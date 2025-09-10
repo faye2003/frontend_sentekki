@@ -1,0 +1,28 @@
+// Core Bootstrap
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";  // si nécessaire
+
+// Tes variables custom
+@import "variables";
+@import "variables-dark";
+
+
+// Bootstrap complet
+@import "bootstrap/scss/bootstrap";
+
+// Tes composants personnalisés
+@import "components/reboot";
+@import "components/alerts";
+@import "components/backgrounds";
+@import "components/badge";
+@import "components/buttons";
+@import "components/breadcrumb";
+@import "components/carousel";
+@import "components/card";
+@import "components/dropdown";
+@import "components/nav";
+@import "components/table";
+@import "components/pagination";
+@import "components/progress";
+@import "components/shadow";
