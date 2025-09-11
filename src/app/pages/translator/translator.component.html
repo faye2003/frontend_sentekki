@@ -1,0 +1,59 @@
+<div class="translator container-fluid py-4 p-auto">
+  <div class="row g-3">
+    <!-- Zone gauche -->
+    <div class="col-12 col-lg-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-primary">Langage Détecter</button>
+            <button type="button" class="btn btn-outline-light">French (FR)</button>
+          </div>
+        </div>
+        <div class="card-body">
+          <textarea
+            class="form-control input-text"
+            rows="12"
+            [(ngModel)]="inputText"
+            placeholder="Saisissez le texte à traduire..."
+          ></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ligne de séparation avec bouton swap -->
+    <!-- <div class="col-12 col-lg-1 d-flex justify-content-center align-items-center">
+      <div class="swap-icon bg-light border rounded-circle d-flex align-items-center justify-content-center shadow-sm"
+      (click)="swapLanguages()"
+      >
+        <i class="bi bi-arrow-left-right fs-4"></i>
+      </div>
+    </div> -->
+
+    <!-- Zone droite -->
+    <div class="col-12 col-lg-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-header">
+            <button type="button" class="btn btn-outline-light">English (EN)</button>
+        </div>
+        <div class="card-body">
+          <textarea
+            class="form-control output-text"
+            rows="12"
+            [value]="outputText"
+            placeholder="La traduction apparaîtra ici..."
+            readonly
+          ></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bouton Translate -->
+  <div class="row mt-4">
+    <div class="col text-center">
+      <button class="btn btn-success px-5 py-2 shadow-sm" (click)="translate()">
+        Translate
+      </button>
+    </div>
+  </div>
+</div>

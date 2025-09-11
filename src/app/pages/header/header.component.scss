@@ -1,0 +1,21 @@
+.navbar {
+  font-size: 0.95rem;
+
+  .nav-link {
+    color: #2e2f45;
+    margin-right: 0.75rem;
+
+    &:hover {
+      color: #84ab4c;
+    }
+
+    &.active {
+      font-weight: 600;
+      color: #84ab4c;
+    }
+  }
+
+  .btn {
+    font-weight: 500;
+  }
+}
