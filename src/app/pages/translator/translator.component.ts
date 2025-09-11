@@ -1,27 +1,31 @@
 import { Component } from '@angular/core';
+import { TranslatorService } from './translator.service';
 
 @Component({
   selector: 'app-translator',
-  templateUrl: './translator.component.html',
-  styleUrls: ['./translator.component.scss']
+  templateUrl: './translator.component.html'
 })
 export class TranslatorComponent {
-  inputText: string = '';
-  outputText: string = '';
+  inputText = '';
+  translatedText = '';
+  errorMessage = '';
 
-  translate() {
-    // Simulation de traduction (mock)
-    if (this.inputText.trim()) {
-      this.outputText = `🔄 Traduction: ${this.inputText}`;
-    } else {
-      this.outputText = '';
-    }
-  }
+  constructor(private translatorService: TranslatorService) {}
 
-  swapLanguages() {
-    // Exemple simple : swap FR -> EN
-    const temp = this.inputText;
-    this.inputText = this.outputText;
-    this.outputText = temp;
+  onTranslate() {
+    this.translatorService.translate(this.inputText, 'fr', 'en').subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.translatedText = res.translated_text;
+          this.errorMessage = '';
+        } else {
+          this.errorMessage = 'Translation failed';
+        }
+      },
+      error: (err) => {
+        console.error(err);
+        this.errorMessage = 'Failed to load data';
+      }
+    });
   }
 }

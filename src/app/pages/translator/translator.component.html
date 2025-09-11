@@ -39,7 +39,7 @@
           <textarea
             class="form-control output-text"
             rows="12"
-            [value]="outputText"
+            [value]="translatedText"
             placeholder="La traduction apparaîtra ici..."
             readonly
           ></textarea>
@@ -51,7 +51,7 @@
   <!-- Bouton Translate -->
   <div class="row mt-4">
     <div class="col text-center">
-      <button class="btn btn-success px-5 py-2 shadow-sm" (click)="translate()">
+      <button class="btn btn-success px-5 py-2 shadow-sm" (click)="onTranslate()">
         Translate
       </button>
     </div>
