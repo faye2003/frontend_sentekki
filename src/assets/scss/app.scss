@@ -1,14 +1,12 @@
-// Fonts
+//Fonts
 @import "fonts/fonts";
 
-// Bootstrap Core
-@import "bootstrap/scss/functions";
-@import "bootstrap/scss/variables";
-@import "bootstrap/scss/mixins";
-
-// Tes variables personnalisées
+//Core files
+@import "./node_modules/bootstrap/scss/functions";
+@import "./node_modules/bootstrap/scss/variables";
 @import "variables";
 @import "variables-dark";
+@import "./node_modules/bootstrap/scss/mixins.scss";
 
 // Structure
 @import "structure/general";
@@ -59,6 +57,7 @@
 @import "plugins/vector-maps";
 @import "plugins/leaflet-maps";
 
+
 // Pages
 @import "pages/authentication";
 @import "pages/email";
@@ -67,10 +66,11 @@
 @import "pages/timeline";
 @import "pages/extras-pages";
 
-// Custom SCSS
-@import "./custom";
+// Custom Scss
+@import "./custom.scss";
 
-// RTL (décommenter si nécessaire)
+
+// rtl
 // @import "rtl/bootstrap-rtl";
 // @import "rtl/components-rtl";
 // @import "rtl/float-rtl";

@@ -1,17 +1,20 @@
-// Core Bootstrap
-@import "bootstrap/scss/functions";
-@import "bootstrap/scss/variables";
-@import "bootstrap/scss/mixins";  // si nécessaire
+/*
+Template Name: Minia - Admin & Dashboard Template
+Author: Themesbrand
+Version: 2.4.0
+Website: https://themesbrand.com/
+Contact: themesbrand@gmail.com
+File: Custom Bootstrap Css File
+*/
 
-// Tes variables custom
+
+//Core files
+@import "./node_modules/bootstrap/scss/functions";
+@import "./node_modules/bootstrap/scss/variables";
 @import "variables";
 @import "variables-dark";
+@import "./node_modules/bootstrap/scss/bootstrap";
 
-
-// Bootstrap complet
-@import "bootstrap/scss/bootstrap";
-
-// Tes composants personnalisés
 @import "components/reboot";
 @import "components/alerts";
 @import "components/backgrounds";

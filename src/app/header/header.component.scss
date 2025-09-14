@@ -1,5 +1,10 @@
 .navbar {
   font-size: 0.95rem;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1054;
 
   .nav-link {
     color: #2e2f45;

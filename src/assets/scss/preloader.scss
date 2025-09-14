@@ -1,11 +1,11 @@
 // 
 // preloader.scss
 //
-// Core files
-@import "bootstrap/scss/functions";   // fonctions Bootstrap
-@import "bootstrap/scss/variables";   // variables Bootstrap
-@import "variables";                  // tes variables personnalisées
 
+//Core files
+@import "./node_modules/bootstrap/scss/functions";
+@import "./node_modules/bootstrap/scss/variables";
+@import "variables";
 
 // pace
 

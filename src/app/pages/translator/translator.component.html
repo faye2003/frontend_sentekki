@@ -1,23 +1,44 @@
 <div class="translator container-fluid py-4 p-auto">
   <div class="row g-3">
     <!-- Zone gauche -->
-    <div class="col-12 col-lg-6">
-      <div class="card shadow-sm h-100">
+    <div class="col-12 col-lg-4">
+      <div class="card shadow-sm h-auto">
         <div class="card-header d-flex align-items-center justify-content-between">
           <div class="d-flex gap-2">
-            <button type="button" class="btn btn-outline-primary">Langage Détecter</button>
-            <button type="button" class="btn btn-outline-light">French (FR)</button>
+            <button type="button" class="btn btn-primary shadow-sm">Langue Détecter</button>
+            <button type="button" class="btn btn-secondary shadow-sm">French (FR)</button>
           </div>
         </div>
-        <div class="card-body">
+        <div class="card-body position-relative">
+          <!-- Bouton vider -->
+          <button
+            *ngIf="inputText && inputText.trim() !== ''"
+            type="button"
+            class="btn btn-close p-1 btn-outline-secondary bg-primary position-absolute top-0 end-0 m-2"
+            (click)="clearInput()"
+            title="Vider"
+          >
+            <!-- <i class="bi bi-x-circle"></i> -->
+          </button>
           <textarea
-            class="form-control input-text"
+            class="form-control py-2 px-1"
+            #autoResizeTextarea
+            style="height: auto; overflow-y: hidden; resize: none; border: none; border-radius: 5px;"
             rows="12"
             [(ngModel)]="inputText"
+            (input)="onInputChange()"
             placeholder="Saisissez le texte à traduire..."
           ></textarea>
         </div>
       </div>
+    <!-- Bouton Translate -->
+      <!-- <div class="row mt-4">
+          <div class="col text-center">
+          <button class="btn btn-outline-primary px-5 py-2 shadow-sm" (click)="onTranslate()">
+              Tranduire
+          </button>
+          </div>
+      </div> -->
     </div>
 
     <!-- Ligne de séparation avec bouton swap -->
@@ -31,29 +52,41 @@
 
     <!-- Zone droite -->
     <div class="col-12 col-lg-6">
-      <div class="card shadow-sm h-100">
+      <div class="card shadow-sm h-auto">
         <div class="card-header">
-            <button type="button" class="btn btn-outline-light">English (EN)</button>
+            <button type="button" class="btn btn-secondary shadow-sm">English (EN)</button>
         </div>
-        <div class="card-body">
+        <div class="card-body position-relative">
+          
+          <button
+            *ngIf="translatedText && translatedText.trim() !== ''"
+            type="button"
+            class="btn btn-sm p-1 btn-secondary position-absolute top-0 end-0 m-2"
+            (click)="copyOutput()"
+            title="Copier"
+          >
+          <i class="fas fa-copy"></i> Copier
+          </button>
           <textarea
-            class="form-control output-text"
+            class="form-control py-2 px-1"
+            #autoResizeTextarea
+            style="height: auto; overflow-y: hidden; resize: none; border: none; border-radius: 5px; background: #f8f9fa;"
             rows="12"
             [value]="translatedText"
-            placeholder="La traduction apparaîtra ici..."
+            placeholder="La traduction s'affiche ici..."
             readonly
           ></textarea>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- Bouton Translate -->
-  <div class="row mt-4">
-    <div class="col text-center">
-      <button class="btn btn-success px-5 py-2 shadow-sm" (click)="onTranslate()">
-        Translate
-      </button>
-    </div>
-  </div>
 </div>
+<main class="home">
+  <br>
+  <button type="button" class="btn btn-secondary">Contact</button>
+  <br><br>
+  <div class="form-floating">
+    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
+    <label for="floatingTextarea2">Comments</label>
+  </div>
+</main>

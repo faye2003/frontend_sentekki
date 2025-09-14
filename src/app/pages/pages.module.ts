@@ -12,14 +12,16 @@ import { CarouselModule } from 'ngx-owl-carousel-o';
 import { FeatherModule } from 'angular-feather';
 import { allIcons } from 'angular-feather/icons';
 // import { LightboxModule } from 'ngx-lightbox';
-import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { LeafletModule } from '@bluehalo/ngx-leaflet';
 import { PagesRoutingModule } from './pages-routing.module';
 import { HomeComponent } from './home/home.component';
+import { TranslatorComponent } from './translator/translator.component';
 
 
 @NgModule({
   declarations: [
     HomeComponent,
+    TranslatorComponent
   ],
   imports: [
     CommonModule,
