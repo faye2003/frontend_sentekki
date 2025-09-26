@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 interface TranslationResponse {
   success: boolean;
-  translated_text: string;
+  output_text: string;
   src: string;
   dest: string;
 }
@@ -23,5 +23,9 @@ export class TranslatorService {
       src,
       dest
     });
+  }
+
+  addCorrection(payload: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/add-correction/`, payload);
   }
 }

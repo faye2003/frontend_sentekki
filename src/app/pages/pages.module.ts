@@ -16,11 +16,13 @@ import { LeafletModule } from '@bluehalo/ngx-leaflet';
 import { PagesRoutingModule } from './pages-routing.module';
 import { HomeComponent } from './home/home.component';
 import { TranslatorComponent } from './translator/translator.component';
+import { TranslatorTestComponent } from './translator-test/translator-test.component';
 
 
 @NgModule({
   declarations: [
     HomeComponent,
+    TranslatorTestComponent,
     TranslatorComponent
   ],
   imports: [

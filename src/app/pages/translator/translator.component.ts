@@ -1,16 +1,22 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, HostListener } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, HostListener } from '@angular/core';
 import { TranslatorService } from './translator.service';
+import { TranslatorData } from './translator.model';
 
 @Component({
   selector: 'app-translator',
   templateUrl: './translator.component.html'
 })
-export class TranslatorComponent {
+export class TranslatorComponent implements OnInit {
   inputText = '';
+  output_text = '';
   translatedText = '';
+  translatorData!: TranslatorData;
+  sentences: string[] = [];
   errorMessage = '';
 
   constructor(private translatorService: TranslatorService) {}
+
+  ngOnInit(): void {}
 
   @ViewChild('autoResizeTextarea') autoResizeTextarea!: ElementRef<HTMLTextAreaElement>;
   textValue: string = '';
@@ -32,6 +38,7 @@ export class TranslatorComponent {
 
   clearInput() {
     this.inputText = '';
+    this.output_text = '';
     this.translatedText = '';
     this.adjustTextareaHeight();
   }
@@ -43,20 +50,11 @@ export class TranslatorComponent {
     }
   }
 
-  onInputChange() {
-    if (this.inputText.trim() === '') {
-      this.translatedText = '';
-      return;
-    }
-
+  onTranslate() {
+    
     this.translatorService.translate(this.inputText, 'fr', 'en').subscribe({
       next: (res) => {
-        if (res.success) {
-          this.translatedText = res.translated_text;
-          this.errorMessage = '';
-        } else {
-          this.errorMessage = 'Translation failed';
-        }
+        this.translatedText = res.output_text;
       },
       error: (err) => {
         console.error(err);
@@ -64,6 +62,58 @@ export class TranslatorComponent {
       }
     });
   }
+
+  editSentence(sentence: any) {
+    sentence.isEditing = true;
+    sentence.editText = sentence.sentence_translated; // Pré-rempli avec la phrase actuelle
+  }
+
+  cancelEdit(sentence: any) {
+    sentence.isEditing = false;
+  }
+
+  saveCorrection(sentence: any) {
+    if (!sentence.editText || sentence.editText === sentence.sentence_translated) {
+      sentence.isEditing = false;
+      return;
+    }
+
+    const payload = {
+      sentence: sentence.id,
+      corrected_text: sentence.editText
+    };
+
+    this.translatorService.addCorrection(payload).subscribe({
+      next: (res) => {
+        sentence.sentence_translated = res.corrected_text; // Mise à jour avec correction
+        sentence.isEditing = false;
+      },
+      error: (err) => console.error(err)
+    });
+  }
+
+
+  // onInputChange() {
+  //   if (this.inputText.trim() === '') {
+  //     this.translatedText = '';
+  //     return;
+  //   }
+
+  //   this.translatorService.translate(this.inputText, 'fr', 'en').subscribe({
+  //     next: (res) => {
+  //       if (res.success) {
+  //         this.translatedText = res.translated_text;
+  //         this.errorMessage = '';
+  //       } else {
+  //         this.errorMessage = 'Translation failed';
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.error(err);
+  //       this.errorMessage = 'Failed to load data';
+  //     }
+  //   });
+  // }
 
   
 }

@@ -7,10 +7,13 @@ import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { PagesModule } from './pages/pages.module';
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './header/header.component';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgbModule, NgbTooltipModule, NgbPopoverModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { AuthInterceptor } from './core/services/auth.interceptor';
+import { LayoutComponent } from './layouts/layout.component';
+import { HeaderComponent } from './layouts/header/header.component';
+import { LayoutsModule } from './layouts/layouts.module';
 
 
 export function createTranslateLoader(http: HttpClient): any {
@@ -20,7 +23,7 @@ export function createTranslateLoader(http: HttpClient): any {
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent
+    LayoutComponent
   ],
   imports: [
     TranslateModule.forRoot({
@@ -34,15 +37,17 @@ export function createTranslateLoader(http: HttpClient): any {
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,
+    LayoutsModule,
     PagesModule,
     NgbModule,
     NgbTooltipModule,
     NgbPopoverModule,
     NgbNavModule,
     BrowserModule, 
-    FormsModule
+    FormsModule,
   ],
   providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

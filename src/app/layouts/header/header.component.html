@@ -22,13 +22,13 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Paraphraser</a>
+          <a class="nav-link active" aria-current="page" [routerLink]="['/translate']">Traducteur</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/translate-test']">Paraphraser</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" [routerLink]="['/home']">Grammaire</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/translate']">Traducteur</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Résumé</a>
@@ -37,7 +37,7 @@
 
       <!-- Right actions -->
       <div class="d-flex">
-        <button class="btn btn-outline-primary me-2">Connexion</button>
+        <a class="btn btn-outline-primary me-2" [routerLink]="['/account/login']">Connexion</a>
         <button class="btn btn-primary">S’inscrire</button>
       </div>
     </div>

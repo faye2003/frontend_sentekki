@@ -5,8 +5,7 @@
       <div class="card shadow-sm h-auto">
         <div class="card-header d-flex align-items-center justify-content-between">
           <div class="d-flex gap-2">
-            <button type="button" class="btn btn-primary shadow-sm">Langue Détecter</button>
-            <button type="button" class="btn btn-secondary shadow-sm">French (FR)</button>
+            <button type="button" class="btn btn-outline-primary dropdown-toggle shadow-sm">French (FR)</button>
           </div>
         </div>
         <div class="card-body position-relative">
@@ -18,7 +17,7 @@
             (click)="clearInput()"
             title="Vider"
           >
-            <!-- <i class="bi bi-x-circle"></i> -->
+          <!-- <i class="bi bi-x-circle"></i> -->
           </button>
           <textarea
             class="form-control py-2 px-1"
@@ -26,19 +25,18 @@
             style="height: auto; overflow-y: hidden; resize: none; border: none; border-radius: 5px;"
             rows="12"
             [(ngModel)]="inputText"
-            (input)="onInputChange()"
             placeholder="Saisissez le texte à traduire..."
           ></textarea>
         </div>
       </div>
     <!-- Bouton Translate -->
-      <!-- <div class="row mt-4">
+      <div class="row mt-4">
           <div class="col text-center">
           <button class="btn btn-outline-primary px-5 py-2 shadow-sm" (click)="onTranslate()">
               Tranduire
           </button>
           </div>
-      </div> -->
+      </div>
     </div>
 
     <!-- Ligne de séparation avec bouton swap -->
@@ -54,7 +52,7 @@
     <div class="col-12 col-lg-6">
       <div class="card shadow-sm h-auto">
         <div class="card-header">
-            <button type="button" class="btn btn-secondary shadow-sm">English (EN)</button>
+            <button type="button" class="btn btn-secondary dropdown-toggle shadow-sm">English (EN)</button>
         </div>
         <div class="card-body position-relative">
           
@@ -65,7 +63,7 @@
             (click)="copyOutput()"
             title="Copier"
           >
-          <i class="fas fa-copy"></i> Copier
+          <i class="fas fa-copy"> c</i>
           </button>
           <textarea
             class="form-control py-2 px-1"
@@ -82,6 +80,42 @@
   </div>
 </div>
 <main class="home">
+  <div *ngIf="translatorData">
+    <h6>Traduction :</h6>
+    <ul class="list-group">
+      <li *ngFor="let s of translatorData.sentences" class="list-group-item d-flex justify-content-between align-items-center">
+        
+        <!-- Mode affichage -->
+        <span *ngIf="!s.isEditing">{{ s.sentence_translated }}</span>
+        
+        <!-- Mode édition -->
+        <input *ngIf="s.isEditing"
+              [(ngModel)]="s.editText"
+              class="form-control"
+              (keyup.enter)="saveCorrection(s)"
+              (blur)="cancelEdit(s)">
+        
+        <div>
+          <button class="btn btn-sm btn-outline-secondary me-1"
+                  *ngIf="!s.isEditing"
+                  (click)="editSentence(s)">
+            Corriger
+          </button>
+          <button class="btn btn-sm btn-success"
+                  *ngIf="s.isEditing"
+                  (click)="saveCorrection(s)">
+            ✅
+          </button>
+          <button class="btn btn-sm btn-danger"
+                  *ngIf="s.isEditing"
+                  (click)="cancelEdit(s)">
+            ❌
+          </button>
+        </div>
+      </li>
+    </ul>
+  </div>
+
   <br>
   <button type="button" class="btn btn-secondary">Contact</button>
   <br><br>
@@ -89,4 +123,4 @@
     <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
     <label for="floatingTextarea2">Comments</label>
   </div>
-</main>
+</main> 
