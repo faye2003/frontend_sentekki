@@ -17,13 +17,15 @@ import { PagesRoutingModule } from './pages-routing.module';
 import { HomeComponent } from './home/home.component';
 import { TranslatorComponent } from './translator/translator.component';
 import { TranslatorTestComponent } from './translator-test/translator-test.component';
+import { TranslatorFusionComponent } from './translator-fusion/translator-fusion.component';
 
 
 @NgModule({
   declarations: [
     HomeComponent,
     TranslatorTestComponent,
-    TranslatorComponent
+    TranslatorComponent,
+    TranslatorFusionComponent
   ],
   imports: [
     CommonModule,

@@ -1,14 +1,18 @@
-import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, HostListener } from '@angular/core';
-import { TranslatorService } from './translator.service';
-import { TranslatorData, Sentence } from './translator.model';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, HostListener, TemplateRef } from '@angular/core';
+import { TranslatorFusionService } from './translator-fusion.service';
+import { TranslatorFusionData, Sentence } from './translator-fusion.model';
+import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { AuthService } from 'src/app/core/services/auth.service';
+declare var bootstrap: any;
 
 @Component({
-  selector: 'app-translator',
-  templateUrl: './translator.component.html'
+  selector: 'app-translator-fusion',
+  templateUrl: './translator-fusion.component.html',
+  styleUrls: ['./translator-fusion.component.scss']
 })
-export class TranslatorComponent implements OnInit {
+export class TranslatorFusionComponent implements OnInit {
   inputText = '';
   output_text = '';
   translatedText = '';
@@ -17,14 +21,18 @@ export class TranslatorComponent implements OnInit {
   isReadonly: boolean = true;
   textareaContent: string = "This is some read-only text.";
   isModalOpen: boolean = false;
-  translatorData: TranslatorData | null = null;
+  translatorData: TranslatorFusionData | null = null;
+  currentSentence: Sentence | null = null;
   loading = false;
-  error = '';
+  error = ''; 
 
-  constructor(private translatorService: TranslatorService, private readonly fb: FormBuilder, private readonly modalService: NgbModal) 
-  {
-    
-  }
+  constructor(
+    private translatorService: TranslatorFusionService, 
+    private readonly fb: FormBuilder, 
+    private readonly modalService: NgbModal,
+    private authService: AuthService,
+    private router: Router
+  ){}
 
   ngOnInit(): void {}
 
@@ -67,11 +75,22 @@ export class TranslatorComponent implements OnInit {
       .join(" ");
   }
 
+  @ViewChild('content') content!: TemplateRef<any>; // importer TemplateRef
+
+  handleSentenceClick(sentence: Sentence) {
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    this.currentSentence = sentence;
+    this.modalService.open(this.content, { centered: true });
+  }
 
   onTranslate() {
-  this.loading = true;
-  this.error = '';
-  const payload = { text: this.inputText, lang_src: 'fr', lang_dest: 'en' };
+    this.loading = true;
+    this.error = '';
+    const payload = { text: this.inputText, lang_src: 'fr', lang_dest: 'en' };
 
     this.translatorService.translate(payload).subscribe({
       next: (res) => {
@@ -109,44 +128,71 @@ export class TranslatorComponent implements OnInit {
   //   });
   // }
 
-  editSentence(sentence: any) {
+  editSentence(sentence: Sentence) {
     sentence.isEditing = true;
     sentence.editText = sentence.sentence_translated; // Pré-rempli avec la phrase actuelle
+    this.currentSentence = sentence;
   }
 
   cancelEdit(sentence: any) {
     sentence.isEditing = false;
   }
 
-  saveCorrection(s: Sentence) {
-    if (!s.editText || s.editText.trim() === s.sentence_translated.trim()) {
-      s.isEditing = false;
+  saveCorrection(sentence: Sentence) {
+    if (!sentence.editText || sentence.editText.trim() === sentence.sentence_translated.trim()) {
+      sentence.isEditing = false;
       return;
     }
     console.log('Bonjour jh§!');
 
-    if (!s.id) {
-      const payload = { sentence_info: { sentence_number: s.sentence_number, sentence_src: s.sentence_src }, correction_text: s.editText };
-      this.translatorService.addCorrection({ sentence_id: 0, correction_text: s.editText })
-        .subscribe({
-          next: (resp) => {
-            s.sentence_translated = s.editText!;
-            s.isEditing = false;
-            this.refreshTranslatedText();
-          },
-          error: (err) => { console.error(err); }
-        });
+
+    if (!this.translatorData?.id) {
+      console.error("Translator ID manquant !");
       return;
     }
 
-    this.translatorService.addCorrection({ sentence_id: s.id, correction_text: s.editText! }).subscribe({
-      next: (res) => {
-        s.sentence_translated = s.editText!;
-        s.isEditing = false;
+    const payload = {
+      translator_id: this.translatorData.id,
+      sentence_index: sentence.sentence_number,
+      corrected_text: sentence.editText
+    };
+
+    this.translatorService.addCorrection(payload).subscribe({
+      next: () => {
+        sentence.sentence_translated = sentence.editText!;
+        sentence.isEditing = false;
         this.refreshTranslatedText();
       },
       error: (err) => console.error(err)
     });
+  }
+
+  selectedSentence: any = null;
+
+  setSentence(sentence: any) {
+    this.selectedSentence = sentence;
+  }
+
+  // confirmCorrection(sentence: any) {
+  //   this.saveCorrection(sentence);
+
+  //   // ✅ Fermer le modal automatiquement après confirmation
+  //   const modalEl = document.getElementById('confirmModal');
+  //   const modal = bootstrap.Modal.getInstance(modalEl);
+  //   modal.hide();
+  // }
+
+  ConfirmCorrection() 
+  {
+    if (this.currentSentence) {
+      this.saveCorrection(this.currentSentence);
+      this.currentSentence = null;
+      this.closeModal('Ok')
+    } 
+    else 
+    {
+      this.error = "Aucun phrase trouvé !";
+    }
   }
 
   // saveCorrection(sentence: any) {
@@ -171,12 +217,14 @@ export class TranslatorComponent implements OnInit {
   //   });
   // }
 
-  closeModal() {
+  closeModal(_modalname: any) {
     this.isModalOpen = false;
+    this.modalService.dismissAll();
+    this.errorMessage = "";
+    this.error = ""
   }
 
   openModal(modalname: any) {
-    console.log('Ouvrir le modal');
     this.isModalOpen = true;
     this.modalService.open(modalname, { centered: true });
   }

@@ -24,9 +24,13 @@ export class AuthService {
     return !!localStorage.getItem(this.accessTokenKey);
   }
 
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem(this.accessTokenKey);
+  }
+
   // 🔹 Login utilisateur
   login(username: string, password: string): Observable<TokenResponse> {
-    return this.http.post<TokenResponse>(`${this.apiUrl}/token/`, { username, password }).pipe(
+    return this.http.post<TokenResponse>(`${this.apiUrl}/login/`, { username, password }).pipe(
       tap(tokens => {
         this.setTokens(tokens.access, tokens.refresh);
         this.isLoggedIn$.next(true);

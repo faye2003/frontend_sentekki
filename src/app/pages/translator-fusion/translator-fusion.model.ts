@@ -9,7 +9,7 @@ export interface Sentence {
   editText?: string;
 }
 
-export interface TranslatorData {
+export interface TranslatorFusionData {
   id: number | null;
   user: number | null;
   lang_src: number | string;
