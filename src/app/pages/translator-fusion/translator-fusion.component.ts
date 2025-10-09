@@ -79,7 +79,7 @@ export class TranslatorFusionComponent implements OnInit {
 
   handleSentenceClick(sentence: Sentence) {
     if (!this.authService.isLoggedIn()) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/account/login']);
       return;
     }
 

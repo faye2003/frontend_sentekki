@@ -14,6 +14,7 @@ export class AuthService {
   private apiUrl = 'http://127.0.0.1:8000/api'; // ton backend Django
   private accessTokenKey = 'access_token';
   private refreshTokenKey = 'refresh_token';
+  private tokenKey = 'jwt_token';
 
   isLoggedIn$ = new BehaviorSubject<boolean>(this.hasAccessToken());
 

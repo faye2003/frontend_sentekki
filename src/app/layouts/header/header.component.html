@@ -37,8 +37,20 @@
 
       <!-- Right actions -->
       <div class="d-flex">
-        <a class="btn btn-outline-primary me-2" [routerLink]="['/account/login']">Connexion</a>
-        <button class="btn btn-primary">S’inscrire</button>
+        <div class="dropdown d-inline-block" ngbDropdown>
+          <button type="button" class="btn header-item topbar-light bg-light-subtle border-start border-end" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
+              <img class="rounded-circle header-profile-user" src="assets/images/users/" alt="Header Avatar">
+              <span class="d-none d-xl-inline-block ms-1 fw-medium">MASTER</span>
+              <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+          </button>
+          <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+              <!-- item-->
+              <a class="dropdown-item" [routerLink]="['/account/login']"><i class="mdi mdi-face-man font-size-16 align-middle me-1"></i>Se connecter</a>
+              <a class="dropdown-item" routerLink=""><i class="mdi mdi-lock font-size-16 align-middle me-1"></i>S'inscrire</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="javascript: void(0);" (click)="logout()"><i class="mdi mdi-logout text-muted font-size-16 align-middle me-1"></i> <span class="align-middle" key="t-logout">Déconnexion</span></a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
