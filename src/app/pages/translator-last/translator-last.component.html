@@ -1,0 +1,180 @@
+<div class="translator container-fluid py-4 p-auto">
+  <div class="row g-3">
+    <!-- Zone gauche -->
+    <div class="col-12 col-lg-4">
+      <div class="card h-auto">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-primary dropdown-toggle shadow-sm">French (FR)</button>
+          </div>
+        </div>
+        <div class="card-body position-relative">
+          <!-- Bouton vider -->
+          <button
+            *ngIf="inputText && inputText.trim() !== ''"
+            type="button"
+            class="btn btn-close p-1 btn-outline-secondary bg-primary position-absolute top-0 end-0 m-2"
+            (click)="clearInput()"
+            title="Vider"
+          >
+          </button>
+          <textarea
+            class="form-control py-2 px-1"
+            #autoResizeTextarea
+            style="height: auto; overflow-y: hidden; resize: none; border: none; border-radius: 5px;"
+            rows="12"
+            [(ngModel)]="inputText"
+            placeholder="Saisissez le texte à traduire..."
+          ></textarea>
+        </div>
+      </div>
+    <!-- Bouton Translate -->
+      <div class="row mt-2">
+          <div class="col text-center">
+            <button class="btn btn-outline-primary px-5 py-2 shadow-sm" (click)="onTranslate()">
+                Tranduire
+            </button>
+          </div>
+      </div>
+    </div>
+
+    <!-- Zone droite -->
+    <div class="col-12 col-lg-6">
+      <div class="card h-auto">
+        <div class="card-header">
+            <button type="button" class="btn btn-secondary dropdown-toggle shadow-sm">English (EN)</button>
+        </div>
+        <div class="card-body position-relative">
+          <!-- Copier la traduction -->
+          <button
+            *ngIf="translatedText && translatedText.trim() !== ''"
+            type="button"
+            class="btn btn-sm p-1 btn-secondary position-absolute top-0 end-0 m-2"
+            (click)="copyOutput()"
+            title="Copier"
+          >
+          <i class="fas fa-copy"> c</i>
+          </button>
+          <div class="translated-output">
+            <div *ngIf="translatorData">
+              <ng-container *ngFor="let sentence of translatorData.output_sentence; let i = index">
+                <a href="javascript:void(0);" 
+                  (click)="handleSentenceClick(sentence)">
+                  {{ sentence.text || "La traduction s'affiche ici..." }}
+                </a>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Correction -->
+<ng-template #content role="document" let-modal>
+  <div class="modal-header border-bottom-0">
+    <h5 class="modal-title mt-0 ">Corriger la traduction</h5>
+    <button type="button" class="btn-close" (click)="closeModal('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+      <div class="row m-2">
+        <ul *ngIf="translatorData">
+          <li *ngFor="let s of translatorData.output_sentence">
+            <span *ngIf="!s.isEditing">{{ s.text }}</span>
+            <input *ngIf="s.isEditing" [(ngModel)]="s.editText" class="form-control" (keyup.enter)="saveCorrection(s)">
+            <button class="btn btn-sm"
+                  *ngIf="!s.isEditing"
+                  (click)="editSentence(s)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <div class="row mt-2">
+              <div class="text-end col-md-6">
+                <button *ngIf="s.isEditing" (click)="cancelEdit(s)" type="reset" class="btn btn-danger" id="btn-save-event">
+                  Annuler
+                </button>
+              </div>
+
+              <div class="text-start col-md-6">
+                <button *ngIf="s.isEditing" (click)="openModal(confirmation)" onclick="refreshPage()" type="submit"
+                  class="btn btn-primary button-envoyer px-1 rounded-2 d-flex justify-content-center">
+                  <span *ngIf="!isSubmitted">Enregistrer</span>
+                </button>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+  </div>
+</ng-template>
+
+<!-- Modal de confirmation -->
+<ng-template #confirmation role="document" let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title mt-0">Confirmation</h5>
+    <button type="button" class="btn-close" aria-hidden="true" (click)="closeModal('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-12">
+        <p>
+          <span>Veuillez confirmer la correction de la phrase: </span>
+          <span class="text-sonatel fw-bold ml-2"></span>
+        </p>
+      </div>
+    </div>
+    <div class="mb-2" *ngIf="error">
+      <div class="text-danger" style="font-size: 12px;">{{error}}</div>
+    </div>
+    <div class="row">
+      <div class="text-end col-md-6">
+        <button (click)="closeModal('Cross click')" class="btn btn-dark" id="btn-save-event">
+          Annuler
+        </button>
+      </div>
+      <div class="text-start col-md-6">
+        <button (click)="ConfirmCorrection()" type="submit" class="btn btn-primary" id="btn-save-event">
+          Confirmer
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Exemple -->
+<main class="home">
+  <div *ngIf="translatorData">
+    <h6>Traduction :</h6>
+    <ul class="list-group">
+      <li *ngFor="let s of translatorData.output_sentence" class="list-group-item d-flex justify-content-between align-items-center">
+        
+        <!-- Mode affichage -->
+        <span *ngIf="!s.isEditing">{{ s.text }}</span>
+        
+        <!-- Mode édition -->
+        <input *ngIf="s.isEditing"
+              [(ngModel)]="s.editText"
+              class="form-control"
+              (keyup.enter)="saveCorrection(s)"
+              (blur)="cancelEdit(s)">
+        <div>
+          <button class="btn btn-sm btn-outline-secondary me-1"
+                  *ngIf="!s.isEditing"
+                  (click)="editSentence(s)">
+            Corriger
+          </button>
+          <button class="btn btn-sm btn-success"
+                  *ngIf="s.isEditing"
+                  (click)="saveCorrection(s)">
+            ✅
+          </button>
+          <button class="btn btn-sm btn-danger"
+                  *ngIf="s.isEditing"
+                  (click)="cancelEdit(s)">
+            ❌
+          </button>
+        </div>
+      </li>
+    </ul>
+  </div>
+</main> 

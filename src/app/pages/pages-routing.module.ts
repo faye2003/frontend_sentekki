@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { HomeComponent } from './home/home.component';
 import { TranslatorComponent } from './translator/translator.component';
-import { TranslatorTestComponent } from './translator-test/translator-test.component';
+import { TranslatorLastComponent } from './translator-last/translator-last.component';
 import { TranslatorFusionComponent } from './translator-fusion/translator-fusion.component';
 
 
@@ -21,8 +21,8 @@ const routes: Routes = [
     component: HomeComponent
   },
   {
-    path: 'translate-test',
-    component: TranslatorTestComponent
+    path: 'translate-last',
+    component: TranslatorLastComponent
   }
  
 ];

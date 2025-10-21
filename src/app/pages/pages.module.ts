@@ -16,6 +16,7 @@ import { LeafletModule } from '@bluehalo/ngx-leaflet';
 import { PagesRoutingModule } from './pages-routing.module';
 import { HomeComponent } from './home/home.component';
 import { TranslatorComponent } from './translator/translator.component';
+import { TranslatorLastComponent } from './translator-last/translator-last.component';
 import { TranslatorTestComponent } from './translator-test/translator-test.component';
 import { TranslatorFusionComponent } from './translator-fusion/translator-fusion.component';
 
@@ -23,9 +24,10 @@ import { TranslatorFusionComponent } from './translator-fusion/translator-fusion
 @NgModule({
   declarations: [
     HomeComponent,
-    TranslatorTestComponent,
+    TranslatorLastComponent,
     TranslatorComponent,
-    TranslatorFusionComponent
+    TranslatorFusionComponent,
+    TranslatorTestComponent
   ],
   imports: [
     CommonModule,
