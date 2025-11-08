@@ -1,9 +1,9 @@
-<nav class="navbar navbar-expand-lg p-4 bg-white border-bottom shadow-sm">
+<nav class="navbar navbar-expand-lg bg-white border-bottom shadow-sm" *ngIf="userRole !== 'super_admin'">
   <div class="container-fluid">
     <!-- Logo -->
     <a class="navbar-brand d-flex align-items-center" href="#">
-      <img src="https://quillbot.com/images/logo.png" alt="Logo" height="32" class="me-2" />
-      <span class="fw-bold">SenTekki</span>
+      <img src="assets/images/logo1.png" alt="Logo" height="32" class="me-2" />
+      <!-- <span class="fw-bold">SenTekki</span> -->
     </a>
 
     <!-- Burger menu for mobile -->
@@ -28,19 +28,26 @@
           <a class="nav-link" [routerLink]="['/translate-last']">Paraphraser</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/home']">Grammaire</a>
+          <a class="nav-link" [routerLink]="['/historique']">Grammaire</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" [routerLink]="['/translate-fusion']">Résumé</a>
         </li>
       </ul>
 
+      <!-- <ul>
+        <li *ngFor="let item of menuItems" 
+            *ngIf="item.roles.includes(userRole)">
+          <a [routerLink]="item.route">{{ item.label }}</a>
+        </li>
+      </ul> -->
+
       <!-- Right actions -->
       <div class="d-flex">
         <div class="dropdown d-inline-block" ngbDropdown>
           <button type="button" class="btn header-item topbar-light bg-light-subtle border-start border-end" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
-              <img class="rounded-circle header-profile-user" src="assets/images/users/" alt="Header Avatar">
-              <span class="d-none d-xl-inline-block ms-1 fw-medium">MASTER</span>
+              <img class="rounded-circle header-profile-user" src="assets/images/logo-bg2.png" alt="Header Avatar">
+              <span class="d-none d-xl-inline-block ms-1 fw-medium">SenTekki</span>
               <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
           </button>
           <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>

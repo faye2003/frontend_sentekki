@@ -5,11 +5,12 @@ import { HomeComponent } from './home/home.component';
 import { TranslatorComponent } from './translator/translator.component';
 import { TranslatorLastComponent } from './translator-last/translator-last.component';
 import { TranslatorFusionComponent } from './translator-fusion/translator-fusion.component';
+import { HistoriqueComponent } from './historique/historique.component';
 
 
 const routes: Routes = [
   {
-    path: 'translate',
+    path: 'translate-last',
     component: TranslatorComponent,
   },
   {
@@ -21,7 +22,15 @@ const routes: Routes = [
     component: HomeComponent
   },
   {
-    path: 'translate-last',
+    path: 'historique',
+    component: HistoriqueComponent
+  },
+  {
+    path: 'translate',
+    component: TranslatorLastComponent
+  },
+  {
+    path: '',
     component: TranslatorLastComponent
   }
  

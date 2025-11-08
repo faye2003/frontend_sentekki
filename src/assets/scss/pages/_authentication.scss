@@ -3,12 +3,12 @@
 //
 
 .auth-bg{
-    background-image: url("../../images/parking-e.jpg");
+    background-image: url("../../images/logo.png");
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
     .bg-overlay{
-        opacity: 0.9;
+        opacity: 0.5;
     }
     @media (min-width: 768px){
         height: 100vh;

@@ -1,19 +1,19 @@
-<div class="container mt-5">
+<!-- <div class="container mt-5">
     <h3>Connexion</h3>
     <input [(ngModel)]="username" class="form-control mb-2" placeholder="Nom d'utilisateur">
     <input [(ngModel)]="password" type="password" class="form-control mb-2" placeholder="Mot de passe">
     <button class="btn btn-primary" (click)="onLogin()">Se connecter</button>
-</div>
-<!-- <div class="auth-page">
+</div> -->
+<div class="auth-page">
     <div class="container-fluid p-0">
         <div class="row g-0">
             <div class="col-xxl-3 col-lg-4 col-md-5">
                 <div class="auth-full-page-content d-flex p-sm-5 p-4">
                     <div class="w-100">
-                        <div class="d-flex flex-column h-100">
+                        <div class="d-flex flex-column h-100 align-items-center">
                             <div class="mb-4 mb-md-5 text-center">
                                 <a routerLink="/" class="d-block auth-logo">
-                                    <img src="assets/images/logo-icon.png" alt="" height="28"> <span class="logo-txt">SenTekki</span>
+                                    <img src="assets/images/logo2.png" alt="" height="28"> <span class="logo-txt">SenTekki</span>
                                 </a>
                             </div>
                             <div class="auth-content my-auto">
@@ -21,12 +21,12 @@
                                     <h5 class="mb-0">Bienvenue à SenTekki !</h5>
                                     <p class="text-muted mt-2">Connectez-vous pour continuer.</p>
                                 </div>
-                                <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+                                <div class="container">
 
                                     <div class="mb-3">
                                         <label for="username">Nom d'utilisateur</label>
-                                        <input type="text" [(ngModel)]="username" placeholder="Nom d'utilisateur" class="form-control" id="username" formControlName="username" [ngClass]="{ 'is-invalid': submitted && f.username.errors }">
-                                       </div>
+                                        <input [(ngModel)]="username" class="form-control mb-2" placeholder="Nom d'utilisateur">
+                                    </div>
 
                                     <div class="mb-3">
                                         <div class="float-end">
@@ -34,7 +34,7 @@
                                         </div>
                                         <label for="userpassword">Mot de passe</label>
                                         <div class="input-group auth-pass-inputgroup">
-                                            <input [type]="fieldTextType ? 'text' : 'password'" class="form-control" formControlName="password" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" placeholder="Enter password" aria-label="Password" aria-describedby="password-addon">
+                                            <input [type]="fieldTextType ? 'text' : 'password'" [(ngModel)]="password" type="password" class="form-control" placeholder="Mot de passe">
                                             <button class="btn btn-light " type="button" id="password-addon"><i class="mdi" [ngClass]="{'mdi-eye-off-outline': !fieldTextType, 'mdi-eye-outline': fieldTextType
                                                 }" (click)="toggleFieldTextType()"></i></button>
                                             @if(submitted && f.password.errors){
@@ -45,18 +45,18 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-check">
+                                    <!-- <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="remember-check">
                                         <label class="form-check-label" for="remember-check">
                                             Se rappeler de moi
                                         </label>
-                                    </div>
+                                    </div> -->
 
                                     <div class="mt-3 d-grid">
-                                        <button class="btn btn-primary btn-block" type="submit">se connecter</button>
+                                        <button class="btn btn-primary btn-block" (click)="onLogin()">se connecter</button>
                                     </div>
 
-                                </form>
+                                </div>
 
                                 <div class="mt-4 pt-2 text-center">
                                     <div class="signin-other-title">
@@ -98,7 +98,7 @@
             </div>
             <div class="col-xxl-9 col-lg-8 col-md-7">
                 <div class="auth-bg pt-md-5 p-4 d-flex">
-                    <div class="bg-overlay bg-primary"></div>
+                    <div class="bg-overlay bg-success"></div>
                     <ul class="bg-bubbles">
                         <li></li>
                         <li></li>
@@ -120,4 +120,4 @@
             </div>
         </div>
     </div>
-</div> -->
+</div>

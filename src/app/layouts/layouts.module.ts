@@ -7,10 +7,14 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { HeaderComponent } from './header/header.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { TopbarComponent } from './topbar/topbar.component';
 
 @NgModule({
   declarations: [
-    HeaderComponent
+    HeaderComponent,
+    SidebarComponent,
+    TopbarComponent,
   ],
   imports: [
     CommonModule,
@@ -21,6 +25,6 @@ import { HeaderComponent } from './header/header.component';
     SimplebarAngularModule,
   ],
   providers: [],
-  exports: [HeaderComponent]
+  exports: [HeaderComponent, TopbarComponent, SidebarComponent]
 })
 export class LayoutsModule { }

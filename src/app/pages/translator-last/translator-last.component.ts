@@ -10,8 +10,10 @@ import {
 import { TranslatorLastService } from './translator-last.service';
 import { Translator, CorrectionTranslator, Sentence } from './translator-last.model';
 import { Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'src/app/core/services/auth.service';
+import Swal from 'sweetalert2';
+import { result } from 'lodash';
 
 @Component({
   selector: 'app-translator-last',
@@ -31,6 +33,14 @@ export class TranslatorLastComponent implements OnInit, AfterViewInit {
   selectedSentence: string | null = null;
   correctedText: string = '';
   isModalOpen: boolean = false;
+  // bread crumb items
+  breadCrumbItems!: Array<{}>;
+  currentRate = 0;
+  defaultSelect = 1;
+  hovered = 0;
+  readonly = false;
+  customColor = 4;
+  translations: any[] = [];
 
   @ViewChild('autoResizeTextarea') autoResizeTextarea!: ElementRef<HTMLTextAreaElement>;
   @ViewChild('content') content!: TemplateRef<any>;
@@ -39,10 +49,41 @@ export class TranslatorLastComponent implements OnInit, AfterViewInit {
     private translatorService: TranslatorLastService,
     private modalService: NgbModal,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private offcanvasService: NgbOffcanvas
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    /**
+     * BreadCrumb Set
+     */
+    this.breadCrumbItems = [
+      { label: 'Pages' },
+      { label: 'Tranduction Page', active: true }
+    ];
+    this.loadHistory();
+  }
+
+  loadHistory(): void {
+    this.translatorService.getUserHistory().subscribe({
+      next: (res) => {
+        this.translations = res;
+        console.log(res);
+      },
+      error: (err) => {
+        console.error('Erreur chargement historique :', err);
+      }
+    });
+  }
+
+  onRate(translationId: number, rate: number): void {
+    this.translatorService.rateTranslation(translationId, rate, 'Très bonne traduction').subscribe({
+      next: () => {
+        console.log(`Traduction ${translationId} notée ${rate}/5`);
+      },
+      error: (err) => console.error('Erreur lors de la notation :', err)
+    });
+  }
 
   ngAfterViewInit() {
     this.adjustTextareaHeight();
@@ -52,6 +93,11 @@ export class TranslatorLastComponent implements OnInit, AfterViewInit {
   @HostListener('input')
   onInput() {
     this.adjustTextareaHeight();
+  }
+
+  // Offcanvas Open Right
+  openRight(content: TemplateRef<any>) {
+    this.offcanvasService.open(content, { position: 'end' });
   }
 
   adjustTextareaHeight() {
@@ -107,6 +153,7 @@ export class TranslatorLastComponent implements OnInit, AfterViewInit {
       error: (err) => {
         console.error(err);
         this.error = 'Erreur lors de la traduction';
+        Swal.fire('Erreur!', err.error?.error || 'Une erreur est survenue lors de la traduction.', 'error');
         this.loading = false;
       },
     });
@@ -173,11 +220,19 @@ export class TranslatorLastComponent implements OnInit, AfterViewInit {
 
     this.translatorService.addCorrection(payload).subscribe({
       next: () => {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Text corrigé avec succès',
+          showConfirmButton: false,
+          timer: 1500,
+        });
         this.modalService.dismissAll();
       },
       error: (err) => {
         console.error(err);
         this.error = 'Erreur lors de la sauvegarde de la correction';
+        Swal.fire('Erreur!', err.error?.error || 'Erreur lors de la sauvegarde de la correction.', 'error');
       },
     });
   }
@@ -186,7 +241,6 @@ export class TranslatorLastComponent implements OnInit, AfterViewInit {
   {
     if (this.currentSentence) {
       this.saveCorrection(this.currentSentence);
-      this.currentSentence = null;
       this.closeModal('Ok')
     } 
     else 

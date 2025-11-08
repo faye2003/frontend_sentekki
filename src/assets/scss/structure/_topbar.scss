@@ -73,6 +73,7 @@ body:not([data-sidebar-size="sm"]) {
 .app-search {
     padding: calc(#{$header-height - 40px} / 2) 0;
     position: relative;
+    margin-left: 1rem;
 
     .form-control {
         border: $search-width solid var(--#{$prefix}search-border-color);

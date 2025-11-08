@@ -21,7 +21,6 @@ export interface Sentence {
   user_id?: number;
   phrase_source: string;
   phrase_corrigee: string;
-  // champs côté UI
   isEditing?: boolean;
   editText?: string;
 }
@@ -32,7 +31,6 @@ export interface CorrectionTranslator {
   user_id?: number;
   phrase_source: string;
   phrase_corrigee: string;
-  // champs côté UI
   isEditing?: boolean;
   editText?: string;
   created_at?: string;

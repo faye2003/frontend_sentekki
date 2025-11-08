@@ -1,0 +1,35 @@
+<!-- Menu Sidebar -->
+<div class="sidebar" *ngIf="userRole === 'super_admin' || userRole === 'admin'">
+    <div class="sidebar-brand">
+        <h2><span></span>SenTekki</h2>
+    </div>
+
+    <div class="sidebar-menu">
+        <ul>
+            <li>
+                <a href="#!/"><span>Dashboard</span></a>
+            </li>
+            <li>
+                <a href="#!/eleves"><span>Traducteur</span></a>
+            </li>
+            <li>
+                <a href="#!/profs"><span>Notes</span></a>
+            </li>
+            <li>
+                <a href="#!/disciplines"><span>Correction</span></a>
+            </li>
+            <li>
+                <a href="#!/emplois"><span>Grammaire</span></a>
+            </li>
+            <li>
+                <a href="#!/niveaus"><span>Résumé</span></a>
+            </li>
+            <li>
+                <a href="#!/niveaus"><span>Historique</span></a>
+            </li>
+            <li>
+                <a href="#!/notes"><span>Utilisateur</span></a>
+            </li>
+        </ul>
+    </div>
+</div>

@@ -55,3 +55,26 @@
     }
   }
 }
+
+.star {
+  font-size: 1.4rem;
+  color: #ccc;
+  position: relative;
+  display: inline-block;
+
+  // Étoile remplie
+  &.full {
+    .half {
+      color: gold;
+    }
+  }
+
+  // Partie colorée (demi-étoile)
+  .half {
+    color: gold;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}

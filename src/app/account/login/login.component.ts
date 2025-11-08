@@ -3,6 +3,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { OwlOptions } from 'ngx-owl-carousel-o';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -42,11 +43,19 @@ export class LoginComponent {
   get f() { return this.loginForm.controls; }
 
   onLogin() {
+    console.log("Bonjour");
     this.authService.login(this.username, this.password).subscribe({
-      next: res => console.log('Connecté ✅', res),
-      error: err => console.error('Erreur ❌', err)
+      next: (res) => {
+        if (res.success) {
+          this.router.navigate(['/']);
+          console.log('Connecté ✅', res)
+        }
+      },
+      error: (err) => {
+        console.log(err.error?.error)
+        Swal.fire('Erreur!', err.error?.error || 'Une erreur est survenue.', 'error');
+      }
     });
-    this.router.navigate(['/']);
   }
 
   /**
