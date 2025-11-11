@@ -1,35 +1,44 @@
-<!-- Menu Sidebar -->
-<div class="sidebar" *ngIf="userRole === 'super_admin' || userRole === 'admin'">
-    <div class="sidebar-brand">
-        <h2><span></span>SenTekki</h2>
-    </div>
+<aside id="sidebar" class="sidebar bg-light shadow-sm" *ngIf="userRole === 'super_admin' || userRole === 'admin'">
+  <div class="sidebar-header d-flex align-items-center justify-content-between px-3 py-2 border-bottom">
+    <a routerLink="/" class="d-flex align-items-center text-decoration-none">
+      <img src="assets/images/logo-bg2.png" alt="Logo" height="28" class="me-2" />
+    </a>
+    <button class="btn btn-sm btn-outline-secondary" (click)="toggleSidebar()">
+      <i class="bx bx-grid-horizontal"></i>
+    </button>
+  </div>
 
-    <div class="sidebar-menu">
-        <ul>
-            <li>
-                <a href="#!/"><span>Dashboard</span></a>
-            </li>
-            <li>
-                <a href="#!/eleves"><span>Traducteur</span></a>
-            </li>
-            <li>
-                <a href="#!/profs"><span>Notes</span></a>
-            </li>
-            <li>
-                <a href="#!/disciplines"><span>Correction</span></a>
-            </li>
-            <li>
-                <a href="#!/emplois"><span>Grammaire</span></a>
-            </li>
-            <li>
-                <a href="#!/niveaus"><span>Résumé</span></a>
-            </li>
-            <li>
-                <a href="#!/niveaus"><span>Historique</span></a>
-            </li>
-            <li>
-                <a href="#!/notes"><span>Utilisateur</span></a>
-            </li>
-        </ul>
-    </div>
-</div>
+  <nav class="nav flex-column p-3">
+    <a routerLink="/dashboard" routerLinkActive="active"
+       class="nav-link d-flex align-items-center gap-2">
+      <i class="bx bx-grid-alt fs-5"></i> <span>Dashboard</span>
+    </a>
+
+    <a [routerLink]="['/translate']" routerLinkActive="active"
+       class="nav-link d-flex align-items-center gap-2">
+      <i class="fas fa-language fs-5"></i><span>Traduction</span>
+    </a>
+
+    <a [routerLink]="['/historique']" routerLinkActive="active"
+       class="nav-link d-flex align-items-center gap-2">
+      <i class="bx bx-history fs-5"></i><span>Historique</span>
+    </a>
+
+    <a routerLink="/utilisateur" routerLinkActive="active"
+       class="nav-link d-flex align-items-center gap-2">
+      <i class="bx bx-user fs-5"></i> <span>Utilisateurs</span>
+    </a>
+
+    <a [routerLink]="['/paramètre']" routerLinkActive="active"
+       class="nav-link d-flex align-items-center gap-2">
+      <i class="bx bx-cog fs-5"></i> <span>Paramètres</span>
+    </a>
+
+    <hr class="my-3" />
+
+    <button class="btn btn-danger w-100 d-flex align-items-center justify-content-center gap-2"
+            (click)="logout()">
+      <i class="bx bx-log-out"></i> Déconnexion
+    </button>
+  </nav>
+</aside>

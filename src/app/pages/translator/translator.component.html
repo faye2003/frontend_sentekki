@@ -1,164 +1,135 @@
-<div class="translator container-fluid py-4 p-auto">
-  <div class="row g-3">
-    <!-- Zone gauche -->
-    <div class="col-12 col-lg-4">
-      <div class="card shadow-sm h-auto">
-        <div class="card-header d-flex align-items-center justify-content-between">
-          <div class="d-flex gap-2">
-            <button type="button" class="btn btn-outline-primary dropdown-toggle shadow-sm">French (FR)</button>
+<app-pagetitle
+  title="Traducteur"
+  [breadcrumbItems]="breadCrumbItems">
+</app-pagetitle>
+
+<div class="translator container-fluid py-3">
+  <div class="row justify-content-center g-4">
+    
+    <!-- Zone gauche : texte source -->
+    <div class="col-12 col-lg-5">
+      <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+          <div class="btn-group btn-group-sm">
+            <button class="btn btn-light border active-lang">Français</button>
+            <button class="btn btn-light border">Anglais</button>
           </div>
-        </div>
-        <div class="card-body position-relative">
-          <!-- Bouton vider -->
           <button
             *ngIf="inputText && inputText.trim() !== ''"
             type="button"
-            class="btn btn-close p-1 btn-outline-secondary bg-primary position-absolute top-0 end-0 m-2"
+            class="btn btn-outline-danger btn-sm rounded-circle"
             (click)="clearInput()"
-            title="Vider"
-          >
-          <!-- <i class="bi bi-x-circle"></i> -->
+            title="Vider le texte">
+            <i class="bi bi-x-lg"></i>
           </button>
-          <textarea
-            class="form-control py-2 px-1"
-            #autoResizeTextarea
-            style="height: auto; overflow-y: hidden; resize: none; border: none; border-radius: 5px;"
-            rows="12"
-            [(ngModel)]="inputText"
-            placeholder="Saisissez le texte à traduire..."
-          ></textarea>
         </div>
-      </div>
-    <!-- Bouton Translate -->
-      <div class="row mt-4">
-          <div class="col text-center">
-          <button class="btn btn-outline-primary px-5 py-2 shadow-sm" (click)="onTranslate()">
-              Tranduire
+
+        <div class="card-body">
+          <textarea
+            class="form-control border-0 bg-light rounded-3 shadow-sm p-3"
+            [(ngModel)]="inputText"
+            rows="10"
+            placeholder="Saisissez le texte à traduire...">
+          </textarea>
+        </div>
+
+        <div class="card-footer bg-white border-0 text-center">
+          <button class="btn btn-primary px-4 py-2 shadow-sm" (click)="onTranslate()">
+            <i class="bi bi-arrow-left-right me-1"></i> Traduire
           </button>
-          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Ligne de séparation avec bouton swap -->
-    <!-- <div class="col-12 col-lg-1 d-flex justify-content-center align-items-center">
-      <div class="swap-icon bg-light border rounded-circle d-flex align-items-center justify-content-center shadow-sm"
-      (click)="swapLanguages()"
-      >
-        <i class="bi bi-arrow-left-right fs-4"></i>
-      </div>
-    </div> -->
-
-    <!-- Zone droite -->
-    <div class="col-12 col-lg-6">
-      <div class="card shadow-sm h-auto">
-        <div class="card-header">
-            <button type="button" class="btn btn-secondary dropdown-toggle shadow-sm">English (EN)</button>
-        </div>
-        <div class="card-body position-relative">
-          <!-- Copier la traduction -->
+    <!-- Zone droite : traduction -->
+    <div class="col-12 col-lg-5">
+      <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+          <div class="btn-group btn-group-sm">
+            <button class="btn btn-light border">Français</button>
+            <button class="btn btn-light border active-lang">Anglais</button>
+          </div>
           <button
             *ngIf="translatedText && translatedText.trim() !== ''"
             type="button"
-            class="btn btn-sm p-1 btn-secondary position-absolute top-0 end-0 m-2"
+            class="btn btn-outline-secondary btn-sm rounded-circle"
             (click)="copyOutput()"
-            title="Copier"
-          >
-          <i class="fas fa-copy"> c</i>
+            title="Copier la traduction">
+            <i class="bi bi-clipboard"></i>
           </button>
-          <textarea
-            class="form-control py-2 px-1"
-            #autoResizeTextarea
-            style="height: auto; overflow-y: hidden; cursor: pointer; resize: none; border: none; border-radius: 5px; background: #f8f9fa;"
-            rows="12"
-            [value]="translatedText"
-           (click)="openModal(content)"
-            placeholder="La traduction s'affiche ici..."
-            readonly
-          ></textarea>
+        </div>
+
+        <div class="card-body bg-light rounded-3 position-relative" style="min-height: 250px;">
+          <div *ngIf="loading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+          </div>
+
+          <div *ngIf="!loading && translatorData" class="translated-text">
+            <p class="m-0" *ngFor="let s of translatorData.output_sentence">
+              {{ s.text }}
+            </p>
+          </div>
+        </div>
+
+        <div class="card-footer bg-white border-0 text-center">
+          <button
+            class="btn btn-outline-dark btn-sm"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasHistory"
+            (click)="openRight(Rightcontent)">
+            <i class="bi bi-clock-history"></i> Historique
+          </button>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Modal Correction -->
-<ng-template #content role="document" let-modal>
-  <div class="modal-header border-bottom-0">
-    <h5 class="modal-title mt-0">Corriger la traduction</h5>
-    <button type="button" class="btn-close" (click)="closeModal()"></button>
+<!-- Offcanvas Historique -->
+<ng-template #Rightcontent let-offcanvas>
+  <div class="offcanvas-header border-bottom bg-light">
+    <h5 class="fw-semibold mb-0">
+      <i class="bi bi-clock-history me-2 text-primary"></i> Historique
+    </h5>
+    <button type="button" class="btn-close" (click)="offcanvas.dismiss('Cross click')"></button>
   </div>
-  <div class="modal-body">
-      <div class="row m-2">
-        <ul *ngIf="translatorData">
-          <li *ngFor="let s of translatorData.sentences">
-            <span *ngIf="!s.isEditing">{{ s.sentence_translated }}</span>
-            <input *ngIf="s.isEditing" [(ngModel)]="s.editText" class="form-control" (keyup.enter)="saveCorrection(s)">
-            <button class="btn btn-sm btn-outline-secondary me-1"
-                  *ngIf="!s.isEditing"
-                  (click)="editSentence(s)">
-              <i class="fas fa-edit"></i>
-            </button>
-            <div class="row mt-2">
-              <div class="text-end col-md-6">
-                <button *ngIf="s.isEditing" (click)="cancelEdit(s)" type="reset" class="btn btn-danger" id="btn-save-event">
-                  Annuler
-                </button>
-              </div>
-              <div class="text-start col-md-6">
-                <button *ngIf="s.isEditing" (click)="saveCorrection(s)" onclick="refreshPage()" type="submit"
-                  class="btn btn-primary button-envoyer px-1 rounded-2 d-flex justify-content-center">
-                  <span *ngIf="!isSubmitted">Enregistrer</span>
-                </button>
-              </div>
-            </div>
-          </li>
-        </ul>
+
+  <div class="offcanvas-body p-3">
+    <div *ngIf="translations?.length === 0" class="text-center text-muted py-5">
+      <i class="bi bi-translate display-6 d-block mb-2 text-secondary"></i>
+      <p>Aucune traduction enregistrée</p>
+    </div>
+
+    <div *ngIf="translations?.length && translations.length > 0" class="list-group rounded-3 shadow-sm">
+      <div *ngFor="let t of translations" class="list-group-item list-group-item-action py-3">
+        <div class="d-flex justify-content-between align-items-center">
+          <h6 class="fw-semibold text-primary">{{ t.lang_src.name }} → {{ t.lang_dest.name }}</h6>
+          <small class="text-muted">{{ t.created_at | date:'short' }}</small>
+        </div>
+        <p class="mb-1 text-dark small">{{ t.input_text }}</p>
+        <p class="text-secondary small">{{ t.output_text }}</p>
+
+        <!-- Note -->
+        <div class="mt-2">
+          <ng-template #starTemplate let-fill="fill">
+            <span class="star" [class.full]="fill === 100">
+              <span class="half" [style.width.%]="fill">★</span>☆
+            </span>
+          </ng-template>
+          <ngb-rating
+            [(rate)]="t.rate"
+            [starTemplate]="starTemplate"
+            [readonly]="false"
+            [max]="5"
+            (rateChange)="onRate(t.id, t.rate)">
+          </ngb-rating>
+        </div>
       </div>
+    </div>
+  </div>
+
+  <div class="offcanvas-footer text-center py-3 bg-light border-top">
+    <small class="text-muted">Historique des 10 dernières traductions</small>
   </div>
 </ng-template>
-
-<!-- Exemple -->
-<main class="home">
-  <div *ngIf="translatorData">
-    <h6>Traduction :</h6>
-    <ul class="list-group">
-      <li *ngFor="let s of translatorData.sentences" class="list-group-item d-flex justify-content-between align-items-center">
-        
-        <!-- Mode affichage -->
-        <span *ngIf="!s.isEditing">{{ s.sentence_translated }}</span>
-        
-        <!-- Mode édition -->
-        <input *ngIf="s.isEditing"
-              [(ngModel)]="s.editText"
-              class="form-control"
-              (keyup.enter)="saveCorrection(s)"
-              (blur)="cancelEdit(s)">
-        <div>
-          <button class="btn btn-sm btn-outline-secondary me-1"
-                  *ngIf="!s.isEditing"
-                  (click)="editSentence(s)">
-            Corriger
-          </button>
-          <button class="btn btn-sm btn-success"
-                  *ngIf="s.isEditing"
-                  (click)="saveCorrection(s)">
-            ✅
-          </button>
-          <button class="btn btn-sm btn-danger"
-                  *ngIf="s.isEditing"
-                  (click)="cancelEdit(s)">
-            ❌
-          </button>
-        </div>
-      </li>
-    </ul>
-  </div>
-
-  <br>
-  <button type="button" class="btn btn-secondary">Contact</button>
-  <br><br>
-  <div class="form-floating">
-    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
-    <label for="floatingTextarea2">Comments</label>
-  </div>
-</main> 

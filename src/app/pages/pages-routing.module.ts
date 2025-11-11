@@ -6,6 +6,7 @@ import { TranslatorComponent } from './translator/translator.component';
 import { TranslatorLastComponent } from './translator-last/translator-last.component';
 import { TranslatorFusionComponent } from './translator-fusion/translator-fusion.component';
 import { HistoriqueComponent } from './historique/historique.component';
+import { CorrectionComponent } from './correction/correction.component';
 
 
 const routes: Routes = [
@@ -28,6 +29,10 @@ const routes: Routes = [
   {
     path: 'translate',
     component: TranslatorLastComponent
+  },
+  {
+    path: 'correction',
+    component: CorrectionComponent
   },
   {
     path: '',

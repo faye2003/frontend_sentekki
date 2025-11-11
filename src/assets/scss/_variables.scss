@@ -16,7 +16,7 @@ $sidebar-menu-item-active-color: var(--#{$prefix}sidebar-menu-item-active-color)
 $sidebar-menu-item-active-effact-color: var(--#{$prefix}sidebar-menu-item-active-effact-color);
 $sidebar-border-color: var(--#{$prefix}sidebar-border-color);
 $sidebar-alert: var(--#{$prefix}sidebar-alert);
-$sidebar-width: 100px;
+$sidebar-width: 200px;
 $sidebar-collapsed-width: 70px;
 $sidebar-width-sm: 90px;
 
@@ -28,7 +28,7 @@ $sidebar-dark-menu-item-hover-color: var(--#{$prefix}sidebar-dark-menu-item-hove
 $sidebar-dark-menu-item-active-color: var(--#{$prefix}sidebar-dark-menu-item-active-color);
 
 // Topbar - Deafult Light
-$header-height: 70px;
+$header-height: 80px;
 $header-bg: $white;
 $header-item-color: var(--#{$prefix}header-item-color);
 

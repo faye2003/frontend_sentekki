@@ -24,6 +24,7 @@ import { TranslatorTestComponent } from './translator-test/translator-test.compo
 import { TranslatorFusionComponent } from './translator-fusion/translator-fusion.component';
 import { HistoriqueComponent } from './historique/historique.component';
 import { NgbRatingModule } from '@ng-bootstrap/ng-bootstrap';
+import { CorrectionComponent } from './correction/correction.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { NgbRatingModule } from '@ng-bootstrap/ng-bootstrap';
     TranslatorComponent,
     TranslatorFusionComponent,
     TranslatorTestComponent,
-    HistoriqueComponent
+    HistoriqueComponent,
+    CorrectionComponent
   ],
   imports: [
     CommonModule,

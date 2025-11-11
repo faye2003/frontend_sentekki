@@ -1,91 +1,77 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
-import { TranslatorData, Sentence } from './translator.model';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
+import { AuthService } from 'src/app/core/services/auth.service';
+import { Translator, CorrectionTranslator } from './translator.model';
 
 @Injectable({ providedIn: 'root' })
 export class TranslatorService {
   private apiUrl = 'http://127.0.0.1:8000/api';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
-  private splitIntoSentences(text: string): string[] {
-    if (!text) return [];
-    return text.trim().split(/(?<=[.!?])/,5).filter(s => s.trim().length > 0);
+  private getHeaders(withAuth: boolean = false): HttpHeaders {
+    const token = localStorage.getItem('access');
+    const headers: any = { 'Content-Type': 'application/json' };
+
+    if (withAuth && token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    return new HttpHeaders(headers);
   }
 
-  translate(payload: { text: string; lang_src?: string; lang_dest?: string }): Observable<TranslatorData> {
-    return this.http.post<any>(`${this.apiUrl}/translate/`, payload).pipe(
-      map((res) => {
-        if (res && res.id && Array.isArray(res.sentences)) {
-          return res as TranslatorData;
-        }
-
-        const output = res.output_text ?? res.translated_text ?? '';
-        const sentencesSrc = this.splitIntoSentences(payload.text);
-        const sentencesOut = this.splitIntoSentences(output);
-
-        const sentences: Sentence[] = (sentencesOut.length ? sentencesOut : sentencesSrc).map((out, idx) => ({
-          id: null,
-          sentence_number: idx + 1,
-          sentence_src: sentencesSrc[idx] ?? '',
-          sentence_translated: out ?? '',
-          corrections: [],
-          isEditing: false,
-          editText: out ?? ''
-        }));
-
-        const fallback: TranslatorData = {
-          id: null,
-          user: null,
-          lang_src: payload.lang_src ?? 'auto',
-          lang_dest: payload.lang_dest ?? 'en',
-          input_text: payload.text,
-          output_text: output,
-          created_at: new Date().toISOString(),
-          sentences
-        };
-        return fallback;
-      })
+   getUserHistory(): Observable<any[]> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.authService.getAccessToken()}`
+    });
+    return this.http.get<{ count: number, results: any[] }>(`${this.apiUrl}/history/recent/`, { headers }).pipe(
+      map(response => response.results || []) // ✅ on renvoie seulement le tableau
     );
   }
 
-  addCorrection(payload: { sentence_id: number; correction_text: string }) {
-    return this.http.post<any>(`${this.apiUrl}/translate/sentence/${payload.sentence_id}/correct/`, {
-      correction_text: payload.correction_text
+  rateTranslation(translatorId: number, stars: number, comment: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.authService.getAccessToken()}`
     });
+    const body = {
+      translator_id: translatorId,  // 👈 clé correcte attendue par Django
+      stars: stars,
+      comment: comment
+    };
+    return this.http.post(`${this.apiUrl}/note/`, body, { headers });
+  }
+
+  translate(payload: { input_text: string; lang_src?: string; lang_dest?: string }): Observable<Translator> {
+    return this.http.post<Translator>(`${this.apiUrl}/translate/`, payload, {
+      headers: this.getHeaders(false)
+    }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  addCorrection(payload: { translator_id: number; phrase_source: string; phrase_corrigee: string }): Observable<CorrectionTranslator> {
+    return this.http.post<CorrectionTranslator>(`${this.apiUrl}/correction/`, payload, {
+      headers: this.getHeaders(true)
+    }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  private handleError(error: any) {
+    console.error('Erreur API:', error);
+    let message = 'Erreur inconnue';
+    if (error.error instanceof ErrorEvent) {
+      message = `Erreur client: ${error.error.message}`;
+    } else if (error.status === 401) {
+      message = 'Authentification requise pour cette action.';
+    } else if (error.status === 403) {
+      message = 'Accès refusé.';
+    } else {
+      message = `Erreur serveur: ${error.status} - ${error.statusText}`;
+    }
+    return throwError(() => message);
   }
 }
-
-
-// import { Injectable } from '@angular/core';
-// import { HttpClient } from '@angular/common/http';
-// import { Observable } from 'rxjs';
-
-// interface TranslationResponse {
-//   success: boolean;
-//   output_text: string;
-//   src: string;
-//   dest: string;
-// }
-
-// @Injectable({
-//   providedIn: 'root'
-// })
-// export class TranslatorService {
-//   private apiUrl = 'http://127.0.0.1:8000/api/translate/';
-
-//   constructor(private http: HttpClient) {}
-
-//   translate(text: string, src: string, dest: string): Observable<TranslationResponse> {
-//     return this.http.post<TranslationResponse>(this.apiUrl, {
-//       text,
-//       src,
-//       dest
-//     });
-//   }
-
-//   addCorrection(payload: any): Observable<any> {
-//     return this.http.post(`${this.apiUrl}/add-correction/`, payload);
-//   }
-// }

@@ -19,8 +19,21 @@ import { TranslateService } from '@ngx-translate/core';
 export class SidebarComponent implements OnInit {
   userRole: string | null = null;
   username: string | null = null;
+  isCollapsed = false;
 
   constructor (private authService: AuthService, private router: Router){}
+
+
+  // toggleSidebar() {
+  //   this.isCollapsed = !this.isCollapsed;
+  //   console.log("Bonjour!");
+  // }
+
+  toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    sidebar?.classList.toggle('open');
+    console.log("portez ce whisky!");
+  }
 
   ngOnInit(): void {
     // Récupération initiale du rôle
@@ -39,7 +52,7 @@ export class SidebarComponent implements OnInit {
 
 
   logout() {
-      this.authService.logout();
+    this.authService.logout();
     this.router.navigate(['/account/login']);
   }
 }

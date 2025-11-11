@@ -1,14 +1,22 @@
-<div id="layout-wrapper">
-    <app-header></app-header>
+<div id="layout-wrapper" *ngIf="userRole === 'super_admin' || userRole === 'admin'">
+    <!-- <app-header></app-header> -->
     <app-topbar></app-topbar>
     <app-sidebar></app-sidebar>
 
     <div class="main-content mt-2" id="mainContent">
         <div class="page-content">
             <div class="container-fluid">
-                
                 <router-outlet></router-outlet>
             </div>
+        </div>
+    </div>
+</div>
+
+<div id="layout-wrapper" *ngIf="userRole === 'corrector' || userRole === 'translator' || !userRole">
+    <app-header></app-header>
+    <div class="page-content">
+        <div class="container-fluid">
+            <router-outlet></router-outlet>
         </div>
     </div>
 </div>

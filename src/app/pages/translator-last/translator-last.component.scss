@@ -27,6 +27,23 @@
     }
   }
 
+  .history {
+    width: 50px;
+    height: 50px;
+    color: #84ab4c;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    &:hover {
+      background-color: #84ab4c;
+      color: #ffffff;
+      transform: rotate(90deg);
+    }
+  }
+
+  .text-history {
+    color: #212529;
+  }
+
   .badge {
     font-weight: 500;
     padding: 0.4rem 0.7rem;
@@ -54,27 +71,48 @@
       background: #64a8f0;
     }
   }
+
+}
+  // button {
+  //   color: #84ab4c;
+  //   &:hover {
+  //     color: #ffffff;
+  //     background: #64a8f0;
+  //   }
+  // }
+
+/* Offcanvas */
+.offcanvas-header, .offcanvas-footer {
+  background-color: #f8f9fa;
 }
 
+.list-group-item {
+  border: none;
+  border-bottom: 1px solid #f1f3f5;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.list-group-item:hover {
+  background-color: #f9fafb;
+  transform: translateX(3px);
+}
+
+/* Stars */
 .star {
   font-size: 1.4rem;
   color: #ccc;
   position: relative;
   display: inline-block;
+}
 
-  // Étoile remplie
-  &.full {
-    .half {
-      color: gold;
-    }
-  }
+.star.full .half {
+  color: gold;
+}
 
-  // Partie colorée (demi-étoile)
-  .half {
-    color: gold;
-    overflow: hidden;
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
+.half {
+  color: gold;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
 }

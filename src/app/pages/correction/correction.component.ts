@@ -1,12 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-correction',
-  standalone: true,
-  imports: [],
   templateUrl: './correction.component.html',
-  styleUrl: './correction.component.scss'
+  styleUrls: ['./correction.component.scss']
 })
-export class CorrectionComponent {
 
+export class CorrectionComponent implements OnInit{
+
+  breadCrumbItems!: Array<{}>;
+
+  ngOnInit(): void {
+    /**
+     * BreadCrumb Set
+     */
+    this.breadCrumbItems = [
+      { label: 'Pages' },
+      { label: 'Correction Page', active: true }
+    ];
+  }
 }

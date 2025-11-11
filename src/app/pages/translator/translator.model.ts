@@ -1,47 +1,37 @@
+// Modèles TypeScript pour correspondre au backend
+export interface Language {
+  id: number;
+  code: string;
+  name: string;
+}
+
+export interface Translator {
+  id?: number;
+  lang_src: Language | number;
+  lang_dest: Language | number;
+  input_text: string;
+  output_text?: string;
+  input_sentence?: any;   // JSON object {index: "phrase", ...}
+  output_sentence?: any;  // JSON object {index: "phrase", ...}
+  created_at?: string;
+}
+
 export interface Sentence {
   id: number | null;
-  sentence_number: number;
-  sentence_src: string;
-  sentence_translated: string;
-  corrections: any[];
-  // champs côté UI
+  user_id?: number;
+  phrase_source: string;
+  phrase_corrigee: string;
   isEditing?: boolean;
   editText?: string;
 }
 
-export interface TranslatorData {
-  id: number | null;
-  user: number | null;
-  lang_src: number | string;
-  lang_dest: number | string;
-  input_text: string;
-  output_text: string;
+export interface CorrectionTranslator {
+  id?: number;
+  translator_id: number;
+  user_id?: number;
+  phrase_source: string;
+  phrase_corrigee: string;
+  isEditing?: boolean;
+  editText?: string;
   created_at?: string;
-  sentences: Sentence[];
 }
-
-
-// export interface Sentence {
-//   id: number;
-//   sentence_number: number;
-//   sentence_src: string;
-//   sentence_translated: string;
-//   corrections: any[];
-//   isEditing?: boolean;
-//   editText?: string;
-// }
-
-// export interface TranslatorData {
-//   id: number;
-//   user: number;
-//   lang_src: number;
-//   lang_dest: number;
-//   input_text: string;
-//   output_text: string;
-//   created_at: string;
-//   sentences: Sentence[];
-// }
-
-// export interface TranslationResponse {
-//   sentences: string[];
-// }
