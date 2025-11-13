@@ -12,7 +12,7 @@
     </div>
 </div>
 
-<div id="layout-wrapper" *ngIf="userRole === 'corrector' || userRole === 'translator' || !userRole">
+<div id="layout-wrapper" *ngIf="userRole === 'corrector' || userRole === 'translator' || userRole === ''">
     <app-header></app-header>
     <div class="page-content">
         <div class="container-fluid">

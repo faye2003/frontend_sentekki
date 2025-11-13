@@ -1,4 +1,4 @@
-<app-pagetitle title="Traducteur" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+<app-pagetitle class=" font-size-18" title="Traducteur" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
 <div class="translator container-fluid py-2 p-auto">
   <div class="row g-3">
     <!-- Zone gauche -->
@@ -8,8 +8,8 @@
           <div class="d-flex gap-2">
             <!-- <button type="button" class="btn btn-outline-primary dropdown-toggle shadow-sm border">French (FR)</button> -->
             <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-outline-info fw-bold font-size-14">Français</button>
-                <button type="button" class="btn btn-outline-secondary fw-bold font-size-14">Anglais</button>
+                <button type="button" class="btn btn-outline-info font-size-18">Français</button>
+                <button type="button" class="btn btn-outline-secondary font-size-18">Anglais</button>
             </div>
           </div>
         </div>
@@ -35,7 +35,7 @@
         <!-- Bouton Translate -->
         <div class="row">
             <div class="col text-center">
-              <button class="btn btn-outline-primary px-5 py-2 shadow-sm" (click)="onTranslate()">
+              <button class="btn btn-outline-secondary px-5 py-2 shadow-sm btn-traduire" (click)="onTranslate()">
                   <i class="fa-solid fa-right-left"></i> Tranduire
               </button>
             </div>
@@ -55,8 +55,8 @@
         <div class="card-header">
           <!-- <button type="button" class="btn btn-outline-primary dropdown-toggle shadow-sm border">French (FR)</button> -->
           <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-              <button type="button" class="btn btn-outline-secondary fw-bold font-size-14">Français</button>
-              <button type="button" class="btn btn-outline-info fw-bold font-size-14">Anglais</button>
+              <button type="button" class="btn btn-outline-secondary font-size-18">Français</button>
+              <button type="button" class="btn btn-outline-info font-size-18">Anglais</button>
           </div>
         </div>
         <div class="card-body position-relative">
@@ -100,7 +100,7 @@
             <button class="btn btn-rounded shadow-sm history" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" (click)="openRight(Rightcontent)">
               <i class="fas fa-history"></i>
             </button>
-            <p><span class="text-history">Historique</span></p>
+            <p><span class="text-history fw-medium font-size-18">Historique</span></p>
             <!-- <h6>Historique</h6> -->
           </div>
       </div>

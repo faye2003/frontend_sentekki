@@ -30,7 +30,8 @@
   .history {
     width: 50px;
     height: 50px;
-    color: #84ab4c;
+    color: #64a8f0;
+    font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     &:hover {
@@ -47,6 +48,16 @@
   .badge {
     font-weight: 500;
     padding: 0.4rem 0.7rem;
+  }
+
+  .btn-traduire {
+    color: #64a8f0;
+    font-size: 18px;
+    font-weight: 500;
+    &:hover {
+      background-color: #84ab4c;
+      color: #ffffff;
+    }
   }
 }
 
