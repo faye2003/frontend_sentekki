@@ -4,10 +4,10 @@ import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { Translator, CorrectionTranslator } from './translator.model';
+import { Translator, CorrectionTranslator } from './traduction.model';
 
 @Injectable({ providedIn: 'root' })
-export class TranslatorService {
+export class TraductionService {
   private apiUrl = 'http://127.0.0.1:8000/api';
 
   constructor(private http: HttpClient, private authService: AuthService) {}
@@ -23,12 +23,14 @@ export class TranslatorService {
     return new HttpHeaders(headers);
   }
 
-   getUserHistory(): Observable<any[]> {
+  getUserHistory(): Observable<any[]> {
+    // const headers = this.getHeaders(true)
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getAccessToken()}`
     });
+    console.log(this.authService.getAccessToken());
     return this.http.get<{ count: number, results: any[] }>(`${this.apiUrl}/history/recent/`, { headers }).pipe(
-      map(response => response.results || []) // ✅ on renvoie seulement le tableau
+      map(response => response.results || []) // on renvoie seulement le tableau
     );
   }
 
@@ -37,7 +39,7 @@ export class TranslatorService {
       'Authorization': `Bearer ${this.authService.getAccessToken()}`
     });
     const body = {
-      translator_id: translatorId,  // 👈 clé correcte attendue par Django
+      translator_id: translatorId,  // clé correcte attendue par Django
       stars: stars,
       comment: comment
     };

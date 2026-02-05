@@ -153,9 +153,9 @@ body[data-bs-theme="dark"] {
         }
     }
 }
-
+$margin-top-page-content: 0.3rem;
 .page-content {
-    padding: calc(#{$header-height} + #{$grid-gutter-width}) calc(#{$grid-gutter-width} * 0.75) $footer-height calc(#{$grid-gutter-width} * 0.75);
+    padding: calc(#{$margin-top-page-content} + #{$grid-gutter-width}) calc(#{$grid-gutter-width} * 0.75) $footer-height calc(#{$grid-gutter-width} * 0.75);
 }
 
 .header-item {

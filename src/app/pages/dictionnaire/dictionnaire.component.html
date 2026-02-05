@@ -1,0 +1,188 @@
+<app-pagetitle title="Dictionnaire" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+
+<div class="container py-5">
+
+  <!-- Header -->
+  <div class="row align-items-center mb-4">
+    <div class="col-md-6">
+      <h2 class="fw-bold mb-1">Dictionnaire de données</h2>
+      <p class="text-muted mb-0">
+        Manage and explore organization-wide data definitions.
+      </p>
+    </div>
+
+    <div class="col-md-6 d-flex justify-content-md-end mt-3 mt-md-0">
+      <input
+        type="text"
+        class="form-control form-control-lg search-input"
+        placeholder="🔍 Rechercher des termes ou définitions..."
+      >
+    </div>
+  </div>
+
+  <!-- Alphabet Filter -->
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+
+      <div class="d-flex align-items-center mb-3">
+        <span class="text-uppercase text-muted fw-semibold me-3">
+          Alphabet Filtre
+        </span>
+        <button class="alphabet-btn active">All</button>
+      </div>
+
+      <div class="d-flex flex-wrap gap-2">
+        <button class="btn btn-outline-secondary alphabet-btn">A</button>
+        <button class="btn btn-outline-secondary alphabet-btn">B</button>
+        <button class="btn btn-outline-secondary alphabet-btn">C</button>
+        <button class="btn btn-outline-secondary alphabet-btn">D</button>
+        <button class="btn btn-outline-secondary alphabet-btn">E</button>
+        <button class="btn btn-outline-secondary alphabet-btn">F</button>
+        <button class="btn btn-outline-secondary alphabet-btn">G</button>
+        <button class="btn btn-outline-secondary alphabet-btn">H</button>
+        <button class="btn btn-outline-secondary alphabet-btn">I</button>
+        <button class="btn btn-outline-secondary alphabet-btn">J</button>
+        <button class="btn btn-outline-secondary alphabet-btn">K</button>
+        <button class="btn btn-outline-secondary alphabet-btn">L</button>
+        <button class="btn btn-outline-secondary alphabet-btn">M</button>
+        <button class="btn btn-outline-secondary alphabet-btn">N</button>
+        <button class="btn btn-outline-secondary alphabet-btn">O</button>
+        <button class="btn btn-outline-secondary alphabet-btn">P</button>
+        <button class="btn btn-outline-secondary alphabet-btn">Q</button>
+        <button class="btn btn-outline-secondary alphabet-btn">R</button>
+        <button class="btn btn-outline-secondary alphabet-btn">S</button>
+        <button class="btn btn-outline-secondary alphabet-btn">T</button>
+        <button class="btn btn-outline-secondary alphabet-btn">U</button>
+        <button class="btn btn-outline-secondary alphabet-btn">V</button>
+        <button class="btn btn-outline-secondary alphabet-btn">W</button>
+        <button class="btn btn-outline-secondary alphabet-btn">X</button>
+        <button class="btn btn-outline-secondary alphabet-btn">Y</button>
+        <button class="btn btn-outline-secondary alphabet-btn">Z</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Results count -->
+  <h5 class="fw-semibold mb-4">20 résultats trouvés</h5>
+
+  <!-- Dictionary Cards -->
+  <div class="row g-4">
+
+    <!-- Card 1 -->
+    <div class="col-md-4">
+      <div class="card dictionary-card h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="badge badge-category rounded-pill px-3 py-2">
+              TECHNICAL
+            </span>
+            <small class="text-muted">Updated: 2023-10-24</small>
+          </div>
+
+          <h5 class="fw-bold">API</h5>
+          <p class="text-muted">
+            Application Programming Interface – a set of functions and procedures
+            allowing the creation of applications that access the features or data
+            of an operating system or service.
+          </p>
+
+          <div class="text-end">
+            <span class="text-primary fw-semibold">→</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="col-md-4">
+      <div class="card dictionary-card h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="badge badge-category rounded-pill px-3 py-2">
+              MANAGEMENT
+            </span>
+            <small class="text-muted">Updated: 2023-11-01</small>
+          </div>
+
+          <h5 class="fw-bold">Agile</h5>
+          <p class="text-muted">
+            A method of software development that emphasizes incremental delivery,
+            team collaboration, continual planning, and continuous learning.
+          </p>
+
+          <div class="text-end">
+            <span class="text-primary fw-semibold">→</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="col-md-4">
+      <div class="card dictionary-card h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="badge badge-category rounded-pill px-3 py-2">
+              DEVELOPMENT
+            </span>
+            <small class="text-muted">Updated: 2023-09-15</small>
+          </div>
+
+          <h5 class="fw-bold">Backend</h5>
+          <p class="text-muted">
+            The part of a computer system or application that is not directly accessed
+            by the user, typically responsible for storing and manipulating data.
+          </p>
+
+          <div class="text-end">
+            <span class="text-primary fw-semibold">→</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Pagination -->
+    <div class="d-flex justify-content-center mt-5">
+    <nav aria-label="Page navigation">
+        <ul class="pagination pagination-lg align-items-center">
+
+        <!-- Previous -->
+        <li class="page-item disabled">
+            <a class="page-link d-flex align-items-center gap-2" href="#">
+            <span>&laquo;</span> Previous
+            </a>
+        </li>
+
+        <!-- Pages -->
+        <li class="page-item active">
+            <a class="page-link" href="#">1</a>
+        </li>
+
+        <li class="page-item">
+            <a class="page-link" href="#">2</a>
+        </li>
+
+        <li class="page-item">
+            <a class="page-link" href="#">3</a>
+        </li>
+
+        <li class="page-item">
+            <a class="page-link" href="#">4</a>
+        </li>
+
+        <!-- Next -->
+        <li class="page-item">
+            <a class="page-link d-flex align-items-center gap-2" href="#">
+            Next <span>&raquo;</span>
+            </a>
+        </li>
+
+        </ul>
+    </nav>
+    </div>
+
+
+</div>

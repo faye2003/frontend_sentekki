@@ -11,12 +11,12 @@ import Swal from 'sweetalert2';
 import { UserMe } from 'src/app/core/services/user-me.model';
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
+  selector: 'app-navbar',
+  templateUrl: './navbar.component.html',
+  styleUrl: './navbar.component.scss'
 })
 
-export class HeaderComponent implements OnInit {
+export class NavbarComponent implements OnInit {
   userRole: string | null = null;
   username: string | null = null;
   isLoading = false;

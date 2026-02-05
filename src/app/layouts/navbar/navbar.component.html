@@ -1,72 +1,113 @@
-<nav class="navbar navbar-expand-lg bg-white border-bottom shadow-sm" *ngIf="userRole !== 'super_admin'">
-  <div class="container-fluid">
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
+  <div class="container">
+
     <!-- Logo -->
-    <a class="navbar-brand d-flex align-items-center" href="#">
-      <img src="assets/images/logo1.png" alt="Logo" height="32" class="me-2" />
-      <!-- <span class="fw-bold">SenTekki</span> -->
+    <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#">
+      <i class="mdi mdi-translate fs-4 text-primary"></i>
+      <span>SENTEKKI</span>
     </a>
 
-    <!-- Burger menu for mobile -->
+    <!-- Mobile toggle -->
     <button
       class="navbar-toggler"
       type="button"
       data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-      aria-controls="navbarNav"
+      data-bs-target="#mainNavbar"
+      aria-controls="mainNavbar"
       aria-expanded="false"
-      aria-label="Toggle navigation">
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!-- Menu items -->
-    <div class="collapse navbar-collapse nav-header" id="navbarNav">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <!-- Navbar content -->
+    <div class="collapse navbar-collapse" id="mainNavbar">
+
+      <!-- Left menu -->
+       <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-lg-2">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" [routerLink]="['/translate']">Traducteur</a>
+          <a class="nav-link active" aria-current="page" [routerLink]="['/translate']">Traduire</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Paraphraser</a>
+          <a class="nav-link" [routerLink]="['/traduire']">Paraphraser</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Grammaire</a>
+          <a class="nav-link disabled" href="#">Grammaire</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Résumé</a>
-        </li>
-        <li class="nav-item">
-          <a *ngIf="userRole === 'corrector'" class="nav-link" [routerLink]="['/correction']">Mes corrections</a>
+          <a class="nav-link disabled" href="#">Résumé</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" [routerLink]="['/outil']">Consulter le dictionnaire</a>
         </li>
         <li class="nav-item">
+          <a *ngIf="userRole === 'corrector'" class="nav-link" [routerLink]="['/correction']">Mes corrections</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" [routerLink]="['/dictionnaire']">Outils</a>
         </li>
       </ul>
+      <!-- <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-lg-2">
+        <li class="nav-item">
+          <a class="nav-link active" href="#">Traduire</a>
+        </li>
 
-      <!-- <ul>
-        <li *ngFor="let item of menuItems" 
-            *ngIf="item.roles.includes(userRole)">
-          <a [routerLink]="item.route">{{ item.label }}</a>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Dictionnaire</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">Langues</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">API</a>
         </li>
       </ul> -->
 
       <!-- Right actions -->
-      <div class="d-flex">
-        <div class="dropdown d-inline-block" ngbDropdown>
-          <button type="button" class="btn header-item topbar-light bg-light-subtle border-start border-end" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
-              <img class="rounded-circle header-profile-user" src="assets/images/logo-bg2.png" alt="Header Avatar">
+      <div class="d-flex align-items-center gap-3">
+
+        <!-- Language switch -->
+        <div class="dropdown" ngbDropdown>
+          <button
+            class="btn btn-outline-secondary dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            ngbDropdownToggle
+          >
+            🌍 FR
           </button>
-          <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
-              <!-- item-->
-              <a class="dropdown-item" [routerLink]="['/account/login']"><i class="mdi mdi-face-man font-size-16 align-middle me-1"></i>Se connecter</a>
-              <a class="dropdown-item" routerLink=""><i class="mdi mdi-lock font-size-16 align-middle me-1"></i>S'inscrire</a>
-              <a *ngIf="userRole" class="dropdown-item" routerLink="" (click)="openProfile(Profilecontent)"><i class="mdi mdi-eye font-size-16 align-middle me-1"></i>Voir mon profile</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="javascript: void(0);" (click)="logout()"><i class="mdi mdi-logout text-muted font-size-16 align-middle me-1"></i> <span class="align-middle" key="t-logout">Déconnexion</span></a>
+          <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+            <li><a class="dropdown-item" href="#">🇫🇷 Français</a></li>
+            <li><a class="dropdown-item" href="#">🇬🇧 English</a></li>
+            <li><a class="dropdown-item" href="#">🇪🇸 Español</a></li>
+            <li><a class="dropdown-item" href="#">🇩🇪 Deutsch</a></li>
+          </ul>
+        </div>
+
+        
+        <!-- Right actions -->
+        <div class="d-flex">
+          <div class="dropdown d-inline-block" ngbDropdown>
+            <button type="button" class="btn header-item topbar-light bg-light-subtle border-start border-end" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
+                <img class="rounded-circle header-profile-user" src="assets/images/logo-bg2.png" alt="Header Avatar">
+            </button>
+            <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                <!-- item-->
+                <a class="dropdown-item" [routerLink]="['/account/login']"><i class="mdi mdi-face-man font-size-16 align-middle me-1"></i>Se connecter</a>
+                <a class="dropdown-item" routerLink=""><i class="mdi mdi-lock font-size-16 align-middle me-1"></i>S'inscrire</a>
+                <a *ngIf="userRole" class="dropdown-item" routerLink="" (click)="openProfile(Profilecontent)"><i class="mdi mdi-eye font-size-16 align-middle me-1"></i>Voir mon profile</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="javascript: void(0);" (click)="logout()"><i class="mdi mdi-logout text-muted font-size-16 align-middle me-1"></i> <span class="align-middle" key="t-logout">Déconnexion</span></a>
+            </div>
           </div>
         </div>
+
       </div>
+
     </div>
   </div>
 </nav>
@@ -84,8 +125,8 @@
         height="45"
       />
       <div>
-        <h6 class="mb-0 fw-semibold">Mamadou Faye</h6>
-        <small class="text-muted">fayem&#64;gmail.com</small>
+        <h6 class="mb-0 fw-semibold">{{ user.username }}</h6>
+        <small class="text-muted">{{ user.email }}</small>
       </div>
     </div>
 
@@ -257,124 +298,3 @@
     </div>
   </div>
 </ng-template>
-
-
-<!-- <ng-template #Profilecontent let-offcanvas>
-  <div class="offcanvas-header border-bottom bg-light">
-    <div class="d-flex align-items-center gap-2">
-      <img
-        class="rounded-circle header-profile-user"
-        src="assets/images/logo-bg2.png"
-        alt="Avatar"
-        width="45"
-        height="45"
-      />
-      <div>
-        <h6 class="mb-0 fw-semibold">{{ user?.fullName }}</h6>
-        <small class="text-muted">{{ user?.email }}</small>
-      </div>
-    </div>
-
-    <button
-      type="button"
-      class="btn-close"
-      (click)="offcanvas.dismiss('Cross click')">
-    </button>
-  </div>
-
-  <div class="offcanvas-body p-3">
-
-    <div class="alert alert-success py-2 d-flex align-items-center gap-2">
-      <i class="mdi mdi-check-circle-outline"></i>
-      <span>Compte actif</span>
-    </div>
-
-    <div class="card mb-3 shadow-sm">
-      <div class="card-body">
-        <h6 class="card-title fw-semibold mb-3">
-          <i class="mdi mdi-account-outline me-1"></i>
-          Informations personnelles
-        </h6>
-
-        <ul class="list-unstyled mb-0">
-          <li class="mb-2">
-            <strong>Nom :</strong> {{ user?.fullName }}
-          </li>
-          <li class="mb-2">
-            <strong>Email :</strong> {{ user?.email }}
-          </li>
-          <li class="mb-2">
-            <strong>Téléphone :</strong> {{ user?.phone || 'Non renseigné' }}
-          </li>
-          <li>
-            <strong>Date d’inscription :</strong>
-            {{ user?.createdAt | date:'dd/MM/yyyy' }}
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="card mb-3 shadow-sm">
-      <div class="card-body">
-        <h6 class="card-title fw-semibold mb-3">
-          <i class="mdi mdi-shield-account-outline me-1"></i>
-          Rôle & permissions
-        </h6>
-
-        <span class="badge bg-primary me-2">
-          {{ user?.role }}
-        </span>
-
-        <p class="text-muted small mt-2 mb-0">
-          Ce rôle détermine vos droits sur la plateforme.
-        </p>
-      </div>
-    </div>
-
-    <div class="card shadow-sm">
-      <div class="card-body">
-        <h6 class="card-title fw-semibold mb-3">
-          <i class="mdi mdi-cog-outline me-1"></i>
-          Actions
-        </h6>
-
-        <div class="d-grid gap-2">
-          <button class="btn btn-outline-primary"
-                  (click)="editProfile()">
-            <i class="mdi mdi-account-edit-outline me-1"></i>
-            Modifier le profil
-          </button>
-
-          <button class="btn btn-outline-warning"
-                  *ngIf="user?.role === 'USER'"
-                  (click)="requestTranslator()">
-            <i class="mdi mdi-account-switch-outline me-1"></i>
-            Demander le rôle de correcteur
-          </button>
-
-          <button class="btn btn-outline-secondary"
-                  (click)="changePassword()">
-            <i class="mdi mdi-lock-reset me-1"></i>
-            Changer le mot de passe
-          </button>
-
-          <button class="btn btn-outline-danger"
-                  (click)="logout()">
-            <i class="mdi mdi-logout me-1"></i>
-            Déconnexion
-          </button>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="offcanvas-footer text-center py-3 bg-light border-top">
-    <small class="text-muted">
-      Connecté en tant que <strong>{{ user?.username }}</strong>
-    </small>
-  </div>
-</ng-template> -->
-
-
-

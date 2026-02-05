@@ -4,10 +4,11 @@ import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { Translator, CorrectionTranslator } from './translator-last.model';
+import { Dictionnaire } from './dictionnaire.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
-export class TranslatorLastService {
+export class DictionnaireService {
   private apiUrl = 'http://127.0.0.1:8000/api';
 
   constructor(private http: HttpClient, private authService: AuthService) {}
@@ -23,14 +24,22 @@ export class TranslatorLastService {
     return new HttpHeaders(headers);
   }
 
-  getUserHistory(): Observable<any[]> {
-    // const headers = this.getHeaders(true)
+  getAllDictionnaire(): Observable<any[]> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getAccessToken()}`
     });
-    console.log(this.authService.getAccessToken());
-    return this.http.get<{ count: number, results: any[] }>(`${this.apiUrl}/history/recent/`, { headers }).pipe(
-      map(response => response.results || []) // on renvoie seulement le tableau
+    return this.http.get<{results: any[]}>(`${this.apiUrl}/dictionnaire/all/`, { headers }).pipe(
+        map(response => response.results || [])
+    );
+    
+  }
+
+   getUserDictionnaire(): Observable<any[]> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.authService.getAccessToken()}`
+    });
+    return this.http.get<{ count: number, results: any[] }>(`${this.apiUrl}/dictionnaire/recent/`, { headers }).pipe(
+      map(response => response.results || []) // ✅ on renvoie seulement le tableau
     );
   }
 
@@ -39,28 +48,13 @@ export class TranslatorLastService {
       'Authorization': `Bearer ${this.authService.getAccessToken()}`
     });
     const body = {
-      translator_id: translatorId,  // clé correcte attendue par Django
+      translator_id: translatorId,  // 👈 clé correcte attendue par Django
       stars: stars,
       comment: comment
     };
     return this.http.post(`${this.apiUrl}/note/`, body, { headers });
   }
 
-  translate(payload: { input_text: string; lang_src?: string; lang_dest?: string }): Observable<Translator> {
-    return this.http.post<Translator>(`${this.apiUrl}/translate/`, payload, {
-      headers: this.getHeaders(false)
-    }).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-  addCorrection(payload: { translator_id: number; phrase_source: string; phrase_corrigee: string }): Observable<CorrectionTranslator> {
-    return this.http.post<CorrectionTranslator>(`${this.apiUrl}/correction/`, payload, {
-      headers: this.getHeaders(true)
-    }).pipe(
-      catchError(this.handleError)
-    );
-  }
 
   private handleError(error: any) {
     console.error('Erreur API:', error);

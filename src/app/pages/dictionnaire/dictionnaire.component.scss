@@ -1,0 +1,74 @@
+body {
+  background-color: #f8fafc;
+}
+
+/* Alphabet buttons */
+.alphabet-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  font-weight: 600;
+  border: 1px solid #e5e7eb;
+
+  &.active {
+    background-color: #2563eb;
+    color: #fff;
+    border: none;
+  }
+}
+
+/* Dictionary card */
+.dictionary-card {
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    transform: translateY(-2px);
+  }
+}
+
+/* Category badge */
+.badge-category {
+  background-color: #e0ecff;
+  color: #1d4ed8;
+  font-weight: 500;
+}
+
+/* Search input */
+.search-input {
+  max-width: 360px;
+}
+
+/* Pagination */
+.pagination {
+  .page-link {
+    border-radius: 12px;
+    padding: 10px 18px;
+    font-weight: 500;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+
+    &:hover {
+      background-color: #eff6ff;
+    }
+  }
+
+  .page-item {
+    &.active {
+      .page-link {
+        background-color: #2563eb;
+        border-color: #2563eb;
+        color: #fff;
+      }
+    }
+
+    &.disabled {
+      .page-link {
+        color: #94a3b8;
+        background-color: #f8fafc;
+      }
+    }
+  }
+}

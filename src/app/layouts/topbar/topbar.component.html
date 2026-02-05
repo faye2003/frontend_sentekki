@@ -51,18 +51,20 @@
                 </div>
             </div>
 
-
-            <div class="dropdown d-inline-block" ngbDropdown>
+            <!-- Right actions -->
+            <div class="d-flex">
+                <div class="dropdown d-inline-block" ngbDropdown>
                 <button type="button" class="btn header-item topbar-light bg-light-subtle border-start border-end" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
                     <img class="rounded-circle header-profile-user" src="assets/images/logo-bg2.png" alt="Header Avatar">
                 </button>
                 <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
                     <!-- item-->
-                    <a class="dropdown-item" routerLink="/apps/profile"><i class="mdi mdi-face-man font-size-16 align-middle me-1"></i> Profile</a>
-                    <a class="dropdown-item" routerLink="/account/lock-screen"><i class="mdi mdi-lock font-size-16 align-middle me-1"></i> Lock screen</a>
+                    <a class="dropdown-item" [routerLink]="['/account/login']"><i class="mdi mdi-face-man font-size-16 align-middle me-1"></i>Se connecter</a>
+                    <a class="dropdown-item" routerLink=""><i class="mdi mdi-lock font-size-16 align-middle me-1"></i>S'inscrire</a>
+                    <a *ngIf="userRole" class="dropdown-item" routerLink=""><i class="mdi mdi-eye font-size-16 align-middle me-1"></i>Voir mon profile</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="javascript: void(0);" (click)="logout()"><i class="mdi mdi-logout text-muted font-size-16 align-middle me-1"></i> <span class="align-middle" key="t-logout">{{ 'MENUITEMS.AUTHENTICATION.LIST.LOGOUT' |
-                            translate}}</span></a>
+                    <a class="dropdown-item" href="javascript: void(0);" (click)="logout()"><i class="mdi mdi-logout text-muted font-size-16 align-middle me-1"></i> <span class="align-middle" key="t-logout">Déconnexion</span></a>
+                </div>
                 </div>
             </div>
 

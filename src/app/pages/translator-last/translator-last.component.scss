@@ -1,4 +1,5 @@
 .translator {
+  
   .card {
     border: none;
     border-radius: 0.75rem;
@@ -41,7 +42,7 @@
     }
   }
 
-  .text-history {
+  .span-history {
     color: #212529;
   }
 
@@ -52,7 +53,7 @@
 
   .btn-traduire {
     color: #64a8f0;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 500;
     &:hover {
       background-color: #84ab4c;
@@ -116,12 +117,12 @@
   display: inline-block;
 }
 
-.star.full .half {
-  color: gold;
-}
+// .star.full .half {
+//   color: rgba(255, 217, 0, 0.893);
+// }
 
 .half {
-  color: gold;
+  color: rgba(255, 217, 0, 0.893);
   overflow: hidden;
   position: absolute;
   top: 0;

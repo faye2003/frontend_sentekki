@@ -35,12 +35,18 @@ export class TranslatorLastComponent implements OnInit, AfterViewInit {
   isModalOpen: boolean = false;
   // bread crumb items
   breadCrumbItems!: Array<{}>;
+
+  // profil role utilisateur
+  userRole: string | null = null;
+  username: string | null = null;
+
   currentRate = 0;
   defaultSelect = 1;
   hovered = 0;
   readonly = false;
   customColor = 4;
   translations: any[] = [];
+  mention = '';
 
   @ViewChild('autoResizeTextarea') autoResizeTextarea!: ElementRef<HTMLTextAreaElement>;
   @ViewChild('content') content!: TemplateRef<any>;
@@ -61,7 +67,25 @@ export class TranslatorLastComponent implements OnInit, AfterViewInit {
       { label: 'Pages' },
       { label: 'Tranduction Page', active: true }
     ];
+    this.getRoleUser();
     this.loadHistory();
+
+    // Si l'utilisateur n'est pas connecté rediriger à la page de connection
+    // if (!this.authService.isLoggedIn()) {
+    //   this.router.navigate(['/account/login']);
+    // }
+
+  }
+
+  getRoleUser() {
+    this.authService.getUserRole().subscribe(role => {
+      this.userRole = role;
+      console.log(this.userRole);
+    });
+  }
+
+  hasRole(...roles: string[]): boolean {
+    return roles.includes(this.userRole || '');
   }
 
   loadHistory(): void {
@@ -77,7 +101,27 @@ export class TranslatorLastComponent implements OnInit, AfterViewInit {
   }
 
   onRate(translationId: number, rate: number): void {
-    this.translatorService.rateTranslation(translationId, rate, 'Très bonne traduction').subscribe({
+    if (rate === 5) 
+    {
+      this.mention = "Très bonne traduction";
+    } 
+    else if (rate === 4)
+    {
+      this.mention = "Bonne traduction !";
+    }
+    else if (rate === 3)
+    {
+      this.mention = "Moyenne Traduction";
+    } 
+    else if (rate === 2) 
+    {
+      this.mention = "Faible note de la traduction !";
+    } 
+    else if (rate === 1) 
+    {
+      this.mention = "Mauvaise traduction !";
+    }
+    this.translatorService.rateTranslation(translationId, rate, this.mention).subscribe({
       next: () => {
         console.log(`Traduction ${translationId} notée ${rate}/5`);
       },
@@ -89,7 +133,7 @@ export class TranslatorLastComponent implements OnInit, AfterViewInit {
     this.adjustTextareaHeight();
   }
 
-  /** 🔹 Ajuste la hauteur du textarea automatiquement */
+  /** Ajuste la hauteur du textarea automatiquement */
   @HostListener('input')
   onInput() {
     this.adjustTextareaHeight();
@@ -108,20 +152,28 @@ export class TranslatorLastComponent implements OnInit, AfterViewInit {
     }
   }
 
-  /** 🔹 Efface le contenu */
+  /** Efface le contenu */
   clearInput() {
     this.inputText = '';
     this.translatedText = '';
   }
 
-  /** 🔹 Copie la traduction */
+  /** Copie la traduction */
   copyOutput() {
     if (this.translatedText) {
       navigator.clipboard.writeText(this.translatedText);
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: 'Copié !',
+        showConfirmButton: false,
+        timer: 1500
+      });
     }
   }
 
-  /** 🔹 Traduire le texte */
+  /** Traduire le texte */
   onTranslate() {
     if (!this.inputText.trim()) {
       this.error = 'Veuillez saisir un texte à traduire';
@@ -184,7 +236,7 @@ export class TranslatorLastComponent implements OnInit, AfterViewInit {
   }
 
 
-  /** 🔹 Lorsqu’on clique sur une phrase traduite */
+  /** Lorsqu’on clique sur une phrase traduite */
   handleSentenceClick(sentence: string) {
     if (!this.authService.isLoggedIn()) {
       this.router.navigate(['/account/login']);
@@ -196,7 +248,7 @@ export class TranslatorLastComponent implements OnInit, AfterViewInit {
     this.modalService.open(this.content, { centered: true });
   }
 
-  /** 🔹 Confirme la correction */
+  /** Confirme la correction */
   saveCorrection(sentence: Sentence) {
     // if (!sentence.editText || sentence.editText.trim() === sentence.phrase_corrigee.trim()) {
     //   sentence.isEditing = false;
@@ -218,14 +270,16 @@ export class TranslatorLastComponent implements OnInit, AfterViewInit {
       phrase_corrigee: this.correctedText,
     };
 
+    // appel service
     this.translatorService.addCorrection(payload).subscribe({
       next: () => {
         Swal.fire({
+          toast: true,
           position: 'top-end',
           icon: 'success',
-          title: 'Text corrigé avec succès',
+          title: 'Correction envoyée',
           showConfirmButton: false,
-          timer: 1500,
+          timer: 1500
         });
         this.modalService.dismissAll();
       },
@@ -237,6 +291,7 @@ export class TranslatorLastComponent implements OnInit, AfterViewInit {
     });
   }
 
+  // action confirmation de la correction
   ConfirmCorrection() 
   {
     if (this.currentSentence) {
@@ -249,6 +304,7 @@ export class TranslatorLastComponent implements OnInit, AfterViewInit {
     }
   }
 
+  // action fermeture modal
   closeModal(_modalname: any) {
     this.modalService.dismissAll();
     this.selectedSentence = null;
@@ -258,6 +314,7 @@ export class TranslatorLastComponent implements OnInit, AfterViewInit {
     this.error = ""
   }
 
+  // action ouverture modal
   openModal(modalname: any) {
     this.isModalOpen = true;
     this.modalService.open(modalname, { centered: true });

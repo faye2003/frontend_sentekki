@@ -9,12 +9,14 @@ import { TranslateModule } from '@ngx-translate/core';
 import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { TopbarComponent } from './topbar/topbar.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     SidebarComponent,
     TopbarComponent,
+    NavbarComponent
   ],
   imports: [
     CommonModule,
@@ -25,6 +27,6 @@ import { TopbarComponent } from './topbar/topbar.component';
     SimplebarAngularModule,
   ],
   providers: [],
-  exports: [HeaderComponent, TopbarComponent, SidebarComponent]
+  exports: [HeaderComponent, TopbarComponent, SidebarComponent, NavbarComponent]
 })
 export class LayoutsModule { }

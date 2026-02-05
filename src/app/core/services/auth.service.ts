@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { UserMe } from './user-me.model';
 
 interface TokenResponse {
   success: boolean;
@@ -34,6 +35,11 @@ export class AuthService {
 
   getUserRole(): Observable<string | null> {
     return this.userRole$.asObservable();
+  }
+
+  // 🔹 Récupérer l'utilisateur connecté
+  getMe(): Observable<UserMe> {
+    return this.http.get<UserMe>(`${this.apiUrl}/me/`);
   }
 
   getCurrentUserRole(): string | null {
@@ -88,6 +94,21 @@ export class AuthService {
   getUsername(): string | null {
     return localStorage.getItem(this.usernameKey);
   }
+
+  // 🔹 Demande pour devenir correcteur
+  requestCorrector(): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${this.apiUrl}/request/corrector/`,
+      {}
+    );
+  }
+
+  
+  // refreshUser(): Observable<any> {
+  //   return this.http.get(`${this.apiUrl}/request/corrector/`).pipe(
+  //     tap(tokens => this.setUserRole(tokens.profil))
+  //   );
+  // }
 
   refreshAccessToken(): Observable<{ access: string }> {
     const refresh = this.getRefreshToken();

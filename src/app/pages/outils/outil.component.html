@@ -1,0 +1,129 @@
+<app-pagetitle title="Bibliothèque" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+
+<div class="container py-5">
+
+  <!-- Titre -->
+  <div class="mb-4 text-center">
+    <h2 class="fw-bold">📘 Dictionnaire de données</h2>
+    <p class="text-muted">Recherche et filtrage alphabétique</p>
+  </div>
+
+  <!-- Barre de recherche -->
+  <div class="row mb-4">
+    <div class="col-md-6 mx-auto">
+      <input
+        type="text"
+        class="form-control form-control-lg"
+        placeholder="Rechercher une donnée..."
+      >
+    </div>
+  </div>
+
+  <!-- Filtres alphabétiques -->
+  <div class="mb-4">
+    <div class="d-flex flex-wrap justify-content-center gap-2">
+      <!-- Boutons A-Z -->
+      <button class="btn btn-outline-primary btn-sm">A</button>
+      <button class="btn btn-outline-primary btn-sm">B</button>
+      <button class="btn btn-outline-primary btn-sm">C</button>
+      <button class="btn btn-outline-primary btn-sm">D</button>
+      <button class="btn btn-outline-primary btn-sm">E</button>
+      <button class="btn btn-outline-primary btn-sm">F</button>
+      <button class="btn btn-outline-primary btn-sm">G</button>
+      <button class="btn btn-outline-primary btn-sm">H</button>
+      <button class="btn btn-outline-primary btn-sm">I</button>
+      <button class="btn btn-outline-primary btn-sm">J</button>
+      <button class="btn btn-outline-primary btn-sm">K</button>
+      <button class="btn btn-outline-primary btn-sm">L</button>
+      <button class="btn btn-outline-primary btn-sm">M</button>
+      <button class="btn btn-outline-primary btn-sm">N</button>
+      <button class="btn btn-outline-primary btn-sm">O</button>
+      <button class="btn btn-outline-primary btn-sm">P</button>
+      <button class="btn btn-outline-primary btn-sm">Q</button>
+      <button class="btn btn-outline-primary btn-sm">R</button>
+      <button class="btn btn-outline-primary btn-sm">S</button>
+      <button class="btn btn-outline-primary btn-sm">T</button>
+      <button class="btn btn-outline-primary btn-sm">U</button>
+      <button class="btn btn-outline-primary btn-sm">V</button>
+      <button class="btn btn-outline-primary btn-sm">W</button>
+      <button class="btn btn-outline-primary btn-sm">X</button>
+      <button class="btn btn-outline-primary btn-sm">Y</button>
+      <button class="btn btn-outline-primary btn-sm">Z</button>
+    </div>
+  </div>
+
+  <!-- Liste des données -->
+  <div class="card shadow-sm">
+    <div class="card-body p-0">
+
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>#</th>
+            <th>Terme</th>
+            <th>Description</th>
+            <th>Catégorie</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Données fictives -->
+          <tr>
+            <td>1</td>
+            <td>API</td>
+            <td>Interface de programmation applicative</td>
+            <td>Technique</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Backend</td>
+            <td>Partie serveur d’une application</td>
+            <td>Technique</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Cache</td>
+            <td>Système de stockage temporaire</td>
+            <td>Performance</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Django</td>
+            <td>Framework web Python</td>
+            <td>Framework</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>Frontend</td>
+            <td>Interface utilisateur</td>
+            <td>UI</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div class="mt-4 d-flex justify-content-center">
+    <nav>
+      <ul class="pagination">
+        <li class="page-item disabled">
+          <a class="page-link">Précédent</a>
+        </li>
+        <li class="page-item active">
+          <a class="page-link">1</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link">2</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link">3</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link">Suivant</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+</div>

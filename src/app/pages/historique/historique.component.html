@@ -1,2 +1,44 @@
 <app-pagetitle title="Historique" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
 <!-- end page title -->
+<div class="offcanvas-header border-bottom bg-light">
+    <h5 class="fw-semibold mb-0">
+      <i class="bi bi-clock-history me-2 text-primary"></i> Mes Traductions
+    </h5>
+  </div>
+
+  <div class="offcanvas-body p-3">
+    <div *ngIf="translations?.length === 0" class="text-center text-muted py-5">
+      <i class="bi bi-translate display-6 d-block mb-2 text-secondary"></i>
+      <p>Aucune traduction enregistrée</p>
+    </div>
+
+    <div *ngIf="translations?.length && translations.length > 0" class="list-group rounded-3 shadow-sm">
+      <div *ngFor="let t of translations" class="list-group-item list-group-item-action py-3">
+        <div class="d-flex justify-content-between align-items-center">
+          <h6 class="fw-semibold text-primary">{{ t.lang_src.name }} → {{ t.lang_dest.name }}</h6>
+          <small class="text-muted">{{ t.created_at | date:'short' }}</small>
+        </div>
+        <p class="mb-1 text-dark small">{{ t.input_text }}</p>
+        <p class="text-secondary small">{{ t.output_text }}</p>
+
+        <div class="mt-2">
+          <ng-template #starTemplate let-fill="fill">
+            <span class="star" [class.full]="fill === 100">
+              <span class="half" [style.width.%]="fill">★</span>☆
+            </span>
+          </ng-template>
+          <ngb-rating
+            [(rate)]="t.rate"
+            [starTemplate]="starTemplate"
+            [readonly]="false"
+            [max]="5"
+            (rateChange)="onRate(t.id, t.rate)">
+          </ngb-rating>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="offcanvas-footer text-center py-3 bg-light border-top">
+    <small class="text-muted">Historique de tout vos traductions</small>
+  </div>

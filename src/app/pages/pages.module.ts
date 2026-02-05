@@ -18,23 +18,23 @@ import { allIcons } from 'angular-feather/icons';
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
 import { PagesRoutingModule } from './pages-routing.module';
 import { HomeComponent } from './home/home.component';
-import { TranslatorComponent } from './translator/translator.component';
 import { TranslatorLastComponent } from './translator-last/translator-last.component';
-import { TranslatorTestComponent } from './translator-test/translator-test.component';
-import { TranslatorFusionComponent } from './translator-fusion/translator-fusion.component';
 import { HistoriqueComponent } from './historique/historique.component';
 import { NgbRatingModule } from '@ng-bootstrap/ng-bootstrap';
 import { CorrectionComponent } from './correction/correction.component';
+import { OutilComponent } from './outils/outil.component';
+import { DictionnaireComponent } from './dictionnaire/dictionnaire.component';
+import { TraductionComponent } from './traduction/traduction.component';
 
 @NgModule({
   declarations: [
     HomeComponent,
     TranslatorLastComponent,
-    TranslatorComponent,
-    TranslatorFusionComponent,
-    TranslatorTestComponent,
     HistoriqueComponent,
-    CorrectionComponent
+    CorrectionComponent,
+    OutilComponent,
+    DictionnaireComponent,
+    TraductionComponent
   ],
   imports: [
     CommonModule,

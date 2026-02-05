@@ -1,18 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TranslatorTestComponent } from './translator-test.component';
+import { OutilComponent } from './outil.component';
 
-describe('TranslatorTestComponent', () => {
-  let component: TranslatorTestComponent;
-  let fixture: ComponentFixture<TranslatorTestComponent>;
+describe('OutilComponent', () => {
+  let component: OutilComponent;
+  let fixture: ComponentFixture<OutilComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TranslatorTestComponent]
+      declarations: [ OutilComponent ]
     })
     .compileComponents();
+  });
 
-    fixture = TestBed.createComponent(TranslatorTestComponent);
+  beforeEach(() => {
+    fixture = TestBed.createComponent(OutilComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
