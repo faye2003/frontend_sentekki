@@ -51,7 +51,7 @@
   border-radius: 5px;
   background: #f8f9fa;
   color: #212529;
-  height: 190px;
+  min-height: 190px;
   cursor: pointer;
   transition: color 0.3s ease, background 0.3s ease;
 
@@ -77,6 +77,26 @@
   margin-bottom: 6px;
   border: 1px solid #e5e7eb;
   transition: 0.2s;
+
+  &:hover {
+    background-color: #eff6ff;
+  }
+}
+
+/* Historique - recherche */
+.search-history {
+  max-width: 260px;
+  border-radius: 10px;
+}
+
+/* Bouton effacer */
+.btn-outline-danger {
+  border-radius: 10px;
+}
+
+/* Animation légère au hover */
+.list-group-item {
+  transition: 0.2s ease;
 
   &:hover {
     background-color: #eff6ff;

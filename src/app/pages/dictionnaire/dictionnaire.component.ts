@@ -28,8 +28,8 @@ export class DictionnaireComponent implements OnInit {
      * BreadCrumb Set
      */
     this.breadCrumbItems = [
-      { label: 'Pages' },
-      { label: 'Bibliothèque Page', active: true }
+      { label: 'Page' },
+      { label: 'Dictionnaire', active: true }
     ];
   }
 

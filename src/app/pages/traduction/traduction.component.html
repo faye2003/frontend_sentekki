@@ -152,11 +152,32 @@
 
 </div>
 
-
-<div class="card border-0 shadow-sm mt-4" *ngIf="translations?.length && translations.length > 0">
+<div class="card border-0 shadow-sm mt-4" *ngIf="translations.length > 0">
   <div class="card-body">
 
-    <h6 class="fw-semibold mb-3">🕘 Historique des traductions</h6>
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+      <h6 class="fw-semibold mb-0">🕘 Historique des traductions</h6>
+
+      <div class="d-flex gap-2 align-items-center">
+        <!-- 🔍 FILTRE -->
+        <input
+          type="text"
+          class="form-control form-control-sm search-history"
+          placeholder="Rechercher dans l’historique..."
+          [(ngModel)]="historySearch"
+          (input)="filterHistory()"
+        />
+
+        <!-- 🗑️ BOUTON EFFACER -->
+        <button 
+          class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1"
+          (click)="clearHistory()"
+        >
+          <i class="mdi mdi-delete-outline"></i>
+          Effacer
+        </button>
+      </div>
+    </div>
 
     <div class="list-group">
       <a 
@@ -167,15 +188,23 @@
         <div>
           <strong>{{ item.input_text }}</strong>
           <p class="mb-0 text-muted small">{{ item.output_text }}</p>
+            <!-- Affichage de la note si elle existe -->
+            <div *ngIf="item.rate && item.rate > 0" class="mt-1">
+                <ngb-rating [rate]="item.rate" [readonly]="true" [max]="5"></ngb-rating>
+                <small class="text-muted ms-2">{{ item.mention }}</small>
+            </div>
         </div>
 
         <small class="text-muted">{{ item.created_at | date:'short' }}</small>
       </a>
     </div>
 
+    <p class="text-muted small text-end mt-2 mb-0">
+      {{ filteredHistory.length }} élément(s)
+    </p>
+
   </div>
 </div>
-
 
 <!-- Modal Correction -->
 <ng-template #content role="document" let-modal>
@@ -247,13 +276,44 @@
   </div>
 </ng-template>
 
+<ng-template #ratingModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Évaluer la traduction</h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+  </div>
+
+  <div class="modal-body text-center">
+    <p class="mb-3">
+      Que pensez-vous de cette traduction ?
+    </p>
+
+    <!-- ⭐ Système de notation -->
+    <ngb-rating 
+      [(rate)]="currentRate"
+      [max]="5"
+      (rateChange)="onUserRate($event)"
+    ></ngb-rating>
+
+    <p class="mt-2 text-muted small">
+      Vous pouvez ignorer si vous ne souhaitez pas noter.
+    </p>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-outline-secondary" (click)="modal.dismiss()">
+      Ignorer
+    </button>
+  </div>
+</ng-template>
+
+
 <!-- Offcanvas Historique -->
 <ng-template #Rightcontent let-offcanvas>
   <div class="offcanvas-header border-bottom bg-light">
     <h5 class="fw-semibold mb-0">
       <i class="bi bi-clock-history me-2 text-primary"></i> Historique
     </h5>
-    <a class="nav-link m-4 font-size-16" [routerLink]="['/historique']" (click)="offcanvas.dismiss('Cross click')">plus</a>
+    <a type="button" class="btn btn-outline-secondary m-4 font-size-16" [routerLink]="['/historique']" (click)="offcanvas.dismiss('Cross click')">plus</a>
     <button type="button" class="btn-close" (click)="offcanvas.dismiss('Cross click')"></button>
   </div>
 
@@ -273,7 +333,7 @@
         <p class="text-secondary small">{{ t.output_text }}</p>
 
         <!-- Note -->
-        <div class="mt-2">
+        <!-- <div class="mt-2">
           <ng-template #starTemplate let-fill="fill">
             <span class="star" [class.full]="fill === 100">
               <span class="half" [style.width.%]="fill">★</span>☆
@@ -286,7 +346,7 @@
             [max]="5"
             (rateChange)="onRate(t.id, t.rate)">
           </ngb-rating>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

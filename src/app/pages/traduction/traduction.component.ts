@@ -43,15 +43,28 @@ export class TraductionComponent implements OnInit, AfterViewInit {
   username: string | null = null;
 
   currentRate = 0;
+  hasRated = false;
   defaultSelect = 1;
   hovered = 0;
   readonly = false;
   customColor = 4;
   translations: any[] = [];
   mention = '';
+  historySearch: string = '';
+
+  
+  filteredHistory: {
+    input_text: string;
+    output_text: string;
+    date: Date;
+    rate?: number;        // note donnée (1–5)
+    mention?: string;     // commentaire associé
+  }[] = [];
 
   @ViewChild('autoResizeTextarea') autoResizeTextarea!: ElementRef<HTMLTextAreaElement>;
   @ViewChild('content') content!: TemplateRef<any>;
+  @ViewChild('ratingModal') ratingModal!: TemplateRef<any>;
+
 
   constructor(
     private traductionService: TraductionService,
@@ -66,8 +79,8 @@ export class TraductionComponent implements OnInit, AfterViewInit {
      * BreadCrumb Set
      */
     this.breadCrumbItems = [
-      { label: 'Pages' },
-      { label: 'Tranduction Page', active: true }
+      { label: 'Page' },
+      { label: 'Tranducteur', active: true }
     ];
     this.getRoleUser();
     this.loadHistory();
@@ -100,18 +113,45 @@ export class TraductionComponent implements OnInit, AfterViewInit {
     }
   }
 
-
   loadHistory(): void {
-    this.traductionService.getUserHistory().subscribe({
-      next: (res) => {
-        this.translations = res;
-        console.log(res);
-      },
-      error: (err) => {
-        console.error('Erreur chargement historique :', err);
-      }
-    });
+    const saved = localStorage.getItem('translationHistory');
+
+    if (saved) {
+      this.translations = JSON.parse(saved);
+      this.filterHistory();
+      localStorage.setItem('translationHistory', JSON.stringify(this.translations));
+    } else {
+      this.traductionService.getUserHistory().subscribe({
+        next: (res) => {
+          this.translations = res;
+          this.filterHistory();
+        },
+        error: (err) => console.error('Erreur chargement historique :', err)
+      });
+    }
   }
+
+
+  filterHistory() {
+    const search = this.historySearch.toLowerCase().trim();
+
+    if (!search) {
+      this.filteredHistory = [...this.translations];
+    } else {
+      this.filteredHistory = this.translations.filter(item =>
+        item.input_text.toLowerCase().includes(search) ||
+        item.output_text.toLowerCase().includes(search)
+      );
+    }
+  }
+
+  clearHistory() {
+    if (confirm("Voulez-vous vraiment effacer tout l’historique ?")) {
+      this.translations = [];
+      this.filteredHistory = [];
+    }
+  }
+
 
   loadFromHistory(index: number) {
     const item = this.translations[index];
@@ -120,6 +160,47 @@ export class TraductionComponent implements OnInit, AfterViewInit {
     this.charCount = this.inputText.length;
   }
 
+  getMentionForRate(rate: number): string {
+    if (rate === 5) return "Très bonne traduction";
+    if (rate === 4) return "Bonne traduction !";
+    if (rate === 3) return "Traduction moyenne";
+    if (rate === 2) return "Traduction faible";
+    return "Mauvaise traduction !";
+  }
+
+  onUserRate(rate: number) {
+    if (!this.translatorData?.id) return;
+    if (this.hasRated) return;
+
+    this.hasRated = true;
+    const mention = this.getMentionForRate(rate);
+
+    this.traductionService.rateTranslation(this.translatorData.id, rate, mention)
+      .subscribe({
+        next: () => {
+
+        // Mettre à jour la dernière traduction dans l’historique
+        if (this.translations.length > 0) {
+          this.translations[0].rate = rate;
+          this.translations[0].mention = mention;
+        }
+
+        this.filterHistory(); // rafraîchir affichage
+          this.modalService.dismissAll();
+
+          Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: 'Merci pour votre évaluation ! ⭐',
+            text: mention,
+            showConfirmButton: false,
+            timer: 2000
+          });
+        },
+        error: (err) => console.error('Erreur lors de la notation :', err)
+      });
+  }
 
   onRate(translationId: number, rate: number): void {
     if (rate === 5) 
@@ -194,12 +275,19 @@ export class TraductionComponent implements OnInit, AfterViewInit {
     }
   }
 
+  openRatingModal() {
+    this.currentRate = 0; // reset
+    this.modalService.open(this.ratingModal, { centered: true });
+  }
+
+
   /** Traduire le texte */
   onTranslate() {
     if (!this.inputText.trim()) {
       this.error = 'Veuillez saisir un texte à traduire';
       return;
     }
+    this.hasRated = false; // reset pour nouvelle traduction
 
     this.loading = true;
     this.error = '';
@@ -222,6 +310,22 @@ export class TraductionComponent implements OnInit, AfterViewInit {
         }
         this.translatedText = res.output_text ?? '';
         this.loading = false;
+
+        // Ajouter à l'historique local (sans note pour l'instant)
+        this.translations.unshift({
+          input_text: this.inputText,
+          output_text: this.translatedText,
+          date: new Date(),
+          rate: 0,
+          mention: ''
+        });
+
+        this.filterHistory(); // mettre à jour l'affichage
+
+        // OUVRIR LA POPUP DE NOTATION
+        setTimeout(() => {
+          this.openRatingModal();
+        }, 3000);
       },
       error: (err) => {
         console.error(err);
