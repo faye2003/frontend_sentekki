@@ -31,7 +31,7 @@
           <a class="nav-link active" aria-current="page" [routerLink]="['/translate']">Traduire</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/traduire']">Paraphraser</a>
+          <a class="nav-link disabled" href="#">Paraphraser</a>
         </li>
         <li class="nav-item">
           <a class="nav-link disabled" href="#">Grammaire</a>
@@ -43,7 +43,7 @@
           <a class="nav-link" [routerLink]="['/outil']">Consulter le dictionnaire</a>
         </li>
         <li class="nav-item">
-          <a *ngIf="userRole === 'corrector'" class="nav-link" [routerLink]="['/correction']">Mes corrections</a>
+          <a *ngIf="userRole === 'corrector'" class="nav-link" [routerLink]="['/correction']">Corrections</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" [routerLink]="['/dictionnaire']">Outils</a>

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, TemplateRef } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -9,6 +9,15 @@ import { Translator, CorrectionTranslator } from './traduction.model';
 @Injectable({ providedIn: 'root' })
 export class TraductionService {
   private apiUrl = 'http://127.0.0.1:8000/api';
+  toasts: any[] = [];
+
+  show(textOrTpl: string | TemplateRef<any>, options: any = {}) {
+    this.toasts.push({ textOrTpl, ...options });
+  }
+
+  remove(toast: any) {
+    this.toasts = this.toasts.filter(t => t !== toast);
+  }
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 

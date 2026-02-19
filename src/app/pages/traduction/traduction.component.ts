@@ -14,6 +14,7 @@ import { NgbModal, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'src/app/core/services/auth.service';
 import Swal from 'sweetalert2';
 import { result } from 'lodash';
+import { ToastService } from './toast-service';
 
 @Component({
   selector: 'app-traduction',
@@ -37,6 +38,11 @@ export class TraductionComponent implements OnInit, AfterViewInit {
   isModalOpen: boolean = false;
   // bread crumb items
   breadCrumbItems!: Array<{}>;
+  show = true;
+  translucent = true;
+  stacking = true;
+  stackingsecond = true;
+  placement = true;
 
   // profil role utilisateur
   userRole: string | null = null;
@@ -71,7 +77,8 @@ export class TraductionComponent implements OnInit, AfterViewInit {
     private modalService: NgbModal,
     private authService: AuthService,
     private router: Router,
-    private offcanvasService: NgbOffcanvas
+    private offcanvasService: NgbOffcanvas,
+    private toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -90,6 +97,35 @@ export class TraductionComponent implements OnInit, AfterViewInit {
     //   this.router.navigate(['/account/login']);
     // }
 
+  }
+
+  /**
+   * Standard message 
+   */
+  showStandard() {
+    this.toastService.show('Normal Message', { classname: 'bg-primary text-center text-white', delay: 10000 });
+  }
+
+  /**
+   * Success message 
+   */
+  showSuccess() {
+    this.toastService.show('Success Message', { classname: 'bg-success text-center text-white', delay: 10000 });
+  }
+
+  /**
+   * Danger message 
+   */
+  showDanger() {
+    console.log("poitrtfghhj");
+    this.toastService.show('Error Message', { classname: 'bg-danger text-center text-white', delay: 10000 });
+  }
+
+  /**
+   * Warning message 
+   */
+  showWarning() {
+    this.toastService.show('Warning Message', { classname: 'bg-warning text-center text-white', delay: 10000 });
   }
 
   getRoleUser() {
@@ -264,14 +300,19 @@ export class TraductionComponent implements OnInit, AfterViewInit {
   copyOutput() {
     if (this.translatedText) {
       navigator.clipboard.writeText(this.translatedText);
-      Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'success',
-        title: 'Copié !',
-        showConfirmButton: false,
-        timer: 1500
-      });
+      /**
+       * Danger message 
+       */
+      console.log("Bonjour");
+      this.showDanger();
+      // Swal.fire({
+      //   toast: true,
+      //   position: 'top-end',
+      //   icon: 'success',
+      //   title: 'Copié !',
+      //   showConfirmButton: false,
+      //   timer: 1500
+      // });
     }
   }
 

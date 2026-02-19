@@ -10,7 +10,7 @@
         <!-- Header : choix langue source -->
         <div class="translator-header justify-content-between">
           <select class="form-select form-select-sm">
-            <option>Détecter la langue</option>
+            <!-- <option>Détecter la langue</option> -->
             <option>Français</option>
             <option>Anglais</option>
             <option>Espagnol</option>
@@ -54,11 +54,6 @@
             <button class="icon-btn">
               <i class="mdi mdi-volume-high"></i>
             </button>
-            
-            <!-- Bouton traduire -->
-            <button class="btn btn-outline-secondary px-5 py-2 shadow-sm btn-traduire" (click)="onTranslate()">
-                <i class="fa-solid fa-right-left"></i> Tranduire
-            </button>
 
             <button class="icon-btn ms-auto"
             *ngIf="translatedText && translatedText.trim() !== ''"
@@ -69,6 +64,16 @@
           </div>
         </div>
       </div>
+      
+      <!-- Bouton pour afficher les 10 derniers tranduction de l'utilisateur connecté -->
+        <div class="row mt-2">
+            <div class="col text-center justify-content-center">
+              <!-- Bouton traduire -->
+              <button class="btn btn-outline-primary px-5 py-2 shadow-sm btn-traduire" (click)="onTranslate()">
+                  <i class="fa-solid fa-right-left"></i> Tranduire
+              </button>
+            </div>
+        </div>
     </div>
 
     <!-- Zone OUTPUT (texte traduit) -->
@@ -305,6 +310,48 @@
     </button>
   </div>
 </ng-template>
+
+<div class="table-responsive">
+    <table class="table mb-0">
+        <tbody>
+            <tr>
+                <td>Default alert</td>
+                <td><a href="javascript: void(0);" id="alert-message" class="btn btn-primary btn-sm waves-effect waves-light" (click)="showStandard()">Click me</a></td>
+            </tr>
+            <tr>
+                <td>Success alert</td>
+                <td><a href="javascript: void(0);" id="alert-success" class="btn btn-primary btn-sm waves-effect waves-light" (click)="showSuccess()">Click me</a></td>
+            </tr>
+            <tr>
+                <td>Error alert</td>
+                <td><a href="javascript: void(0);" id="alert-error" class="btn btn-primary btn-sm waves-effect waves-light" (click)="showDanger()">Click me</a></td>
+            </tr>
+            <tr>
+                <td>Warning alert</td>
+                <td><a href="javascript: void(0);" id="alert-warning" class="btn btn-primary btn-sm waves-effect waves-light" (click)="showWarning()">Click me</a></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ng-template #dangerTpl>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="#fff" width="24" height="24" viewBox="0 0 24 24">
+            <path d="M10.872 6.831l1.695 3.904 3.654-1.561-1.79 3.426 3.333.954-3.417 1.338 2.231 4.196-4.773-2.582-2.869 2.287.413-3.004-3.792-.726 2.93-1.74-1.885-2.512 3.427.646.843-4.626zm-.786-6.831l-1.665 9.119-6.512-1.228 3.639 4.851-5.548 3.294 7.108 1.361-.834 6.076 5.742-4.577 9.438 5.104-4.288-8.064 6.834-2.677-6.661-1.907 3.25-6.22-6.98 2.982-3.523-8.114z" />
+        </svg>
+        Danger Danger !
+    </ng-template>
+
+    <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
+
+</div>
+
+<!-- <ng-template #dangerTpl>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="#fff" width="24" height="24" viewBox="0 0 24 24">
+        <path d="M10.872 6.831l1.695 3.904 3.654-1.561-1.79 3.426 3.333.954-3.417 1.338 2.231 4.196-4.773-2.582-2.869 2.287.413-3.004-3.792-.726 2.93-1.74-1.885-2.512 3.427.646.843-4.626zm-.786-6.831l-1.665 9.119-6.512-1.228 3.639 4.851-5.548 3.294 7.108 1.361-.834 6.076 5.742-4.577 9.438 5.104-4.288-8.064 6.834-2.677-6.661-1.907 3.25-6.22-6.98 2.982-3.523-8.114z" />
+    </svg>
+    Danger Danger !
+</ng-template> -->
+
+<!-- <app-toasts aria-live="polite" aria-atomic="true"></app-toasts> -->
 
 
 <!-- Offcanvas Historique -->

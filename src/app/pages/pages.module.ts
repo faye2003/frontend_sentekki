@@ -25,6 +25,7 @@ import { CorrectionComponent } from './correction/correction.component';
 import { OutilComponent } from './outils/outil.component';
 import { DictionnaireComponent } from './dictionnaire/dictionnaire.component';
 import { TraductionComponent } from './traduction/traduction.component';
+import { ToastsContainer } from './traduction/toasts-container.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { TraductionComponent } from './traduction/traduction.component';
     CorrectionComponent,
     OutilComponent,
     DictionnaireComponent,
-    TraductionComponent
+    TraductionComponent,
+    ToastsContainer
   ],
   imports: [
     CommonModule,

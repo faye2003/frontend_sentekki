@@ -24,13 +24,11 @@ export class DictionnaireService {
     return new HttpHeaders(headers);
   }
 
-  getAllDictionnaire(): Observable<any[]> {
+  getDictionary(search: string = '', page: number = 1, pageSize: number = 20) {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getAccessToken()}`
     });
-    return this.http.get<{results: any[]}>(`${this.apiUrl}/dictionnaire/all/`, { headers }).pipe(
-        map(response => response.results || [])
-    );
+    return this.http.get<any>(`http://127.0.0.1:8000/api/dictionnaire/?search=${search}&page=${page}&page_size=${pageSize}`);
     
   }
 
@@ -39,7 +37,7 @@ export class DictionnaireService {
       'Authorization': `Bearer ${this.authService.getAccessToken()}`
     });
     return this.http.get<{ count: number, results: any[] }>(`${this.apiUrl}/dictionnaire/recent/`, { headers }).pipe(
-      map(response => response.results || []) // ✅ on renvoie seulement le tableau
+      map(response => response.results || []) // on renvoie seulement le tableau
     );
   }
 

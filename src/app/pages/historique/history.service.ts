@@ -39,7 +39,7 @@ export class HistoriqueService {
       'Authorization': `Bearer ${this.authService.getAccessToken()}`
     });
     return this.http.get<{ count: number, results: any[] }>(`${this.apiUrl}/history/recent/`, { headers }).pipe(
-      map(response => response.results || []) // ✅ on renvoie seulement le tableau
+      map(response => response.results || []) // on renvoie seulement le tableau
     );
   }
 

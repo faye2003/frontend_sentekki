@@ -10,13 +10,15 @@ import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { TopbarComponent } from './topbar/topbar.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     SidebarComponent,
     TopbarComponent,
-    NavbarComponent
+    NavbarComponent,
+    FooterComponent
   ],
   imports: [
     CommonModule,
@@ -27,6 +29,6 @@ import { NavbarComponent } from './navbar/navbar.component';
     SimplebarAngularModule,
   ],
   providers: [],
-  exports: [HeaderComponent, TopbarComponent, SidebarComponent, NavbarComponent]
+  exports: [HeaderComponent, TopbarComponent, SidebarComponent, NavbarComponent, FooterComponent]
 })
 export class LayoutsModule { }
