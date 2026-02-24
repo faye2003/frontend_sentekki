@@ -1,132 +1,119 @@
-import { Component, OnInit,
-  ElementRef,
-  ViewChild,
-  TemplateRef,
- } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DictionnaireService } from './dictionnaire.service';
-import { NgbModal, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
-
-type Status = 'pending' | 'corrected' | 'flagged' | 'all';
-
-interface Translation {
-  id: string;
-  sourceText: string;
-  translatedText: string;
-  sourceLang: string;
-  targetLang: string;
-  status: 'pending' | 'corrected' | 'flagged';
-  createdAt: string;
-  tags: string[];
-}
-
-interface DictionaryResponse {
-  total: number;
-  total_pages: number;
-  page: number;
-  results: any[];
-}
+import { DictionaryEntry } from './dictionnaire.model';
 
 @Component({
   selector: 'app-dictionnaire',
   templateUrl: './dictionnaire.component.html',
   styleUrls: ['./dictionnaire.component.scss']
 })
-
-/**
- * Historique Component
- */
 export class DictionnaireComponent implements OnInit {
 
-  // bread crumb items
-  breadCrumbItems!: Array<{}>;
+  searchTerm: string = '';
+  activeLetter: string | null = null;
+  alphabetMode: 'WO' | 'FR' = 'WO';
+
+  FRENCH_ALPHABET: string[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
+  WOLOF_ALPHABET: string[] = "A B C D E Ë F G I J K L M N Ñ Ŋ O P Q R S T U W X Y".split(' ');
+
+  words: any[] = [];
+
+  page: number = 1;
+  pageSize: number = 6;
+  totalPages: number = 1;
+  total: number = 0;
+
+  loading: boolean = false;
 
   // ===== PAGINATION =====
   currentPage = 1;
-  itemsPerPage = 5;
+  maxVisiblePages: number = 5
 
-  dictionaryData: any[] = [];
-  words: any[] = [];
-  searchTerm: string = '';
-  page: number = 1;
-  pageSize: number = 20;
-  totalPages: number = 0;
-  total: number = 0
-
-  // ===== FILTRES =====
-  filters = {
-    search: '',
-    alphabet: null as string | null,
-    status: 'all' as Status
-  };
-
-  constructor(
-    private dictionaryService : DictionnaireService
-  ) { }
-
-  alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  constructor(private dictionaryService: DictionnaireService) {}
 
   ngOnInit(): void {
-    /**
-     * BreadCrumb Set
-     */
-    this.breadCrumbItems = [
-      { label: 'Page' },
-      { label: 'Dictionnaire', active: true }
-    ];
     this.getAllDictionnaire();
   }
 
+  get alphabet(): string[] {
+    return this.alphabetMode === 'WO' ? this.WOLOF_ALPHABET : this.FRENCH_ALPHABET;
+  }
+
   getAllDictionnaire() {
-    console.log('Bibdhsdbhsd');
-    this.dictionaryService.getDictionary(this.searchTerm, this.page, this.pageSize).subscribe({
-      next: (data: DictionaryResponse) => {
-        console.log('Données reçues:', data);
+    this.loading = true;
+
+    this.dictionaryService.getDictionary(
+      this.searchTerm,
+      this.currentPage,
+      this.pageSize,
+      this.activeLetter
+    ).subscribe({
+      next: (data) => {
         this.words = data.results;
-        // this.totalPages = data.total_pages;
-        // this.total = data.total;
+        this.total = data.count;
+        this.totalPages = data.total_pages;
+        this.loading = false;
       },
-      error: (error) => {
-        console.error('Erreur:', error);
+      error: (err) => {
+        console.error(err);
+        this.loading = false;
       }
     });
   }
 
-   search() {
-    this.page = 1;
+  changePage(page: number) {
+    if (page < 1 || page > this.totalPages || page === this.currentPage) return;
+
+    this.currentPage = page;
     this.getAllDictionnaire();
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   }
 
-  nextPage() {
-    if (this.page < this.totalPages) {
-      this.page++;
-      this.getAllDictionnaire();
-    }
-  }
+  get visiblePages(): number[] {
+    const pages: number[] = [];
 
-  prevPage() {
-    if (this.page > 1) {
-      this.page--;
-      this.getAllDictionnaire();
+    let start = Math.max(1, this.currentPage - Math.floor(this.maxVisiblePages / 2));
+    let end = start + this.maxVisiblePages - 1;
+
+    if (end > this.totalPages) {
+      end = this.totalPages;
+      start = Math.max(1, end - this.maxVisiblePages + 1);
     }
+
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+
+    return pages;
   }
 
   onSearchChange() {
     this.currentPage = 1;
+    this.getAllDictionnaire();
   }
 
-  setStatus(status: Status) {
-    this.filters.status = status;
-    this.currentPage = 1;
+  toggleAlphabet(mode: 'WO' | 'FR') {
+    this.alphabetMode = mode;
+    this.activeLetter = null;
+    this.page = 1;
+    this.getAllDictionnaire();
   }
 
-  setAlphabet(letter: string | null) {
-    this.filters.alphabet = letter;
+  selectLetter(letter: string) {
+    this.activeLetter = this.activeLetter === letter ? null : letter;
     this.currentPage = 1;
+    this.getAllDictionnaire();
   }
 
-  clearFilters() {
-    this.filters = { search: '', alphabet: null, status: 'all' };
-    this.currentPage = 1;
+  resetFilters() {
+    this.searchTerm = '';
+    this.activeLetter = null;
+    this.page = 1;
+    this.getAllDictionnaire();
   }
 
 }

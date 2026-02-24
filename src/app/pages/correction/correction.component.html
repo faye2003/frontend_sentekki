@@ -28,7 +28,7 @@
 
     <div class="col-md-3 text-end">
       <select class="form-select w-75 ms-auto"
-              [(ngModel)]="filters.status"
+              [(ngModel)]="filters.request_status"
               (change)="currentPage = 1">
         <option value="all">Tous les statuts</option>
         <option value="pending">En attente</option>
@@ -65,11 +65,11 @@
       <div class="d-flex justify-content-between align-items-start mb-2">
         <span class="badge"
               [ngClass]="{
-                'bg-warning text-dark': item.status === 'pending',
-                'bg-success': item.status === 'corrected',
-                'bg-danger': item.status === 'flagged'
+                'bg-warning text-dark': item.request_status === 'pending',
+                'bg-success': item.request_status === 'corrected',
+                'bg-danger': item.request_status === 'flagged'
               }">
-          {{ item.status | uppercase }}
+          {{ item.request_status | uppercase }}
         </span>
 
         <span class="ref">
@@ -94,12 +94,12 @@
       </div>
 
       <div class="actions mt-2 d-flex justify-content-end gap-3">
-        <a (click)="openModal(item, 'view', modal)">
+        <a (click)="openModal(item, 'view', content)">
           <i class="bx bx-show"></i> voir
         </a>
 
         <a class="text-warning"
-          (click)="openModal(item, 'edit', modal)">
+          (click)="openModal(item, 'edit', content)">
           <i class="bx bx-edit"></i> Corriger
         </a>
 
@@ -134,8 +134,87 @@
 
 </div>
 
+<!-- Modal Correction -->
+<ng-template #content role="document" let-modal>
+  <div class="modal-header border-bottom-0">
+    <h5 class="modal-title mt-0 ">Corriger la traduction</h5>
+    <button type="button" class="btn-close" (click)="closeModal('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+      <div class="row m-2">
+        <ul *ngIf="formattedSentences.length > 0">
+          <li *ngFor="let s of formattedSentences" class="mb-3">
+
+            <!-- Affichage normal -->
+            <div *ngIf="!s.isEditing" class="d-flex justify-content-between align-items-center">
+              <span>{{ s.text }}</span>
+
+              <button class="btn btn-sm btn-outline-primary"
+                      (click)="editSentence(s)">
+                <i class="fas fa-edit"></i>
+              </button>
+            </div>
+
+            <!-- Mode édition -->
+            <div *ngIf="s.isEditing">
+              <input [(ngModel)]="s.editText"
+                    class="form-control mb-2">
+
+              <div class="d-flex justify-content-end gap-2">
+                <button class="btn btn-sm btn-danger"
+                        (click)="cancelEdit(s)">
+                  Annuler
+                </button>
+
+                <button class="btn btn-sm btn-success"
+                        (click)="confirmCorrection(s)">
+                  Enregistrer
+                </button>
+              </div>
+            </div>
+
+          </li>
+        </ul>
+
+      </div>
+  </div>
+</ng-template>
+
+<!-- Modal de confirmation -->
+<!-- <ng-template #confirmation role="document" let-modal>
+  <div class="modal-header">
+    <h2 class="modal-title mt-0">Confirmation</h2>
+    <button type="button" class="btn-close" aria-hidden="true" (click)="closeModal('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-12">
+        <p>
+          <span>Voulez-vous confirmer la correction de la phrase ? </span>
+          <span class="text-sonatel fw-bold ml-2"></span>
+        </p>
+      </div>
+    </div>
+    <div class="mb-2" *ngIf="error">
+      <div class="text-danger" style="font-size: 12px;">{{error}}</div>
+    </div>
+    <div class="row">
+      <div class="text-end col-md-6">
+        <button (click)="closeModal('Cross click')" class="btn btn-dark" id="btn-save-event">
+          Annuler
+        </button>
+      </div>
+      <div class="text-start col-md-6">
+        <button (click)="ConfirmCorrection()" type="submit" class="btn btn-primary" id="btn-save-event">
+          Confirmer
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template> -->
+
 <!-- ===== MODAL ===== -->
-<ng-template #modal>
+<!-- <ng-template #modal>
   <div class="modal-header">
     <h5 class="modal-title">
       {{ modalMode === 'edit' ? 'Corriger la traduction' : 'Détail de la traduction' }}
@@ -196,4 +275,4 @@
       Save Correction
     </button>
   </div>
-</ng-template>
+</ng-template> -->

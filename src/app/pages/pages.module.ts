@@ -27,6 +27,7 @@ import { DictionnaireComponent } from './dictionnaire/dictionnaire.component';
 import { TraductionComponent } from './traduction/traduction.component';
 import { ToastsContainer } from './traduction/toasts-container.component';
 
+
 @NgModule({
   declarations: [
     HomeComponent,

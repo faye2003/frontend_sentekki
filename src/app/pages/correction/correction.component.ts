@@ -9,17 +9,6 @@ import { result } from 'lodash';
 
 type Status = 'pending' | 'corrected' | 'flagged' | 'all';
 
-// interface Translation {
-//   id: string;
-//   sourceText: string;
-//   translatedText: string;
-//   sourceLang: string;
-//   targetLang: string;
-//   status: 'pending' | 'corrected' | 'flagged';
-//   createdAt: string;
-//   tags: string[];
-// }
-
 
 @Component({
   selector: 'app-correction',
@@ -62,6 +51,7 @@ export class CorrectionComponent implements OnInit{
   readonly = false;
   customColor = 4;
   translations: any[] = [];
+  formattedSentences: any[] = [];
   mention = '';
   historySearch: string = '';
 
@@ -72,21 +62,11 @@ export class CorrectionComponent implements OnInit{
     private correctionService: CorrectionService
   ) {}
 
-  // // ===== MOCK DATA (à remplacer par ton service plus tard) =====
-  // translations: Translation[] = [
-  //   { id: '1', sourceText: 'The early bird catches the worm.', translatedText: "L'oiseau matinal attrape le ver.", sourceLang: 'en', targetLang: 'fr', status: 'pending', createdAt: '2023-11-01T10:00:00Z', tags: ['idiom', 'nature'] },
-  //   { id: '2', sourceText: 'Break a leg!', translatedText: 'Casse une jambe!', sourceLang: 'en', targetLang: 'fr', status: 'pending', createdAt: '2023-11-02T11:30:00Z', tags: ['expression', 'theater'] },
-  //   { id: '3', sourceText: 'Better late than never.', translatedText: 'Mieux vaut tard que jamais.', sourceLang: 'en', targetLang: 'fr', status: 'corrected', createdAt: '2023-11-03T09:15:00Z', tags: ['proverb'] },
-  //   { id: '4', sourceText: 'A piece of cake.', translatedText: 'Un morceau de gâteau.', sourceLang: 'en', targetLang: 'fr', status: 'pending', createdAt: '2023-11-04T14:45:00Z', tags: ['idiom', 'food'] },
-  //   { id: '5', sourceText: 'Call it a day.', translatedText: 'Appelez ça un jour.', sourceLang: 'en', targetLang: 'fr', status: 'flagged', createdAt: '2023-11-05T16:20:00Z', tags: ['work', 'idiom'] },
-  //   { id: '10', sourceText: 'Feeling under the weather.', translatedText: 'Se sentir sous la météo.', sourceLang: 'en', targetLang: 'fr', status: 'pending', createdAt: '2023-11-10T11:55:00Z', tags: ['health', 'idiom'] },
-  // ];
-
   // ===== FILTRES =====
   filters = {
     search: '',
     alphabet: null as string | null,
-    status: 'all' as Status
+    request_status: 'all' as Status
   };
 
   // ===== PAGINATION =====
@@ -116,6 +96,7 @@ export class CorrectionComponent implements OnInit{
     this.correctionService.getTranslations().subscribe({
       next: (response) => {
         this.translations = response; // IMPORTANT
+        // console.log(response);
       },
       error: (err) => console.error(err)
     });
@@ -135,7 +116,7 @@ export class CorrectionComponent implements OnInit{
           item.input_text?.toUpperCase().startsWith(this.filters.alphabet);
 
         const matchesStatus =
-          this.filters.status === 'all' || item.status === this.filters.status;
+          this.filters.request_status === 'all' || item.request_status === this.filters.request_status;
 
         return matchesSearch && matchesAlphabet && matchesStatus;
       })
@@ -171,18 +152,75 @@ export class CorrectionComponent implements OnInit{
     }
   }
 
+  // ouvre le mode édition pour une phrase (on reçoit l'objet phrase et son index)
+  // editSentence(sentence: any) {
+  //   if (this.translatorData?.output_sentence) {
+  //     this.translatorData.output_sentence.forEach((s: any) => {
+  //       s.isEditing = false;
+  //       s.editText = s.text;
+  //     });
+  //   }
+
+  //   sentence.isEditing = true;
+  //   sentence.editText = sentence.text;
+  //   this.currentSentence = sentence;
+  // }
+
+  editSentence(sentence: any) {
+    this.formattedSentences.forEach(s => s.isEditing = false);
+    sentence.isEditing = true;
+  }
+
+
+  // annule l'édition (remet le texte original)
+  // cancelEdit(sentence: any) {
+  //   sentence.isEditing = false;
+  //   sentence.editText = sentence.text;
+  //   // si currentSentence était celle-ci, la réinitialiser
+  //   if (this.currentSentence === sentence) {
+  //     this.currentSentence = null;
+  //   }
+  // }
+
+  cancelEdit(sentence: any) {
+    sentence.isEditing = false;
+    sentence.editText = sentence.text;
+  }
+
+
   openModal(translation: Translator, mode: 'view' | 'edit', modal: any) {
     this.selectedTranslation = translation;
     this.modalMode = mode;
-    this.editedText = translation.output_text || '';
+
+    // Transformer les phrases string en objets éditables
+    this.formattedSentences = (translation.output_sentence || []).map((text: string) => ({
+      text: text,
+      editText: text,
+      isEditing: false
+    }));
+
     this.modalService.open(modal, { centered: true });
+  }
+
+
+  // openModal(translation: Translator, mode: 'view' | 'edit', modal: any) {
+  //   this.selectedTranslation = translation;
+  //   this.modalMode = mode;
+  //   this.editedText = translation.output_text || '';
+  //   this.modalService.open(modal, { centered: true });
+  // }
+
+  // action ouverture modal
+  openModall(modalname: any) {
+    this.isModalOpen = true;
+    this.modalService.open(modalname, { centered: true });
   }
 
   closeModal(_modalname: any) {
     this.modalService.dismissAll();
   }
 
-  ConfirmCorrection() {
+  ConfirmsssCorrection() {
     if (!this.selectedTranslation?.id) return;
 
     const payload: CorrectionTranslator = {
@@ -217,4 +255,89 @@ export class CorrectionComponent implements OnInit{
       }
     });
   }
+
+  /** Confirme la correction */
+    saveCorrection(sentence: Sentence) {
+      // if (!sentence.editText || sentence.editText.trim() === sentence.phrase_corrigee.trim()) {
+      //   sentence.isEditing = false;
+      //   return;
+      // }
+      if (!this.selectedSentence || !this.translatorData) {
+        this.error = 'Aucune phrase sélectionnée';
+        return;
+      }
+  
+      if (!this.translatorData?.id) {
+        console.error("La traduction n'existe pas !");
+        return;
+      }
+  
+      const payload: CorrectionTranslator = {
+        translator_id: this.translatorData.id,
+        phrase_source: this.selectedSentence,
+        phrase_corrigee: this.correctedText,
+      };
+  
+      // appel service
+      this.correctionService.addCorrection(payload).subscribe({
+        next: () => {
+          Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: 'Correction envoyée',
+            showConfirmButton: false,
+            timer: 1500
+          });
+          this.loadTranslations();
+          this.modalService.dismissAll();
+        },
+        error: (err) => {
+          console.error(err);
+          this.error = 'Erreur lors de la sauvegarde de la correction';
+          Swal.fire('Erreur!', err.error?.error || 'Erreur lors de la sauvegarde de la correction.', 'error');
+        },
+      });
+    }
+  
+    // action confirmation de la correction
+    confirmCorrection(sentence: Sentence) {
+
+      if (!this.selectedTranslation?.id) return;
+
+      if (!sentence.editText || sentence.editText.trim() === '') {
+        Swal.fire('Erreur', 'La phrase corrigée est vide', 'error');
+        return;
+      }
+
+      const payload: CorrectionTranslator = {
+        translator_id: this.selectedTranslation.id,
+        phrase_source: sentence.phrase_source,
+        phrase_corrigee: sentence.editText
+      };
+
+      this.correctionService.addCorrection(payload).subscribe({
+        next: () => {
+
+          sentence.phrase_corrigee = sentence.editText!; // <- maintenant garanti
+          sentence.isEditing = false;
+
+          Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: 'Correction envoyée',
+            showConfirmButton: false,
+            timer: 1500
+          });
+
+          this.loadTranslations();
+          this.modalService.dismissAll();
+        },
+        error: (err) => {
+          console.error(err);
+          Swal.fire('Erreur', 'Erreur backend', 'error');
+        }
+      });
+    }
 }

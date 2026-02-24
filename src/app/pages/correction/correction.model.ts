@@ -13,7 +13,7 @@ export interface Translator {
   output_text?: string;
   input_sentence?: any;   // JSON object {index: "phrase", ...}
   output_sentence?: any;  // JSON object {index: "phrase", ...}
-  status: 'pending' | 'corrected' | 'flagged';
+  request_status: 'pending' | 'corrected' | 'flagged';
   created_at?: string;
   tags: string[];
 }

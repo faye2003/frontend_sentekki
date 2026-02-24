@@ -4,12 +4,12 @@ import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { Dictionnaire } from './dictionnaire.model';
+import { DictionaryEntry } from './dictionnaire.model';
 import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class DictionnaireService {
-  private apiUrl = 'http://127.0.0.1:8000/api';
+  private apiUrl = 'https://api.sentekki.unchk.sn/api/search';
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -24,11 +24,18 @@ export class DictionnaireService {
     return new HttpHeaders(headers);
   }
 
-  getDictionary(search: string = '', page: number = 1, pageSize: number = 20) {
+  getDictionary(search: string = '', page: number = 1, pageSize: number = 20, letter: string | null) {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getAccessToken()}`
     });
-    return this.http.get<any>(`http://127.0.0.1:8000/api/dictionnaire/?search=${search}&page=${page}&page_size=${pageSize}`);
+    return this.http.get<any>(`${this.apiUrl}/?search=${search}&page=${page}&page_size=${pageSize}`,{
+      params: {
+        search,
+        page,
+        page_size: pageSize,
+        letter: letter ?? ''
+      }
+    });
     
   }
 
