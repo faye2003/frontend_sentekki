@@ -2,7 +2,7 @@
 <div class="container translation-queue py-4">
 
   <!-- HEADER -->
-  <header class="mb-4">
+  <header class="mb-2">
     <h3 class="fw-bold">File d'attente de traduction</h3>
     <p class="text-muted">
         Relisez, corrigez et gérez vos traductions automatiques.
@@ -10,50 +10,77 @@
   </header>
 
   <!-- SEARCH + STATUS FILTER -->
-  <div class="row mb-4 align-items-center">
-    <div class="col-md-9">
-      <div class="input-group search-box">
-        <span class="input-group-text bg-white border-end-0">
-          <i class="bx bx-search"></i>
-        </span>
+  <!-- HEADER -->
+  <div class="container py-2">
+    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-4">
+
+      <!-- SEARCH -->
+      <div class="search-wrapper flex-grow-1">
+        <i class="fas fa-search search-icon"></i>
         <input
           type="text"
-          class="form-control border-start-0"
-          placeholder="Recherche par texte source ou traduit..."
           [(ngModel)]="filters.search"
           (ngModelChange)="onSearchChange()"
+          placeholder="Ex: aada, coutume..."
+          class="search-input"
         />
       </div>
-    </div>
 
-    <div class="col-md-3 text-end">
-      <select class="form-select w-75 ms-auto"
-              [(ngModel)]="filters.request_status"
-              (change)="currentPage = 1">
-        <option value="all">Tous les statuts</option>
-        <option value="pending">En attente</option>
-        <option value="corrected">Corrigée</option>
-        <option value="flagged">Signalé</option>
-      </select>
+      <!-- TOGGLE -->
+      <div class="alphabet-toggle">
+        <button
+          [class.active]="alphabetMode === 'WO'"
+          (click)="toggleAlphabet('WO')">
+          Alphabet Wolof
+        </button>
+
+        <button
+          [class.active]="alphabetMode === 'FR'"
+          (click)="toggleAlphabet('FR')">
+          Alphabet Français
+        </button>
+      </div>
+      <div class="col-md-3 text-end alphabet-toggle">
+        <select class="form-select w-75 ms-auto"
+                [(ngModel)]="filters.status"
+                (change)="currentPage = 1">
+          <option value="all">Tous les statuts</option>
+          <option value="pending">En attente</option>
+          <option value="corrected">Corrigée</option>
+          <option value="flagged">Signalé</option>
+        </select>
+      </div>
+
     </div>
   </div>
 
   <!-- ALPHABET FILTER -->
-  <div class="alphabet-filter mb-4 p-2 rounded">
-    <div class="d-flex align-items-center gap-2 flex-wrap">
-      <button class="btn btn-sm"
-              [ngClass]="{'btn-primary': !filters.alphabet, 'btn-light': filters.alphabet}"
-              (click)="setAlphabet(null)">
-        All
-      </button>
+  <div class="container mb-5">
 
-      <button *ngFor="let letter of alphabet"
-              class="btn btn-sm"
-              [ngClass]="{'btn-primary': filters.alphabet === letter, 'btn-light': filters.alphabet !== letter}"
-              (click)="setAlphabet(letter)">
-        {{ letter }}
-      </button>
+    <div class="filter-box">
+
+      <div class="filter-header">
+        <span>FILTRER PAR LETTRE</span>
+        
+        <button class="btn btn-sm reset-btn"
+                [ngClass]="{'btn-primary': !filters.alphabet, 'btn-light': filters.alphabet}"
+                (click)="setAlphabet(null)">
+          All
+        </button>
+      </div>
+
+      <div class="alphabet-grid">
+        <button
+          *ngFor="let letter of alphabet"
+          class="letter-btn"
+          [ngClass]="{'btn-primary': filters.alphabet === letter, 'btn-light': filters.alphabet !== letter}"
+          (click)="setAlphabet(letter)">
+          {{ letter }}
+        </button>
+      </div>
+
     </div>
+
   </div>
 
   <!-- LIST -->
@@ -65,11 +92,11 @@
       <div class="d-flex justify-content-between align-items-start mb-2">
         <span class="badge"
               [ngClass]="{
-                'bg-warning text-dark': item.request_status === 'pending',
-                'bg-success': item.request_status === 'corrected',
-                'bg-danger': item.request_status === 'flagged'
+                'bg-warning text-dark': item.status === 'pending',
+                'bg-success': item.status === 'corrected',
+                'bg-danger': item.status === 'flagged'
               }">
-          {{ item.request_status | uppercase }}
+          {{ item.status | uppercase }}
         </span>
 
         <span class="ref">
@@ -80,14 +107,14 @@
       <div class="row">
         <div class="col-md-6">
           <small class="text-muted">
-            SOURCE ({{ item.lang_src?.code || item.lang_src }})
+            SOURCE ({{ item.lang_src }})
           </small>
           <p class="mb-0">{{ item.input_text }}</p>
         </div>
 
         <div class="col-md-6 border-start ps-3">
           <small class="text-muted">
-            TRANSLATION ({{ item.lang_dest?.code || item.lang_dest }})
+            TRANSLATION ({{ item.lang_dest }})
           </small>
           <p class="mb-0">{{ item.output_text }}</p>
         </div>
@@ -112,7 +139,7 @@
   </div>
 
   <!-- PAGINATION -->
-  <div class="d-flex justify-content-center mt-4" *ngIf="totalPages > 1">
+  <!-- <div class="d-flex justify-content-center mt-4" *ngIf="totalPages > 1">
     <nav>
       <ul class="pagination">
         <li class="page-item" [class.disabled]="currentPage === 1">
@@ -130,6 +157,37 @@
         </li>
       </ul>
     </nav>
+  </div> -->
+
+  <!-- PAGINATION -->
+  <div class="pagination-wrapper" *ngIf="totalPages > 1">
+
+    <button
+      class="page-btn arrow"
+      [disabled]="currentPage === 1"
+      (click)="changePage(currentPage - 1)">
+      ❮
+    </button>
+
+    <div class="pages-scroll">
+
+      <button
+        *ngFor="let page of visiblePages"
+        class="page-btn"
+        [class.active]="currentPage === page"
+        (click)="changePage(page)">
+        {{ page }}
+      </button>
+
+    </div>
+
+    <button
+      class="page-btn arrow"
+      [disabled]="currentPage === totalPages"
+      (click)="changePage(currentPage + 1)">
+      ❯
+    </button>
+
   </div>
 
 </div>

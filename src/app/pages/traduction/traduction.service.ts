@@ -8,7 +8,7 @@ import { Translator, CorrectionTranslator } from './traduction.model';
 
 @Injectable({ providedIn: 'root' })
 export class TraductionService {
-  private apiUrl = 'https://api.sentekki.unchk.sn/api';
+  private apiUrl = 'http://127.0.0.1:8000/api';
   toasts: any[] = [];
 
   show(textOrTpl: string | TemplateRef<any>, options: any = {}) {

@@ -9,6 +9,9 @@ import { DictionaryEntry } from './dictionnaire.model';
 })
 export class DictionnaireComponent implements OnInit {
 
+  // bread crumb items
+  breadCrumbItems!: Array<{}>;
+
   searchTerm: string = '';
   activeLetter: string | null = null;
   alphabetMode: 'WO' | 'FR' = 'WO';
@@ -27,11 +30,18 @@ export class DictionnaireComponent implements OnInit {
 
   // ===== PAGINATION =====
   currentPage = 1;
-  maxVisiblePages: number = 5
+  maxVisiblePages: number = 5;
 
   constructor(private dictionaryService: DictionnaireService) {}
 
   ngOnInit(): void {
+    /**
+     * BreadCrumb Set
+     */
+    this.breadCrumbItems = [
+      { label: 'Page' },
+      { label: 'Dictionnaire', active: true }
+    ];
     this.getAllDictionnaire();
   }
 

@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class DictionnaireService {
-  private apiUrl = 'https://api.sentekki.unchk.sn/api/search';
+  private apiUrl = 'http://127.0.0.1:8000/api/search';
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 

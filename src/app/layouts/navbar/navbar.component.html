@@ -31,6 +31,12 @@
           <a class="nav-link active" aria-current="page" [routerLink]="['/translate']">Traduire</a>
         </li>
         <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/dictionnaire']">Dactilo-dictionnaire</a>
+        </li>
+        <li class="nav-item">
+          <a *ngIf="userRole === 'corrector'" class="nav-link" [routerLink]="['/correction']">Corrections</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link disabled" href="#">Paraphraser</a>
         </li>
         <li class="nav-item">
@@ -40,38 +46,15 @@
           <a class="nav-link disabled" href="#">Résumé</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/outil']">Consulter le dictionnaire</a>
-        </li>
-        <li class="nav-item">
-          <a *ngIf="userRole === 'corrector'" class="nav-link" [routerLink]="['/correction']">Corrections</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/dictionnaire']">Outils</a>
+          <a class="nav-link disabled" href="#">Outils</a>
         </li>
       </ul>
-      <!-- <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-lg-2">
-        <li class="nav-item">
-          <a class="nav-link active" href="#">Traduire</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="#">Dictionnaire</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="#">Langues</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="#">API</a>
-        </li>
-      </ul> -->
-
+        
       <!-- Right actions -->
       <div class="d-flex align-items-center gap-3">
 
         <!-- Language switch -->
-        <div class="dropdown" ngbDropdown>
+        <!-- <div class="dropdown" ngbDropdown>
           <button
             class="btn btn-outline-secondary dropdown-toggle"
             type="button"
@@ -86,11 +69,11 @@
             <li><a class="dropdown-item" href="#">🇪🇸 Español</a></li>
             <li><a class="dropdown-item" href="#">🇩🇪 Deutsch</a></li>
           </ul>
-        </div>
+        </div> -->
 
         
         <!-- Right actions -->
-        <div class="d-flex">
+        <div class="d-flex" *ngIf="userRole">
           <div class="dropdown d-inline-block" ngbDropdown>
             <button type="button" class="btn header-item topbar-light bg-light-subtle border-start border-end" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
                 <img class="rounded-circle header-profile-user" src="assets/images/logo-bg2.png" alt="Header Avatar">
@@ -99,7 +82,7 @@
                 <!-- item-->
                 <a class="dropdown-item" [routerLink]="['/account/login']"><i class="mdi mdi-face-man font-size-16 align-middle me-1"></i>Se connecter</a>
                 <a class="dropdown-item" routerLink=""><i class="mdi mdi-lock font-size-16 align-middle me-1"></i>S'inscrire</a>
-                <a *ngIf="userRole" class="dropdown-item" routerLink="" (click)="openProfile(Profilecontent)"><i class="mdi mdi-eye font-size-16 align-middle me-1"></i>Voir mon profile</a>
+                <a class="dropdown-item" routerLink="" (click)="openProfile(Profilecontent)"><i class="mdi mdi-eye font-size-16 align-middle me-1"></i>Voir mon profile</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="javascript: void(0);" (click)="logout()"><i class="mdi mdi-logout text-muted font-size-16 align-middle me-1"></i> <span class="align-middle" key="t-logout">Déconnexion</span></a>
             </div>

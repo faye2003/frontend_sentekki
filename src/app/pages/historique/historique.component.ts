@@ -41,7 +41,7 @@ export class HistoriqueComponent implements OnInit {
      */
     this.breadCrumbItems = [
       { label: 'Pages' },
-      { label: 'Historique Page', active: true }
+      { label: 'Historique', active: true }
     ];
     this.loadHistory();
   }

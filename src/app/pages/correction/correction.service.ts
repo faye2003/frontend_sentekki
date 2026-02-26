@@ -32,17 +32,25 @@ export class CorrectionService {
     return new HttpHeaders(headers);
   }
 
-  getTranslations() {
+  getTranslations(page: number, perPage: number, status?: string) {
+
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getAccessToken()}`
     });
-    
-    return this.http.get<{results: any[]}>(`${this.apiUrl}/translate/correct/`, { headers }).pipe(
-        map(response => response.results || [])
+
+    let params: any = {
+      page: page,
+      per_page: perPage
+    };
+
+    if (status) {
+      params.status = status;
+    }
+
+    return this.http.get<any>(
+      `${this.apiUrl}/translate/correct/`,
+      { headers, params }
     );
-    // return this.http.get<{count: number; results: any[]}>(`${this.apiUrl}/translate/correct/`, {
-    //   headers: this.getHeaders(true)
-    // });
   }
 
   addCorrection(payload: { translator_id: number; phrase_source: string; phrase_corrigee: string }): Observable<CorrectionTranslator> {

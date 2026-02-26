@@ -25,6 +25,7 @@ export class NavbarComponent implements OnInit {
   error = '';
   message = '';
   isModalOpen: boolean = false;
+  link: boolean = false;
 
   constructor (
     private authService: AuthService, 

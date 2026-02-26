@@ -24,7 +24,6 @@ export class CorrectionComponent implements OnInit{
   translatedText = '';
   isSubmitted = false;
   translatorData: Translator | null = null;
-  loading = false;
   error = '';
   errorMessage = '';
   currentSentence: Sentence | null = null;
@@ -66,19 +65,35 @@ export class CorrectionComponent implements OnInit{
   filters = {
     search: '',
     alphabet: null as string | null,
-    request_status: 'all' as Status
+    status: 'all' as Status
   };
 
   // ===== PAGINATION =====
   currentPage = 1;
-  itemsPerPage = 5;
+  itemsPerPage = 10;
+  page: number = 1;
+  pageSize: number = 10;
+  totalPages: number = 1;
+  total: number = 0;
+  maxVisiblePages: number = 5;
+
+  loading: boolean = false;
 
   // ===== MODAL =====
   selectedTranslation: Translator | null = null;
   modalMode: 'view' | 'edit' = 'view';
   editedText = '';
+  
+  searchTerm: string = '';
+  activeLetter: string | null = null;
+  alphabetMode: 'WO' | 'FR' = 'WO';
+  statusFilter = ''; // 'corrected' | 'pending'
 
-  alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  // alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  
+  FRENCH_ALPHABET: string[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
+  WOLOF_ALPHABET: string[] = "A B C D E Ë F G I J K L M N Ñ Ŋ O P Q R S T U W X Y".split(' ');
+
 
   ngOnInit() {
     /**
@@ -92,14 +107,21 @@ export class CorrectionComponent implements OnInit{
     this.loadTranslations();
   }
 
+  get alphabet(): string[] {
+    return this.alphabetMode === 'WO' ? this.WOLOF_ALPHABET : this.FRENCH_ALPHABET;
+  }
+
   loadTranslations() {
-    this.correctionService.getTranslations().subscribe({
-      next: (response) => {
-        this.translations = response; // IMPORTANT
-        // console.log(response);
-      },
-      error: (err) => console.error(err)
-    });
+    this.correctionService
+      .getTranslations(this.currentPage, this.itemsPerPage, this.statusFilter)
+      .subscribe({
+        next: (response) => {
+          this.translations = response.results;
+          this.totalPages = response.total_pages;
+          this.currentPage = response.page;
+        },
+        error: (err) => console.error(err)
+      });
   }
 
   // ===== FILTRAGE =====
@@ -116,7 +138,7 @@ export class CorrectionComponent implements OnInit{
           item.input_text?.toUpperCase().startsWith(this.filters.alphabet);
 
         const matchesStatus =
-          this.filters.request_status === 'all' || item.request_status === this.filters.request_status;
+          this.filters.status === 'all' || item.status === this.filters.status;
 
         return matchesSearch && matchesAlphabet && matchesStatus;
       })
@@ -126,13 +148,47 @@ export class CorrectionComponent implements OnInit{
       );
   }
 
-  get totalPages(): number {
-    return Math.ceil(this.filteredTranslations.length / this.itemsPerPage);
+  changePage(page: number) {
+    if (page < 1 || page > this.totalPages || page === this.currentPage) return;
+    console.log('jdhfgfgdf');
+    this.currentPage = page;
+    this.loadTranslations();
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   }
+
+  get visiblePages(): number[] {
+    const pages: number[] = [];
+
+    let start = Math.max(1, this.currentPage - Math.floor(this.maxVisiblePages / 2));
+    let end = start + this.maxVisiblePages - 1;
+
+    if (end > this.totalPages) {
+      end = this.totalPages;
+      start = Math.max(1, end - this.maxVisiblePages + 1);
+    }
+
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+
+    return pages;
+  }
+
 
   get paginatedItems(): Translator[] {
     const start = (this.currentPage - 1) * this.itemsPerPage;
     return this.filteredTranslations.slice(start, start + this.itemsPerPage);
+  }
+
+  toggleAlphabet(mode: 'WO' | 'FR') {
+    this.alphabetMode = mode;
+    this.activeLetter = null;
+    this.page = 1;
+    this.loadTranslations();
   }
 
   onSearchChange() {
@@ -144,6 +200,12 @@ export class CorrectionComponent implements OnInit{
     this.currentPage = 1;
   }
 
+  filterBy(status: string) {
+    this.statusFilter = status;
+    this.currentPage = 1; // reset page
+    this.loadTranslations();
+  }
+
   deleteTranslation(id?: number) {
     if (!id) return;
 
@@ -152,35 +214,17 @@ export class CorrectionComponent implements OnInit{
     }
   }
 
-  // ouvre le mode édition pour une phrase (on reçoit l'objet phrase et son index)
-  // editSentence(sentence: any) {
-  //   if (this.translatorData?.output_sentence) {
-  //     this.translatorData.output_sentence.forEach((s: any) => {
-  //       s.isEditing = false;
-  //       s.editText = s.text;
-  //     });
-  //   }
-
-  //   sentence.isEditing = true;
-  //   sentence.editText = sentence.text;
-  //   this.currentSentence = sentence;
-  // }
 
   editSentence(sentence: any) {
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/account/login']);
+      return;
+    }
     this.formattedSentences.forEach(s => s.isEditing = false);
     sentence.isEditing = true;
+    this.selectedSentence = sentence;
+    this.correctedText = sentence;
   }
-
-
-  // annule l'édition (remet le texte original)
-  // cancelEdit(sentence: any) {
-  //   sentence.isEditing = false;
-  //   sentence.editText = sentence.text;
-  //   // si currentSentence était celle-ci, la réinitialiser
-  //   if (this.currentSentence === sentence) {
-  //     this.currentSentence = null;
-  //   }
-  // }
 
   cancelEdit(sentence: any) {
     sentence.isEditing = false;
@@ -201,14 +245,6 @@ export class CorrectionComponent implements OnInit{
 
     this.modalService.open(modal, { centered: true });
   }
-
-
-  // openModal(translation: Translator, mode: 'view' | 'edit', modal: any) {
-  //   this.selectedTranslation = translation;
-  //   this.modalMode = mode;
-  //   this.editedText = translation.output_text || '';
-  //   this.modalService.open(modal, { centered: true });
-  // }
 
   // action ouverture modal
   openModall(modalname: any) {
@@ -303,7 +339,15 @@ export class CorrectionComponent implements OnInit{
     // action confirmation de la correction
     confirmCorrection(sentence: Sentence) {
 
-      if (!this.selectedTranslation?.id) return;
+      if (!this.selectedTranslation?.id) {
+        console.error("La traduction n'existe pas !");
+        return;
+      }
+
+      if (!this.selectedSentence) {
+        Swal.fire('Erreur', 'La phrase source est vide', 'error');
+        return;        
+      }
 
       if (!sentence.editText || sentence.editText.trim() === '') {
         Swal.fire('Erreur', 'La phrase corrigée est vide', 'error');
@@ -312,7 +356,7 @@ export class CorrectionComponent implements OnInit{
 
       const payload: CorrectionTranslator = {
         translator_id: this.selectedTranslation.id,
-        phrase_source: sentence.phrase_source,
+        phrase_source: this.selectedSentence,
         phrase_corrigee: sentence.editText
       };
 
