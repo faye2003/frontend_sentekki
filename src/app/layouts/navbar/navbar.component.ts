@@ -57,6 +57,14 @@ export class NavbarComponent implements OnInit {
     });
   }
 
+  openMobileMenu(content: any) {
+    this.offcanvasService.open(content, {
+      position: 'end', // droite
+      panelClass: 'mobile-offcanvas-sm',
+      backdrop: true
+    });
+  }
+
   requestCorrector() {
     this.isLoading = true;
     this.authService.requestCorrector().subscribe({

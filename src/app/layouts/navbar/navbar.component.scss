@@ -29,3 +29,146 @@
     font-weight: 500;
   }
 }
+
+.offcanvas {
+  width: 260px;
+}
+
+::ng-deep .mobile-offcanvas-sm {
+  width: 222px !important;
+  border: none;
+  box-shadow: -5px 0 25px rgba(0, 0, 0, 0.08);
+}
+
+.mobile-menu {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 20px;
+  background: #f8fafc;
+}
+
+/* HEADER */
+.menu-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 30px;
+
+  h4 {
+    font-weight: 600;
+    margin: 0;
+  }
+}
+
+.logo-box {
+  width: 48px;
+  height: 48px;
+  background: #84ab4c;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  font-size: 22px;
+  box-shadow: 0 8px 20px rgba(15, 143, 95, 0.25);
+}
+
+/* MENU LIST */
+.menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  text-decoration: none;
+  color: #334155;
+  font-weight: 500;
+  position: relative;
+  transition: all 0.2s ease;
+
+  i {
+    font-size: 20px;
+    color: #64748b;
+  }
+
+  &:hover {
+    background: rgba(15, 143, 95, 0.08);
+    color: #84ab4c;
+
+    i {
+      color: #84ab4c;
+    }
+  }
+
+  &.active {
+    background: rgba(15, 143, 95, 0.15);
+    color: #84ab4c;
+
+    i {
+      color: #84ab4c;
+    }
+  }
+}
+
+/* Active dot */
+.dot {
+  margin-left: auto;
+  width: 8px;
+  height: 8px;
+  background: #84ab4c;
+  border-radius: 50%;
+}
+
+/* FOOTER */
+.menu-footer {
+  padding-top: 20px;
+}
+
+.profile-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  background: #bbf7d0;
+  color: #84ab4c;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.profile-info {
+  flex: 1;
+
+  strong {
+    display: block;
+    font-size: 14px;
+  }
+
+  small {
+    color: #64748b;
+  }
+}

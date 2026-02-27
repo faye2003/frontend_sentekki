@@ -1,5 +1,3 @@
-
-
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
   <div class="container">
 
@@ -13,17 +11,13 @@
     <button
       class="navbar-toggler"
       type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#mainNavbar"
-      aria-controls="mainNavbar"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
+      (click)="openMobileMenu(content)"
     >
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <!-- Navbar content -->
-    <div class="collapse navbar-collapse" id="mainNavbar">
+    <div class="collapse navbar-collapse d-none d-lg-flex" id="mainNavbar">
 
       <!-- Left menu -->
        <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-lg-2">
@@ -31,8 +25,11 @@
           <a class="nav-link active" aria-current="page" [routerLink]="['/translate']">Traduire</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/dictionnaire']">Dactilo-dictionnaire</a>
+          <a class="nav-link" [routerLink]="['/dictionnaire']">Dictionnaire</a>
         </li>
+        <!-- <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/correction']">Corrections</a>
+        </li> -->
         <li class="nav-item">
           <a *ngIf="userRole === 'corrector'" class="nav-link" [routerLink]="['/correction']">Corrections</a>
         </li>
@@ -51,29 +48,9 @@
       </ul>
         
       <!-- Right actions -->
-      <div class="d-flex align-items-center gap-3">
-
-        <!-- Language switch -->
-        <!-- <div class="dropdown" ngbDropdown>
-          <button
-            class="btn btn-outline-secondary dropdown-toggle"
-            type="button"
-            data-bs-toggle="dropdown"
-            ngbDropdownToggle
-          >
-            🌍 FR
-          </button>
-          <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
-            <li><a class="dropdown-item" href="#">🇫🇷 Français</a></li>
-            <li><a class="dropdown-item" href="#">🇬🇧 English</a></li>
-            <li><a class="dropdown-item" href="#">🇪🇸 Español</a></li>
-            <li><a class="dropdown-item" href="#">🇩🇪 Deutsch</a></li>
-          </ul>
-        </div> -->
-
-        
+      <div class="d-flex align-items-center gap-3">      
         <!-- Right actions -->
-        <div class="d-flex" *ngIf="userRole">
+        <div class="d-flex">
           <div class="dropdown d-inline-block" ngbDropdown>
             <button type="button" class="btn header-item topbar-light bg-light-subtle border-start border-end" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
                 <img class="rounded-circle header-profile-user" src="assets/images/logo-bg2.png" alt="Header Avatar">
@@ -82,7 +59,7 @@
                 <!-- item-->
                 <a class="dropdown-item" [routerLink]="['/account/login']"><i class="mdi mdi-face-man font-size-16 align-middle me-1"></i>Se connecter</a>
                 <a class="dropdown-item" routerLink=""><i class="mdi mdi-lock font-size-16 align-middle me-1"></i>S'inscrire</a>
-                <a class="dropdown-item" routerLink="" (click)="openProfile(Profilecontent)"><i class="mdi mdi-eye font-size-16 align-middle me-1"></i>Voir mon profile</a>
+                <a *ngIf="userRole" class="dropdown-item" routerLink="" (click)="openProfile(Profilecontent)"><i class="mdi mdi-eye font-size-16 align-middle me-1"></i>Voir mon profile</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="javascript: void(0);" (click)="logout()"><i class="mdi mdi-logout text-muted font-size-16 align-middle me-1"></i> <span class="align-middle" key="t-logout">Déconnexion</span></a>
             </div>
@@ -94,6 +71,93 @@
     </div>
   </div>
 </nav>
+
+<!-- Menu Offcanvas Mobile -->
+<ng-template #content let-offcanvas>
+  <div class="mobile-menu">
+
+    <!-- Header -->
+    <div class="menu-header">
+      <div class="logo-box">
+        <i class="mdi mdi-translate"></i>
+      </div>
+      <h4>Sentekki</h4>
+    </div>
+
+    <!-- Navigation -->
+    <ul class="menu-list">
+
+      <li>
+        <a class="menu-item active"
+           [routerLink]="['/translate']"
+           (click)="offcanvas.close()">
+          <i class="mdi mdi-translate"></i>
+          <span>Traduire</span>
+          <span class="dot"></span>
+        </a>
+      </li>
+
+      <li>
+        <a class="menu-item"
+           [routerLink]="['/dictionnaire']"
+           (click)="offcanvas.close()">
+          <i class="mdi mdi-translate"></i>
+          <span>Dico Dictionnaire</span>
+        </a>
+      </li>
+
+      <li>
+        <a class="menu-item"
+           [routerLink]="['/historique']"
+           (click)="offcanvas.close()">
+          <i class="mdi mdi-history"></i>
+          <span>Historique</span>
+        </a>
+      </li>
+
+      <li>
+        <a class="menu-item"
+           [routerLink]="['/favorites']"
+           (click)="offcanvas.close()">
+          <i class="mdi mdi-star-outline"></i>
+          <span>Favoris</span>
+        </a>
+      </li>
+
+      <li>
+        <a class="menu-item"
+           [routerLink]="['/settings']"
+           (click)="offcanvas.close()">
+          <i class="mdi mdi-cog-outline"></i>
+          <span>Paramètres</span>
+        </a>
+      </li>
+
+      <li>
+        <a class="menu-item"
+           [routerLink]="['/about']"
+           (click)="offcanvas.close()">
+          <i class="mdi mdi-information-outline"></i>
+          <span>À propos</span>
+        </a>
+      </li>
+
+    </ul>
+
+    <!-- Footer profile -->
+    <div class="menu-footer" *ngIf="userRole">
+      <div class="profile-card">
+        <div class="avatar">FM</div>
+        <div class="profile-info">
+          <strong>Faye M.</strong>
+          <small>Premium User</small>
+        </div>
+        <i class="mdi mdi-chevron-right"></i>
+      </div>
+    </div>
+
+  </div>
+</ng-template>
 
 <!-- Offcanvas Profile Utilisateur -->
 <ng-template #Profilecontent let-offcanvas>
