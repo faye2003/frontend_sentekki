@@ -48,7 +48,7 @@ export class DictionnaireService {
 
     return this.http.get<any>(
       `${this.apiUrl}/search/`,
-      { headers, params }
+      { params }
     );
   }
 
