@@ -9,7 +9,8 @@ import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class HistoriqueService {
-  private apiUrl = 'http://127.0.0.1:8000/api';
+  
+  apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 

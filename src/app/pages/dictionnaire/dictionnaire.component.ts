@@ -19,6 +19,11 @@ export class DictionnaireComponent implements OnInit {
   FRENCH_ALPHABET: string[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
   WOLOF_ALPHABET: string[] = "A B C D E Ë F G I J K L M N Ñ Ŋ O P Q R S T U W X Y".split(' ');
 
+  filters = {
+    search: '',
+    alphabet: null as string | null,
+  };
+
   words: any[] = [];
 
   page: number = 1;
@@ -113,6 +118,12 @@ export class DictionnaireComponent implements OnInit {
     this.getAllDictionnaire();
   }
 
+  setAlphabet(letter: string | null) {
+    this.activeLetter = letter;
+    this.currentPage = 1;
+    this.getAllDictionnaire();
+  }
+
   selectLetter(letter: string) {
     this.activeLetter = this.activeLetter === letter ? null : letter;
     this.currentPage = 1;
@@ -122,7 +133,7 @@ export class DictionnaireComponent implements OnInit {
   resetFilters() {
     this.searchTerm = '';
     this.activeLetter = null;
-    this.page = 1;
+    this.currentPage = 1;
     this.getAllDictionnaire();
   }
 

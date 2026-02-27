@@ -113,7 +113,7 @@ export class CorrectionComponent implements OnInit{
 
   loadTranslations() {
     this.correctionService
-      .getTranslations(this.currentPage, this.itemsPerPage, this.statusFilter)
+      .getTranslations(this.currentPage, this.itemsPerPage, this.filters)
       .subscribe({
         next: (response) => {
           this.translations = response.results;
@@ -150,7 +150,6 @@ export class CorrectionComponent implements OnInit{
 
   changePage(page: number) {
     if (page < 1 || page > this.totalPages || page === this.currentPage) return;
-    console.log('jdhfgfgdf');
     this.currentPage = page;
     this.loadTranslations();
 
@@ -184,6 +183,11 @@ export class CorrectionComponent implements OnInit{
     return this.filteredTranslations.slice(start, start + this.itemsPerPage);
   }
 
+  onFilterChange() {
+    this.currentPage = 1;
+    this.loadTranslations();
+  }
+
   toggleAlphabet(mode: 'WO' | 'FR') {
     this.alphabetMode = mode;
     this.activeLetter = null;
@@ -198,6 +202,7 @@ export class CorrectionComponent implements OnInit{
   setAlphabet(letter: string | null) {
     this.filters.alphabet = letter;
     this.currentPage = 1;
+    this.loadTranslations();
   }
 
   filterBy(status: string) {

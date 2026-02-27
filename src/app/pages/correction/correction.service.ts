@@ -5,10 +5,13 @@ import { map } from 'rxjs/operators';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { CorrectionTranslator, Translator, Language, Sentence } from './correction.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class CorrectionService {
-  private apiUrl = 'http://127.0.0.1:8000/api';
+  
+  private apiUrl = environment.apiUrl;
+
   toasts: any[] = [];
 
   show(textOrTpl: string | TemplateRef<any>, options: any = {}) {
@@ -32,7 +35,7 @@ export class CorrectionService {
     return new HttpHeaders(headers);
   }
 
-  getTranslations(page: number, perPage: number, status?: string) {
+  getTranslations(page: number, perPage: number, filters: any) {
 
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getAccessToken()}`
@@ -43,8 +46,12 @@ export class CorrectionService {
       per_page: perPage
     };
 
-    if (status) {
-      params.status = status;
+    if (filters.status && filters.status !== 'all') {
+      params.status = filters.status;
+    }
+
+    if (filters.alphabet) {
+      params.alphabet = filters.alphabet;
     }
 
     return this.http.get<any>(

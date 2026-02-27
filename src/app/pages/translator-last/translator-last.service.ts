@@ -5,10 +5,12 @@ import { map } from 'rxjs/operators';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { Translator, CorrectionTranslator } from './translator-last.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class TranslatorLastService {
-  private apiUrl = 'http://127.0.0.1:8000/api';
+
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 

@@ -9,7 +9,8 @@ import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class DictionnaireService {
-  private apiUrl = 'http://127.0.0.1:8000/api/search';
+  
+  apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -24,22 +25,34 @@ export class DictionnaireService {
     return new HttpHeaders(headers);
   }
 
-  getDictionary(search: string = '', page: number = 1, pageSize: number = 20, letter: string | null) {
+  getDictionary(
+    search: string = '',
+    page: number = 1,
+    pageSize: number = 6,
+    alphabet: string | null = null
+  ) {
+
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getAccessToken()}`
     });
-    return this.http.get<any>(`${this.apiUrl}/?search=${search}&page=${page}&page_size=${pageSize}`,{
-      params: {
-        search,
-        page,
-        page_size: pageSize,
-        letter: letter ?? ''
-      }
-    });
-    
+
+    let params: any = {
+      search: search,
+      page: page,
+      page_size: pageSize
+    };
+
+    if (alphabet) {
+      params.alphabet = alphabet;
+    }
+
+    return this.http.get<any>(
+      `${this.apiUrl}/search/`,
+      { headers, params }
+    );
   }
 
-   getUserDictionnaire(): Observable<any[]> {
+  getUserDictionnaire(): Observable<any[]> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getAccessToken()}`
     });

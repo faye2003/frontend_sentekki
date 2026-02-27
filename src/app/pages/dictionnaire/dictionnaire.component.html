@@ -56,7 +56,7 @@
           *ngFor="let letter of alphabet"
           class="letter-btn"
           [class.active]="activeLetter === letter"
-          (click)="selectLetter(letter)">
+          (click)="setAlphabet(letter)">
           {{ letter }}
         </button>
       </div>
