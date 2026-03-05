@@ -146,183 +146,25 @@
     </ul>
 
      <!-- Footer profile -->
-    <div class="menu-footer" *ngIf="userRole">
+    <div class="menu-footer">
       <div class="profile-card dropdown" ngbDropdown>
-        <div class="avatar">ST</div>
+        <div *ngIf="userRole" class="avatar">ST</div>
         <div class="profile-info">
-          <strong>{{ user.username }}</strong>
-          <small>{{ user.profil.name }} User</small>
+          <strong *ngIf="userRole">{{ user.username }}</strong>
+          <strong *ngIf="!userRole">Se connecter</strong>
+          <small *ngIf="userRole">{{ user.profil.name }} User</small>
         </div>
         <a type="button" href="javascript: void(0);" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle></a>         
         <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
             <!-- item-->
-            <a class="dropdown-item" (click)="offcanvas.close()" [routerLink]="['/account/login']"><i class="mdi mdi-face-man font-size-16 align-middle me-1"></i>Se connecter</a>
-            <a class="dropdown-item" (click)="offcanvas.close()" [routerLink]="['/account/register']"><i class="mdi mdi-lock font-size-16 align-middle me-1"></i>S'inscrire</a>
-            <a class="dropdown-item" (click)="offcanvas.close()" [routerLink]="['/profile']"><i class="mdi mdi-eye font-size-16 align-middle me-1"></i>Voir mon profile</a>
+            <a *ngIf="!userRole" class="dropdown-item" (click)="offcanvas.close()" [routerLink]="['/account/login']"><i class="mdi mdi-face-man font-size-16 align-middle me-1"></i>Se connecter</a>
+            <a *ngIf="!userRole" class="dropdown-item" (click)="offcanvas.close()" [routerLink]="['/account/register']"><i class="mdi mdi-lock font-size-16 align-middle me-1"></i>S'inscrire</a>
+            <a *ngIf="userRole" class="dropdown-item" (click)="offcanvas.close()" [routerLink]="['/profile']"><i class="mdi mdi-eye font-size-16 align-middle me-1"></i>Voir mon profile</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="javascript: void(0);" (click)="logout()"><i class="mdi mdi-logout text-muted font-size-16 align-middle me-1"></i> <span class="align-middle" key="t-logout">Déconnexion</span></a>
+            <a *ngIf="userRole" class="dropdown-item" (click)="logout();  offcanvas.close()"><i class="mdi mdi-logout text-muted font-size-16 align-middle me-1"></i> <span class="align-middle" key="t-logout">Déconnexion</span></a>
         </div>
       </div>
     </div>
-
-    <!-- Footer Login -->
-    <div class="menu-footer" *ngIf="!userRole">
-      <div class="profile-card">
-        <a class="btn btn-primary" [routerLink]="['/account/login']"><i class="mdi mdi-face-man font-size-16 align-middle me-1"></i>Connectez-vous</a>
-      </div>
-    </div>
-
-  </div>
-</ng-template>
-
-<!-- Offcanvas Profile Utilisateur -->
-<ng-template #Profilecontent let-offcanvas>
-  <!-- HEADER -->
-  <div class="offcanvas-header border-bottom bg-light">
-    <div class="d-flex align-items-center gap-2">
-      <img
-        class="rounded-circle header-profile-user"
-        src="assets/images/logo-bg2.png"
-        alt="Avatar"
-        width="45"
-        height="45"
-      />
-      <div>
-        <h6 class="mb-0 fw-semibold">{{ user.username }}</h6>
-        <small class="text-muted">{{ user.email }}</small>
-      </div>
-    </div>
-
-    <button
-      type="button"
-      class="btn-close"
-      (click)="offcanvas.dismiss('Cross click')">
-    </button>
-  </div>
-
-  <!-- BODY -->
-  <div class="offcanvas-body p-3">
-
-    <!-- STATUT -->
-    <div class="alert alert-success py-2 d-flex align-items-center gap-2">
-      <i class="mdi mdi-check-circle-outline"></i>
-      <span>Compte actif</span>
-    </div>
-
-    <!-- INFORMATIONS UTILISATEUR -->
-    <div class="card mb-3 shadow-sm">
-      <div class="card-body">
-        <h6 class="card-title fw-semibold mb-3">
-          <i class="mdi mdi-account-outline me-1"></i>
-          Informations personnelles
-        </h6>
-
-        <ul class="list-unstyled mb-0">
-          <li class="mb-2">
-            <strong>Nom :</strong> {{ user.username }}
-          </li>
-          <li class="mb-2">
-            <strong>Email :</strong> {{ user.email }}
-          </li>
-          <li class="mb-2">
-            <strong>Téléphone :</strong> Non renseigné
-          </li>
-          <li>
-            <strong>Date d’inscription :</strong>
-            Date : 07/07/2023
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- ROLE & PERMISSIONS -->
-    <div class="card mb-3 shadow-sm">
-      <div class="card-body">
-        <h6 class="card-title fw-semibold mb-3">
-          <i class="mdi mdi-shield-account-outline me-1"></i>
-          Rôle & permissions
-        </h6>
-
-        <span class="badge bg-primary me-2">
-          {{ user.profil.name }}
-        </span>
-
-        <p class="text-muted small mt-2 mb-0">
-          Ce rôle détermine vos droits sur la plateforme.
-        </p>
-      </div>
-    </div>
-
-    <!-- ACTIONS -->
-    <div class="card shadow-sm">
-      <div class="card-body">
-        <h6 class="card-title fw-semibold mb-3">
-          <i class="mdi mdi-cog-outline me-1"></i>
-          Actions
-        </h6>
-
-        <div class="d-grid gap-2">
-          <!-- editProfile() -->
-          <button class="btn btn-outline-primary"> 
-            <i class="mdi mdi-account-edit-outline me-1"></i>
-            Modifier le profil
-          </button>
-
-          <!-- BOUTON -->
-          <button
-            class="btn btn-outline-warning"
-            *ngIf="user?.profil?.name === 'translator' && !hasPendingRequest"
-            (click)="openModal(confirmation)"
-            [disabled]="isLoading">
-
-            <span *ngIf="!isLoading">
-              <i class="mdi mdi-account-switch-outline me-1"></i>
-              Demander à devenir correcteur
-            </span>
-
-            <span *ngIf="isLoading">
-              <i class="mdi mdi-loading mdi-spin me-1"></i>
-              Envoi en cours...
-            </span>
-          </button>
-
-          <!-- MESSAGE EN ATTENTE -->
-          <div
-            *ngIf="hasPendingRequest"
-            class="alert alert-warning mt-2 d-flex align-items-center gap-2">
-
-            <i class="mdi mdi-timer-sand"></i>
-            <span>Votre demande de rôle correcteur est en cours de traitement.</span>
-          </div>
-
-
-          <!-- MESSAGE -->
-          <div *ngIf="message" class="alert alert-info mt-2">
-            {{ message }}
-          </div>
-
-          <!-- changePassword() -->
-          <button class="btn btn-outline-secondary">
-            <i class="mdi mdi-lock-reset me-1"></i>
-            Changer le mot de passe
-          </button>
-
-          <button class="btn btn-outline-danger"
-                  (click)="logout()">
-            <i class="mdi mdi-logout me-1"></i>
-            Déconnexion
-          </button>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- FOOTER -->
-  <div class="offcanvas-footer text-center py-3 bg-light border-top">
-    <small class="text-muted">
-      Connecté en tant que <strong>{{ user.username }}</strong>
-    </small>
   </div>
 </ng-template>
 
