@@ -35,7 +35,7 @@ export class DictionnaireComponent implements OnInit {
 
   // ===== PAGINATION =====
   currentPage = 1;
-  maxVisiblePages: number = 5;
+  maxVisiblePages: number = 10;
 
   constructor(private dictionaryService: DictionnaireService) {}
 
@@ -65,7 +65,7 @@ export class DictionnaireComponent implements OnInit {
     ).subscribe({
       next: (data) => {
         this.words = data.results;
-        this.total = data.count;
+        this.total = data.total;
         this.totalPages = data.total_pages;
         this.loading = false;
       },

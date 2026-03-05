@@ -6,7 +6,9 @@ export interface UserMe {
   profil: {
     name: 'translator' | 'corrector' | 'admin' | 'super_admin';
     label?: string;
+    avatar: string;
   };
+
 
   role_request: {
     name: 'corrector';

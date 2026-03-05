@@ -1,0 +1,255 @@
+<app-pagetitle class=" font-size-16" title="Profile" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+
+<div class="profile-page container py-2">
+  <!-- HEADER -->
+  <div class="profile-header card shadow-sm border-0 mb-4">
+
+    <div class="header-bg"></div>
+
+    <div class="header-content d-flex flex-column flex-md-row align-items-md-center gap-4">
+
+      <!-- <div class="avatar-wrapper">
+        <img src="assets/images/logo-bg2.png" class="avatar-img" />
+      </div> -->
+
+      <div class="avatar-wrapper position-relative">
+
+        <img
+          [src]="user.profil.avatar || 'assets/images/logo-bg2.png'"
+          class="avatar-img"
+        />
+
+        <input
+          type="file"
+          hidden
+          #fileInput
+          (change)="onFileSelected($event)"
+        />
+
+        <button
+          class="avatar-edit-btn"
+          (click)="fileInput.click()">
+          <i class="mdi mdi-camera"></i>
+        </button>
+
+      </div>
+
+      <div class="flex-grow-1">
+        <div class="d-flex align-items-center gap-3 flex-wrap">
+          <h2 class="fw-bold mb-0">{{ user.username }}</h2>
+
+          <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill">
+            <i class="mdi mdi-check-circle me-1"></i>
+            Compte actif
+          </span>
+        </div>
+
+        <p class="text-muted mt-2 mb-0">
+          {{ user.email }}
+        </p>
+      </div>
+
+      <button class="btn btn-gradient px-4">
+        <i class="mdi mdi-cog-outline me-1"></i>
+        Modifier
+      </button>
+
+    </div>
+  </div>
+
+  <div class="row g-4">
+
+    <!-- LEFT COLUMN -->
+    <div class="col-lg-8">
+
+      <!-- INFO CARD -->
+      <div class="card shadow-sm border-0 p-4 mb-4">
+
+        <h5 class="fw-bold mb-4">
+          <i class="mdi mdi-account-outline me-2"></i>
+          Informations personnelles
+        </h5>
+
+        <div class="row g-4">
+
+          <div class="col-md-6">
+            <small class="text-muted text-uppercase">Nom complet</small>
+            <p class="fw-semibold">{{ user.username }}</p>
+          </div>
+
+          <div class="col-md-6">
+            <small class="text-muted text-uppercase">Email</small>
+            <p class="fw-semibold">{{ user.email }}</p>
+          </div>
+
+          <div class="col-md-6">
+            <small class="text-muted text-uppercase">Téléphone</small>
+            <p class="fw-semibold">Non renseigné</p>
+          </div>
+
+          <div class="col-md-6">
+            <small class="text-muted text-uppercase">Date d'inscription</small>
+            <p class="fw-semibold">07/07/2023</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ROLE CARD -->
+      <div class="card shadow-sm d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-4 p-4 rounded-4">
+
+        <h5 class="fw-bold mb-4">
+          <i class="mdi mdi-shield-account-outline me-2"></i>
+          Rôle & Permissions
+        </h5>
+
+        <!-- ROLE & PERMISSIONS CARD CONTENT -->
+
+        <div class="role-wrapper gap-4 p-4 rounded-4">
+
+          <!-- LEFT SIDE -->
+          <div>
+            <span class="role-badge">
+              {{ user.profil.name }}
+            </span>
+
+            <p class="text-muted mt-2 mb-0">
+              Ce rôle détermine vos droits et accès sur la plateforme.
+            </p>
+          </div>
+
+          <!-- RIGHT SIDE BUTTON -->
+          <button
+            *ngIf="user?.profil?.name === 'translator' && !hasPendingRequest"
+            class="btn btn-corrector d-inline-flex align-items-center gap-2"
+            (click)="openModal(confirmation)"
+            [disabled]="isLoading">
+
+            <span *ngIf="!isLoading" class="d-flex align-items-center gap-2">
+              <i class="mdi mdi-account-plus-outline"></i>
+              Devenir correcteur
+            </span>
+
+            <span *ngIf="isLoading" class="d-flex align-items-center gap-2">
+              <i class="mdi mdi-loading mdi-spin"></i>
+              Envoi en cours...
+            </span>
+
+          </button>
+
+        </div>
+
+        <!-- MESSAGE EN ATTENTE -->
+        <div
+          *ngIf="hasPendingRequest"
+          class="alert-pending mt-4 d-flex align-items-start gap-3">
+
+          <i class="mdi mdi-alert-circle-outline fs-5"></i>
+
+          <div>
+            <strong>Demande en cours</strong>
+            <p class="mb-0 small">
+              Votre demande de rôle correcteur est en cours de traitement par nos administrateurs.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- MESSAGE SUCCESS -->
+        <div *ngIf="message" class="alert-success-custom mt-4">
+          {{ message }}
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="col-lg-4">
+
+      <!-- QUICK ACTIONS -->
+      <div class="card shadow-sm border-0 p-4 mb-4">
+
+        <h5 class="fw-bold mb-4">Actions rapides</h5>
+
+        <div class="d-grid gap-3">
+
+          <button class="btn btn-light action-btn">
+            <i class="mdi mdi-lock-outline me-2"></i>
+            Changer le mot de passe
+          </button>
+
+          <button class="btn btn-light action-btn">
+            <i class="mdi mdi-cog-outline me-2"></i>
+            Paramètres du compte
+          </button>
+
+          <hr>
+
+          <button class="btn btn-danger" (click)="logout()">
+            <i class="mdi mdi-logout me-2"></i>
+            Déconnexion
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- SESSION -->
+      <div class="session-box p-4 rounded-4 text-white">
+
+        <small class="text-uppercase opacity-75">
+          Session actuelle
+        </small>
+
+        <p class="mt-2">
+          Connecté en tant que
+          <strong>{{ user.username }}</strong>
+        </p>
+
+        <div class="secure-dot mt-3">
+          <span></span> Session sécurisée
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Modal de confirmation -->
+<ng-template #confirmation role="document" let-modal>
+  <div class="modal-header">
+    <h2 class="modal-title mt-0">Confirmation</h2>
+    <button type="button" class="btn-close" aria-hidden="true" (click)="closeModal('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-12">
+        <p>
+          <span>Voulez-vous confirmer la correction de la phrase ? </span>
+          <span class="text-sonatel fw-bold ml-2"></span>
+        </p>
+      </div>
+    </div>
+    <div class="mb-2" *ngIf="message">
+      <div class="text-success" style="font-size: 12px;">{{ message }}</div>
+    </div>
+    <div class="mb-2" *ngIf="error">
+      <div class="text-danger" style="font-size: 12px;">{{ error }}</div>
+    </div>
+    <div class="row">
+      <div class="text-end col-md-6">
+        <button (click)="closeModal('Cross click')" class="btn btn-dark" id="btn-save-event">
+          Annuler
+        </button>
+      </div>
+      <div class="text-start col-md-6">
+        <button (click)="requestCorrector()" type="submit" class="btn btn-primary" id="btn-save-event">
+          Confirmer
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

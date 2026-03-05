@@ -77,6 +77,11 @@ export class AuthService {
     );
   }
 
+  // 🔹 Register utilisateur
+  register(data: { username: string; email: string; password: string }): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/register/`, data);
+  }
+
   logout(): void {
     localStorage.removeItem(this.accessTokenKey);
     localStorage.removeItem(this.refreshTokenKey);
@@ -122,5 +127,15 @@ export class AuthService {
 
   getRefreshToken(): string | null {
     return localStorage.getItem(this.refreshTokenKey);
+  }
+
+  uploadAvatar(file: File) {
+    const formData = new FormData();
+    formData.append('avatar', file);
+
+    return this.http.post<any>(
+      `${this.apiUrl}/me/avatar/`,
+      formData
+    );
   }
 }

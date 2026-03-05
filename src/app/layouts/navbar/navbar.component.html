@@ -58,8 +58,9 @@
             <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
                 <!-- item-->
                 <a class="dropdown-item" [routerLink]="['/account/login']"><i class="mdi mdi-face-man font-size-16 align-middle me-1"></i>Se connecter</a>
-                <a class="dropdown-item" routerLink=""><i class="mdi mdi-lock font-size-16 align-middle me-1"></i>S'inscrire</a>
-                <a *ngIf="userRole" class="dropdown-item" routerLink="" (click)="openProfile(Profilecontent)"><i class="mdi mdi-eye font-size-16 align-middle me-1"></i>Voir mon profile</a>
+                <a class="dropdown-item" [routerLink]="['/account/register']"><i class="mdi mdi-lock font-size-16 align-middle me-1"></i>S'inscrire</a>
+                <a *ngIf="userRole" class="dropdown-item" [routerLink]="['/profile']"><i class="mdi mdi-eye font-size-16 align-middle me-1"></i>Voir mon profile</a>
+                <!-- <a *ngIf="userRole" class="dropdown-item" routerLink="" (click)="openProfile(Profilecontent)"><i class="mdi mdi-eye font-size-16 align-middle me-1"></i>Voir mon profile</a> -->
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="javascript: void(0);" (click)="logout()"><i class="mdi mdi-logout text-muted font-size-16 align-middle me-1"></i> <span class="align-middle" key="t-logout">Déconnexion</span></a>
             </div>
@@ -101,7 +102,7 @@
         <a class="menu-item"
            [routerLink]="['/dictionnaire']"
            (click)="offcanvas.close()">
-          <i class="mdi mdi-translate"></i>
+          <i class="mdi mdi-book-open"></i>
           <span>Dico Dictionnaire</span>
         </a>
       </li>
@@ -144,15 +145,30 @@
 
     </ul>
 
-    <!-- Footer profile -->
+     <!-- Footer profile -->
     <div class="menu-footer" *ngIf="userRole">
-      <div class="profile-card">
-        <div class="avatar">FM</div>
+      <div class="profile-card dropdown" ngbDropdown>
+        <div class="avatar">ST</div>
         <div class="profile-info">
-          <strong>Faye M.</strong>
-          <small>Premium User</small>
+          <strong>{{ user.username }}</strong>
+          <small>{{ user.profil.name }} User</small>
         </div>
-        <i class="mdi mdi-chevron-right"></i>
+        <a type="button" href="javascript: void(0);" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle></a>         
+        <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+            <!-- item-->
+            <a class="dropdown-item" (click)="offcanvas.close()" [routerLink]="['/account/login']"><i class="mdi mdi-face-man font-size-16 align-middle me-1"></i>Se connecter</a>
+            <a class="dropdown-item" (click)="offcanvas.close()" [routerLink]="['/account/register']"><i class="mdi mdi-lock font-size-16 align-middle me-1"></i>S'inscrire</a>
+            <a class="dropdown-item" (click)="offcanvas.close()" [routerLink]="['/profile']"><i class="mdi mdi-eye font-size-16 align-middle me-1"></i>Voir mon profile</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="javascript: void(0);" (click)="logout()"><i class="mdi mdi-logout text-muted font-size-16 align-middle me-1"></i> <span class="align-middle" key="t-logout">Déconnexion</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Login -->
+    <div class="menu-footer" *ngIf="!userRole">
+      <div class="profile-card">
+        <a class="btn btn-primary" [routerLink]="['/account/login']"><i class="mdi mdi-face-man font-size-16 align-middle me-1"></i>Connectez-vous</a>
       </div>
     </div>
 

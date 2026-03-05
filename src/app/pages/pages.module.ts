@@ -26,6 +26,7 @@ import { OutilComponent } from './outils/outil.component';
 import { DictionnaireComponent } from './dictionnaire/dictionnaire.component';
 import { TraductionComponent } from './traduction/traduction.component';
 import { ToastsContainer } from './traduction/toasts-container.component';
+import { ProfileComponent } from './profile/profile.component';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { ToastsContainer } from './traduction/toasts-container.component';
     OutilComponent,
     DictionnaireComponent,
     TraductionComponent,
-    ToastsContainer
+    ToastsContainer,
+    ProfileComponent
   ],
   imports: [
     CommonModule,

@@ -292,6 +292,22 @@
     height: 38px;
   }
 
+  .page-title {
+    font-size: 18px;
+  }
+
+  // SEARCH
+  .search-input {
+    width: 100%;
+    padding: 10px 16px 10px 50px;
+    border-radius: 20px;
+    border: none;
+    background: #e9edf2;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.2s ease;
+  }
+
   /* TOGGLE */
   .alphabet-toggle {
     display: flex;
@@ -303,8 +319,9 @@
 
   .alphabet-toggle button {
     border: none;
-    padding: 5px 10px;
+    padding: 4px 8px;
     border-radius: 14px;
+    font-size: 12px;
     font-weight: 600;
     background: transparent;
     color: #475569;

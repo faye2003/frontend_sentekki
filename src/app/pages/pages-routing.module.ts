@@ -8,6 +8,7 @@ import { CorrectionComponent } from './correction/correction.component';
 import { OutilComponent } from './outils/outil.component';
 import { DictionnaireComponent } from './dictionnaire/dictionnaire.component';
 import { TraductionComponent } from './traduction/traduction.component';
+import { ProfileComponent } from './profile/profile.component';
 
 
 const routes: Routes = [
@@ -38,6 +39,10 @@ const routes: Routes = [
   {
     path: 'dictionnaire',
     component: DictionnaireComponent
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent
   },
   {
     path: '',
