@@ -21,28 +21,28 @@
 
       <!-- Left menu -->
        <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-lg-2">
-        <li class="nav-item">
+        <li class="menu-item">
           <a class="nav-link active" aria-current="page" [routerLink]="['/translate']">Traduire</a>
         </li>
-        <li class="nav-item">
+        <li class="menu-item">
           <a class="nav-link" [routerLink]="['/dictionnaire']">Dictionnaire</a>
         </li>
         <!-- <li class="nav-item">
           <a class="nav-link" [routerLink]="['/correction']">Corrections</a>
         </li> -->
-        <li class="nav-item">
-          <a *ngIf="userRole === 'corrector'" class="nav-link" [routerLink]="['/correction']">Corrections</a>
+        <li *ngIf="userRole === 'corrector' || userRole === 'super_admin'" class="menu-item">
+          <a class="nav-link" [routerLink]="['/correction']">Corrections</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#">Paraphraser</a>
+        <li class="menu-item">
+          <a class="nav-link" [routerLink]="['/historique']">Historique</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#">Grammaire</a>
+        <li class="menu-item">
+          <a class="nav-link disabled" href="#">Favoris</a>
         </li>
-        <li class="nav-item">
+        <li class="menu-item">
           <a class="nav-link disabled" href="#">Résumé</a>
         </li>
-        <li class="nav-item">
+        <li class="menu-item">
           <a class="nav-link disabled" href="#">Outils</a>
         </li>
       </ul>
@@ -57,12 +57,12 @@
             </button>
             <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
                 <!-- item-->
-                <a class="dropdown-item" [routerLink]="['/account/login']"><i class="mdi mdi-face-man font-size-16 align-middle me-1"></i>Se connecter</a>
-                <a class="dropdown-item" [routerLink]="['/account/register']"><i class="mdi mdi-lock font-size-16 align-middle me-1"></i>S'inscrire</a>
+                <a *ngIf="!userRole" class="dropdown-item" [routerLink]="['/account/login']"><i class="mdi mdi-face-man font-size-16 align-middle me-1"></i>Se connecter</a>
+                <a *ngIf="!userRole" class="dropdown-item" [routerLink]="['/account/register']"><i class="mdi mdi-lock font-size-16 align-middle me-1"></i>S'inscrire</a>
                 <a *ngIf="userRole" class="dropdown-item" [routerLink]="['/profile']"><i class="mdi mdi-eye font-size-16 align-middle me-1"></i>Voir mon profile</a>
                 <!-- <a *ngIf="userRole" class="dropdown-item" routerLink="" (click)="openProfile(Profilecontent)"><i class="mdi mdi-eye font-size-16 align-middle me-1"></i>Voir mon profile</a> -->
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="javascript: void(0);" (click)="logout()"><i class="mdi mdi-logout text-muted font-size-16 align-middle me-1"></i> <span class="align-middle" key="t-logout">Déconnexion</span></a>
+                <div *ngIf="userRole" class="dropdown-divider"></div>
+                <a *ngIf="userRole" class="dropdown-item" href="javascript: void(0);" (click)="logout()"><i class="mdi mdi-logout text-muted font-size-16 align-middle me-1"></i> <span class="align-middle" key="t-logout">Déconnexion</span></a>
             </div>
           </div>
         </div>

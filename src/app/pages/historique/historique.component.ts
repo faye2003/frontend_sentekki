@@ -5,6 +5,8 @@ import { Component, OnInit,
  } from '@angular/core';
 import { HistoriqueService } from './history.service';
 import { NgbModal, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
+import { Translation } from './types';
+import { MOCK_TRANSLATIONS } from './mock-data';
 
 @Component({
   selector: 'app-historique',
@@ -45,6 +47,59 @@ export class HistoriqueComponent implements OnInit {
     ];
     this.loadHistory();
   }
+
+  // translations: Translation[] = MOCK_TRANSLATIONS;
+
+  searchQuery = '';
+  filter: 'all' | 'favorites' = 'all';
+
+  copiedId: string | null = null;
+
+  get stats() {
+    return {
+      total: this.translations.length,
+      favorites: this.translations.filter(t => t.is_favorite).length,
+      languages: new Set(this.translations.map(t => t.lang_src.code)).size
+    };
+  }
+
+  get filteredTranslations() {
+
+    return this.translations.filter(t => {
+
+      const matchesSearch =
+        t.input_text.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        t.output_text.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        t.lang_src.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        t.lang_dest.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+
+      const matchesFilter =
+        this.filter === 'all' ||
+        (this.filter === 'favorites' && t.is_favorite);
+
+      return matchesSearch && matchesFilter;
+    });
+  }
+
+  toggleFavorite(id: string) {
+    this.translations = this.translations.map(t =>
+      t.id === id ? { ...t, is_favorite: !t.is_favorite } : t
+    );
+  }
+
+  deleteTranslation(id: string) {
+    this.translations = this.translations.filter(t => t.id !== id);
+  }
+
+  copyToClipboard(text: string, id: string) {
+    navigator.clipboard.writeText(text);
+    this.copiedId = id;
+
+    setTimeout(() => {
+      this.copiedId = null;
+    }, 2000);
+  }
+
 
   // Offcanvas Open Right
   openRight(content: TemplateRef<any>) {

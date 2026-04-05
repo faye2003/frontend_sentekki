@@ -1,44 +1,199 @@
-<app-pagetitle title="Historique" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
-<!-- end page title -->
-  <!-- <div class="offcanvas-header border-bottom bg-light">
-    <h5 class="fw-semibold mb-0">
-      <i class="bi bi-clock-history me-2 text-primary"></i> Mes Traductions
-    </h5>
-  </div> -->
+<div class="history-page">
 
-  <div class="offcanvas-body p-3">
-    <div *ngIf="translations?.length === 0" class="text-center text-muted py-5">
-      <i class="bi bi-translate display-6 d-block mb-2 text-secondary"></i>
-      <p>Aucune traduction enregistrée</p>
-    </div>
+  <!-- STATS -->
+  <div class="row g-3 mb-4">
 
-    <div *ngIf="translations?.length && translations.length > 0" class="list-group rounded-3 shadow-sm">
-      <div *ngFor="let t of translations" class="list-group-item list-group-item-action py-3">
-        <div class="d-flex justify-content-between align-items-center">
-          <h6 class="fw-semibold text-primary">{{ t.lang_src.name }} → {{ t.lang_dest.name }}</h6>
-          <small class="text-muted">{{ t.created_at | date:'short' }}</small>
+    <div class="col-md-4">
+      <div class="stat-card">
+
+        <div class="icon blue">
+          <i class="bi bi-translate"></i>
         </div>
-        <p class="mb-1 text-dark small">{{ t.input_text }}</p>
-        <p class="text-secondary small">{{ t.output_text }}</p>
 
-        <!-- <div class="mt-2">
-          <ng-template #starTemplate let-fill="fill">
-            <span class="star" [class.full]="fill === 100">
-              <span class="half" [style.width.%]="fill">★</span>☆
-            </span>
-          </ng-template>
-          <ngb-rating
-            [(rate)]="t.rate"
-            [starTemplate]="starTemplate"
-            [readonly]="false"
-            [max]="5"
-            (rateChange)="onRate(t.id, t.rate)">
-          </ngb-rating>
-        </div> -->
+        <div>
+          <div class="label">Total</div>
+          <div class="value">{{stats.total}}</div>
+        </div>
+
       </div>
     </div>
+
+    <div class="col-md-4">
+      <div class="stat-card">
+
+        <div class="icon amber">
+          <i class="bi bi-star-fill"></i>
+        </div>
+
+        <div>
+          <div class="label">Favoris</div>
+          <div class="value">{{stats.favorites}}</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="stat-card">
+
+        <div class="icon green">
+          <i class="bi bi-graph-up"></i>
+        </div>
+
+        <div>
+          <div class="label">Langues</div>
+          <div class="value">{{stats.languages}}</div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 
-  <div class="offcanvas-footer text-center py-3 bg-light border-top">
-    <small class="text-muted">Historique de vos traductions</small>
+  <!-- SEARCH -->
+  <div class="search-bar mb-4">
+
+    <input type="text" placeholder="Rechercher une traduction..." [(ngModel)]="searchQuery" />
+
+    <!-- <div class="filters">
+
+      <button [class.active]="filter === 'all'" (click)="filter='all'">
+        Tout
+      </button>
+
+      <button [class.active]="filter === 'favorites'" (click)="filter='favorites'">
+        Favoris
+      </button>
+
+    </div> -->
+
+    <div class="filter-switch">
+
+      <button (click)="filter='all'" [class.active]="filter === 'all'">
+
+        Tout
+
+      </button>
+
+      <button (click)="filter='favorites'" [class.active]="filter === 'favorites'">
+
+        Favoris
+
+      </button>
+
+    </div>
+
   </div>
+
+  <!-- LIST -->
+  <div *ngIf="filteredTranslations.length > 0">
+
+    <div class="translation-card" *ngFor="let t of filteredTranslations">
+
+      <!-- HEADER -->
+      <div class="card-top">
+
+        <div class="left">
+
+          <div class="lang-badge">
+            <span>{{t.lang_src.code}}</span>
+            <span class="code">{{t.lang_src.code}}</span>
+
+            <i class="bi bi-arrow-left-right"></i>
+
+            <span>{{t.lang_dest.code}}</span>
+            <span class="code">{{t.lang_dest.code}}</span>
+          </div>
+
+          <span class="category">
+            {{t.category}}
+          </span>
+
+        </div>
+
+        <div class="right">
+
+          <span class="date">
+            <i class="bi bi-clock"></i>
+            {{t.created_at | date:'dd/MM/yyyy HH:mm'}}
+          </span>
+
+          <button (click)="toggleFavorite(t.id)" class="favorite">
+
+            <i class="bi" [ngClass]="t.is_favorite ? 'bi-star-fill active' : 'bi-star'"></i>
+
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- CONTENT -->
+
+      <div class="content">
+
+        <div class="source">
+
+          <span class="label">
+            SOURCE ({{t.lang_src.name | uppercase}})
+          </span>
+
+          <p>
+            {{t.input_text}}
+          </p>
+
+        </div>
+
+        <div class="translation">
+
+          <span class="label blue">
+            TRADUCTION ({{t.lang_dest.name | uppercase}})
+          </span>
+
+          <p>
+            {{t.output_text}}
+          </p>
+
+        </div>
+
+      </div>
+
+      <!-- FOOTER HOVER -->
+
+      <div class="card-footer">
+
+        <div class="rating">
+          <i *ngFor="let s of [1,2,3,4,5]" class="bi"
+            [ngClass]="s <= (t.rate || 0) ? 'bi-star-fill active' : 'bi-star'"></i>
+        </div>
+
+        <div class="actions">
+
+          <button (click)="copyToClipboard(t.output_text,t.id)">
+            <i class="bi bi-clipboard"></i>
+            {{copiedId === t.id ? 'Copié !' : 'Copier'}}
+          </button>
+
+          <button class="delete" (click)="deleteTranslation(t.id)">
+            <i class="bi bi-trash"></i>
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div *ngIf="filteredTranslations.length === 0" class="empty">
+
+  <i class="bi bi-translate"></i>
+
+  <h4>Aucune traduction trouvée</h4>
+
+  <p>Commencez à traduire pour voir votre historique ici.</p>
+
+</div>
