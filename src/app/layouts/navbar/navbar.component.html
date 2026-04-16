@@ -8,11 +8,7 @@
     </a>
 
     <!-- Mobile toggle -->
-    <button
-      class="navbar-toggler"
-      type="button"
-      (click)="openMobileMenu(content)"
-    >
+    <button class="navbar-toggler" type="button" (click)="openMobileMenu(content)">
       <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -20,16 +16,13 @@
     <div class="collapse navbar-collapse d-none d-lg-flex" id="mainNavbar">
 
       <!-- Left menu -->
-       <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-lg-2">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-lg-2">
         <li class="menu-item">
           <a class="nav-link active" aria-current="page" [routerLink]="['/translate']">Traduire</a>
         </li>
         <li class="menu-item">
           <a class="nav-link" [routerLink]="['/dictionnaire']">Dictionnaire</a>
         </li>
-        <!-- <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/correction']">Corrections</a>
-        </li> -->
         <li *ngIf="userRole === 'corrector' || userRole === 'super_admin'" class="menu-item">
           <a class="nav-link" [routerLink]="['/correction']">Corrections</a>
         </li>
@@ -39,30 +32,37 @@
         <li class="menu-item">
           <a class="nav-link disabled" href="#">Favoris</a>
         </li>
-        <li class="menu-item">
-          <a class="nav-link disabled" href="#">Résumé</a>
-        </li>
-        <li class="menu-item">
-          <a class="nav-link disabled" href="#">Outils</a>
-        </li>
       </ul>
-        
+
+      <a *ngIf="!userRole" type="button" class="btn btn-primary" [routerLink]="['/account/login']">
+        <i class="fa-solid fa-right-to-bracket"></i> Connexion
+      </a>
+      &nbsp;&nbsp;
+
+      <a *ngIf="!userRole" class="btn btn-outline-primary border-0 shadow-sm" [routerLink]="['/account/register']">
+        <i class="mdi mdi-lock align-middle"></i> S'inscrire
+      </a>
+
+
       <!-- Right actions -->
-      <div class="d-flex align-items-center gap-3">      
+      <div *ngIf="userRole" class="d-flex align-items-center gap-3">
         <!-- Right actions -->
         <div class="d-flex">
           <div class="dropdown d-inline-block" ngbDropdown>
-            <button type="button" class="btn header-item topbar-light bg-light-subtle border-start border-end" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
-                <img class="rounded-circle header-profile-user" src="assets/images/logo-bg2.png" alt="Header Avatar">
+            <button type="button" class="btn header-item topbar-light bg-light-subtle border-start border-end"
+              id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+              ngbDropdownToggle>
+              <img class="rounded-circle header-profile-user" src="assets/images/logo-bg2.png" alt="Header Avatar">
             </button>
             <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
-                <!-- item-->
-                <a *ngIf="!userRole" class="dropdown-item" [routerLink]="['/account/login']"><i class="mdi mdi-face-man font-size-16 align-middle me-1"></i>Se connecter</a>
-                <a *ngIf="!userRole" class="dropdown-item" [routerLink]="['/account/register']"><i class="mdi mdi-lock font-size-16 align-middle me-1"></i>S'inscrire</a>
-                <a *ngIf="userRole" class="dropdown-item" [routerLink]="['/profile']"><i class="mdi mdi-eye font-size-16 align-middle me-1"></i>Voir mon profile</a>
-                <!-- <a *ngIf="userRole" class="dropdown-item" routerLink="" (click)="openProfile(Profilecontent)"><i class="mdi mdi-eye font-size-16 align-middle me-1"></i>Voir mon profile</a> -->
-                <div *ngIf="userRole" class="dropdown-divider"></div>
-                <a *ngIf="userRole" class="dropdown-item" href="javascript: void(0);" (click)="logout()"><i class="mdi mdi-logout text-muted font-size-16 align-middle me-1"></i> <span class="align-middle" key="t-logout">Déconnexion</span></a>
+              <!-- item-->
+              <a class="dropdown-item" [routerLink]="['/profile']"><i
+                  class="mdi mdi-eye font-size-16 align-middle me-1"></i>Voir mon profile</a>
+              <!-- <a *ngIf="userRole" class="dropdown-item" routerLink="" (click)="openProfile(Profilecontent)"><i class="mdi mdi-eye font-size-16 align-middle me-1"></i>Voir mon profile</a> -->
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="javascript: void(0);" (click)="logout()"><i
+                  class="mdi mdi-logout text-muted font-size-16 align-middle me-1"></i> <span class="align-middle"
+                  key="t-logout">Déconnexion</span></a>
             </div>
           </div>
         </div>
@@ -89,9 +89,7 @@
     <ul class="menu-list">
 
       <li>
-        <a class="menu-item active"
-           [routerLink]="['/translate']"
-           (click)="offcanvas.close()">
+        <a class="menu-item active" [routerLink]="['/translate']" (click)="offcanvas.close()">
           <i class="mdi mdi-translate"></i>
           <span>Traduire</span>
           <span class="dot"></span>
@@ -99,45 +97,35 @@
       </li>
 
       <li>
-        <a class="menu-item"
-           [routerLink]="['/dictionnaire']"
-           (click)="offcanvas.close()">
+        <a class="menu-item" [routerLink]="['/dictionnaire']" (click)="offcanvas.close()">
           <i class="mdi mdi-book-open"></i>
           <span>Dico Dictionnaire</span>
         </a>
       </li>
 
       <li>
-        <a class="menu-item"
-           [routerLink]="['/historique']"
-           (click)="offcanvas.close()">
+        <a class="menu-item" [routerLink]="['/historique']" (click)="offcanvas.close()">
           <i class="mdi mdi-history"></i>
           <span>Historique</span>
         </a>
       </li>
 
       <li>
-        <a class="menu-item"
-           [routerLink]="['/favorites']"
-           (click)="offcanvas.close()">
+        <a class="menu-item" [routerLink]="['/favorites']" (click)="offcanvas.close()">
           <i class="mdi mdi-star-outline"></i>
           <span>Favoris</span>
         </a>
       </li>
 
       <li>
-        <a class="menu-item"
-           [routerLink]="['/settings']"
-           (click)="offcanvas.close()">
+        <a class="menu-item" [routerLink]="['/settings']" (click)="offcanvas.close()">
           <i class="mdi mdi-cog-outline"></i>
           <span>Paramètres</span>
         </a>
       </li>
 
       <li>
-        <a class="menu-item"
-           [routerLink]="['/about']"
-           (click)="offcanvas.close()">
+        <a class="menu-item" [routerLink]="['/about']" (click)="offcanvas.close()">
           <i class="mdi mdi-information-outline"></i>
           <span>À propos</span>
         </a>
@@ -145,7 +133,7 @@
 
     </ul>
 
-     <!-- Footer profile -->
+    <!-- Footer profile -->
     <div class="menu-footer">
       <div class="profile-card dropdown" ngbDropdown>
         <div *ngIf="userRole" class="avatar">ST</div>
@@ -154,14 +142,20 @@
           <strong *ngIf="!userRole">Se connecter</strong>
           <small *ngIf="userRole">{{ user.profil.name }} User</small>
         </div>
-        <a type="button" href="javascript: void(0);" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle></a>         
+        <a type="button" href="javascript: void(0);" data-bs-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false" ngbDropdownToggle></a>
         <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
-            <!-- item-->
-            <a *ngIf="!userRole" class="dropdown-item" (click)="offcanvas.close()" [routerLink]="['/account/login']"><i class="mdi mdi-face-man font-size-16 align-middle me-1"></i>Se connecter</a>
-            <a *ngIf="!userRole" class="dropdown-item" (click)="offcanvas.close()" [routerLink]="['/account/register']"><i class="mdi mdi-lock font-size-16 align-middle me-1"></i>S'inscrire</a>
-            <a *ngIf="userRole" class="dropdown-item" (click)="offcanvas.close()" [routerLink]="['/profile']"><i class="mdi mdi-eye font-size-16 align-middle me-1"></i>Voir mon profile</a>
-            <div class="dropdown-divider"></div>
-            <a *ngIf="userRole" class="dropdown-item" (click)="logout();  offcanvas.close()"><i class="mdi mdi-logout text-muted font-size-16 align-middle me-1"></i> <span class="align-middle" key="t-logout">Déconnexion</span></a>
+          <!-- item-->
+          <a *ngIf="!userRole" class="dropdown-item" (click)="offcanvas.close()" [routerLink]="['/account/login']"><i
+              class="mdi mdi-face-man font-size-16 align-middle me-1"></i>Se connecter</a>
+          <a *ngIf="!userRole" class="dropdown-item" (click)="offcanvas.close()" [routerLink]="['/account/register']"><i
+              class="mdi mdi-lock font-size-16 align-middle me-1"></i>S'inscrire</a>
+          <a *ngIf="userRole" class="dropdown-item" (click)="offcanvas.close()" [routerLink]="['/profile']"><i
+              class="mdi mdi-eye font-size-16 align-middle me-1"></i>Voir mon profile</a>
+          <div class="dropdown-divider"></div>
+          <a *ngIf="userRole" class="dropdown-item" (click)="logout();  offcanvas.close()"><i
+              class="mdi mdi-logout text-muted font-size-16 align-middle me-1"></i> <span class="align-middle"
+              key="t-logout">Déconnexion</span></a>
         </div>
       </div>
     </div>

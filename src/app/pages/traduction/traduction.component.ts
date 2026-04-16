@@ -371,7 +371,8 @@ export class TraductionComponent implements OnInit, AfterViewInit {
       error: (err) => {
         console.error(err);
         this.error = 'Erreur lors de la traduction';
-        Swal.fire('Erreur!', err.error?.error || 'Une erreur est survenue lors de la traduction.', 'error');
+        // Swal.fire('Erreur!', err.error?.error || 'Une erreur est survenue lors de la traduction.', 'error');
+        Swal.fire('A Venir!', err.error?.error || 'Notre modèle est en cours de déploiement et sera bientôt disponible, Merci !', 'info');
         this.loading = false;
       },
     });
